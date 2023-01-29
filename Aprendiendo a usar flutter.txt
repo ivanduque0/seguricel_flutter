@@ -28,7 +28,7 @@ floatingActionButtonLocation: = se usa para editar el sitio donde estara el boto
 
 drawer: Drawer() = es usado para crear una especie de menu en la barra de la aplicacion
 
-
+setState() = cada evz que se quiera cambiar la interfaz grafica se debe llamar este metodo
 
 
 
