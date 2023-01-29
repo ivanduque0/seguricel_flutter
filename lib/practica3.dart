@@ -9,17 +9,12 @@ void main() {
   ));
 }
 
-class HomePage extends StatefulWidget {
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
+class HomePage extends StatelessWidget {
   // const HomePage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[200],
       appBar: AppBar(
         title: Text(
           "Seguricel",
@@ -29,41 +24,10 @@ class _HomePageState extends State<HomePage> {
           ),
       ),
       body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: SingleChildScrollView(
-            child: Card(
-              child: Column(
-                children: [
-                  Image.asset(
-                    "assets/seguricelbackground.jpg",
-                  ),
-                  SizedBox(
-                    height: 20,
-                    //child: Container(color: Colors.green,),
-                  ),
-                  Text(
-                    "Change my name", 
-                    style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(
-                    height: 20,
-                    //child: Container(color: Colors.green,),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: TextField(
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        hintText: "Ingresar codigo",
-                        labelText: "Codigo",
-                        ),
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ),
+        child: Container(
+          color: Colors.teal,
+          height: 100,
+          width: 100,
         ),
       ),
       drawer: Drawer(
