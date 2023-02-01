@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:seguricel_flutter/pages/home_page.dart';
-import 'package:seguricel_flutter/utils/constants.dart';
 
 class LoginPage extends StatefulWidget {
   static const String routeName = "/login";
@@ -47,28 +46,27 @@ class _LoginPageState extends State<LoginPage> {
                             controller: _usernameController,
                             keyboardType: TextInputType.emailAddress,
                             decoration: InputDecoration(
-                              hintText: "Ingrese su codigo",
-                              labelText: "Codigo"
+                              hintText: "Ingrese email",
+                              labelText: "Username"
                             ),
                           ),
-                          // SizedBox(
-                          //   height: 10,
-                          // ),
-                          // TextFormField(
-                          //   controller: _passwordController,
-                          //   keyboardType: TextInputType.text,
-                          //   obscureText: true,
-                          //   decoration: InputDecoration(
-                          //     hintText: "Ingrese contraseña",
-                          //     labelText: "Contraseña"
-                          //   ),
-                          // ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          TextFormField(
+                            controller: _passwordController,
+                            keyboardType: TextInputType.text,
+                            obscureText: true,
+                            decoration: InputDecoration(
+                              hintText: "Ingrese contraseña",
+                              labelText: "Contraseña"
+                            ),
+                          ),
                           SizedBox(
                             height: 10,
                           ),
                           ElevatedButton(
                             onPressed: () {
-                              Constants.prefs?.setBool("loggedIn", true);
                               // Navigator.push(
                               //   context, 
                               //   MaterialPageRoute(
