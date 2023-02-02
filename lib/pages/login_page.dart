@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:seguricel_flutter/pages/main_page.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http_auth/http_auth.dart';
+import 'dart:convert';
 class LoginPage extends StatefulWidget {
   static const String routeName = "/login";
   @override
@@ -11,9 +13,25 @@ class _LoginPageState extends State<LoginPage> {
   //const LoginPage({super.key});
   final formKey = GlobalKey<FormState>();
 
-  final _usernameController = TextEditingController();
+  TextEditingController _codeController = TextEditingController();
 
   //final _passwordController = TextEditingController();
+  var data;
+
+  void dispose() {
+    _codeController.dispose();
+    super.dispose();
+  }
+
+  fetchData()async{
+    //print(this.url);
+    var client = BasicAuthClient('mobile_access', 'S3gur1c3l_mobile@');
+    var res = await client.get(Uri.parse('https://webseguricel.up.railway.app/dispositivosapimobile/${_codeController.text}/'));
+    data = jsonDecode(res.body);
+    // setState(() {
+    // });
+    print(data);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,13 +60,17 @@ class _LoginPageState extends State<LoginPage> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
+                          Text(_codeController.text),
                           TextFormField(
-                            controller: _usernameController,
-                            keyboardType: TextInputType.emailAddress,
+                            controller: _codeController,
+                            keyboardType: TextInputType.text,
                             decoration: InputDecoration(
                               hintText: "Ingrese su codigo",
                               labelText: "Codigo"
                             ),
+                            onChanged: (value) {
+                              setState(() {});
+                            },
                           ),
                           // SizedBox(
                           //   height: 10,
@@ -67,6 +89,7 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                           ElevatedButton(
                             onPressed: () {
+                              fetchData();
                               // Constants.prefs?.setBool("loggedIn", true);
                               // Navigator.push(
                               //   context, 
