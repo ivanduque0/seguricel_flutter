@@ -1,0 +1,37 @@
+Container() =  wifget que es un contenedor como lo seria un DIV en html
+
+alignment: = se usa para alinear el widget donde esta escrito
+
+decoration: = se usa para agregar un decorador que s elq ue se encargara de la parte grafica del widget donde fue llamado
+
+clipBehavior: = se usa para ocultar o no ocultar las cosas que se salen del widget
+
+shape: = se usar para darle forma al widget donde fue llamado
+
+child: = es donde se coloca un widget hijo que estara enun widget padre
+
+borderRadius: = se usa para darle un redondeado a los border del widget donde fue llamado
+
+boxShadow: = se usa para darle sombra al widget
+
+BoxShadow() = widget usado para personalizar la sombra en boxShadow
+
+Row() = widget usado para crear filas en las que se pueden agregar varios widgets hijos
+
+Column() = widget usado para crear columnas en las que se pueden agregar varios widgets hijos
+
+mainAxisAlignment: = se usa para alinear en el eje principal (en row el eje principal es el horizontal y en column es al reves) los distintos widgets hijos en un widget padre
+
+crossAxisAlignment: = se usa para alinear en el eje secundario (en row el eje principal es el vertical y en column es al reves) los distintos widgets hijos en un widget padr
+
+floatingActionButtonLocation: = se usa para editar el sitio donde estara el boton
+
+drawer: Drawer() = es usado para crear una especie de menu en la barra de la aplicacion
+
+setState() = cada evz que se quiera cambiar la interfaz grafica se debe llamar este metodo
+
+
+
+
+
+
