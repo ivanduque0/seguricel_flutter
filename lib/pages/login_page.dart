@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:seguricel_flutter/pages/home_page.dart';
-import 'package:seguricel_flutter/utils/constants.dart';
+import 'package:seguricel_flutter/pages/main_page.dart';
 
 class LoginPage extends StatefulWidget {
   static const String routeName = "/login";
@@ -14,7 +13,7 @@ class _LoginPageState extends State<LoginPage> {
 
   final _usernameController = TextEditingController();
 
-  final _passwordController = TextEditingController();
+  //final _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +25,7 @@ class _LoginPageState extends State<LoginPage> {
         fit: StackFit.expand,
         children: [
           Image.asset(
-            "assets/seguricelbackground.jpg", 
+            "assets/images/seguricelbackground.jpg", 
             fit: BoxFit.cover,
             color: Colors.black.withOpacity(0.6),
             colorBlendMode: BlendMode.darken,
@@ -68,12 +67,12 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                           ElevatedButton(
                             onPressed: () {
-                              Constants.prefs?.setBool("loggedIn", true);
+                              // Constants.prefs?.setBool("loggedIn", true);
                               // Navigator.push(
                               //   context, 
                               //   MaterialPageRoute(
-                              //     builder: ((context) => HomePage())));
-                              Navigator.pushNamed(context, HomePage.routeName);
+                              //     builder: ((context) => MainPage())));
+                              Navigator.pushNamed(context, MainPage.routeName);
                             }, 
                             child: Text("Ingresar"),
                             style: ElevatedButton.styleFrom(
