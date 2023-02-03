@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:seguricel_flutter/drawer.dart';
 // import 'package:seguricel_flutter/name_card_widget.dart';
 import 'package:http_auth/http_auth.dart';
+import 'package:seguricel_flutter/pages/login_page.dart';
 import 'package:seguricel_flutter/screens/aperturas_screen.dart';
 import 'dart:convert';
 
 import 'package:seguricel_flutter/screens/home_screen.dart';
 import 'package:seguricel_flutter/screens/invitados_screen.dart';
+import 'package:seguricel_flutter/utils/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MainPage extends StatefulWidget {
@@ -53,10 +55,10 @@ class _MainPageState extends State<MainPage> {
   
 
   fetchData()async{
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    var encodeDatosUsuario = prefs.getString('datosUsuario');
-    var encodeContratos = prefs.getString('contrtos');
-    var encodeAccesos = prefs.getString('contrtos');
+    //SharedPreferences prefs = await SharedPreferences.getInstance();
+    var encodeDatosUsuario = Constants.prefs.getString('datosUsuario');
+    var encodeContratos = Constants.prefs.getString('contrtos');
+    var encodeAccesos = Constants.prefs.getString('contrtos');
 
     datosUsuario = jsonDecode(encodeDatosUsuario.toString());
     contratos = jsonDecode(encodeContratos.toString());
@@ -90,12 +92,13 @@ class _MainPageState extends State<MainPage> {
         actions: [
           IconButton(
             onPressed: (() async {
-              SharedPreferences prefs = await SharedPreferences.getInstance();
-              prefs.remove("datosUsuario");
-              prefs.remove("accesos");
-              prefs.remove("contratos");
-              prefs.remove("isLoggedIn");
-              Navigator.pop(context);
+              //SharedPreferences prefs = await SharedPreferences.getInstance();
+              Constants.prefs.remove("datosUsuario");
+              Constants.prefs.remove("accesos");
+              Constants.prefs.remove("contratos");
+              Constants.prefs.remove("isLoggedIn");
+              Navigator.pushReplacementNamed(context, LoginPage.routeName);
+              //Navigator.pop(context);
 
             }), 
             icon: Icon(Icons.exit_to_app_rounded)

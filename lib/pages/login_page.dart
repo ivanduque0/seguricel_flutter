@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:seguricel_flutter/pages/main_page.dart';
+import 'package:seguricel_flutter/utils/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http_auth/http_auth.dart';
 import 'dart:convert';
@@ -27,7 +28,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     // TODO: implement initState
-    getBoolValuesSF();
+    // getBoolValuesSF();
     super.initState();
     // fetchData();
     
@@ -89,12 +90,12 @@ class _LoginPageState extends State<LoginPage> {
       print(accesos);
       print(contratosEncode);
 
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-
-      prefs.setString('datosUsuario', datosUsuario);
-      prefs.setString('accesos', accesos);
-      prefs.setString('contratos', contratosEncode);
-      prefs.setBool('isLoggedIn', true);
+      //SharedPreferences prefs = await SharedPreferences.getInstance();
+      
+      Constants.prefs.setString('datosUsuario', datosUsuario);
+      Constants.prefs.setString('accesos', accesos);
+      Constants.prefs.setString('contratos', contratosEncode);
+      Constants.prefs.setBool('isLoggedIn', true);
 
     }
 
@@ -102,17 +103,17 @@ class _LoginPageState extends State<LoginPage> {
     // });
   }
 
-getBoolValuesSF() async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  //Return bool
-  setState(() {
-    var isLoggedIn = prefs.getBool('isLoggedIn');
-    print(isLoggedIn);
-    if (isLoggedIn==true){
-      Navigator.pushReplacementNamed(context, MainPage.routeName);
-    }
-  });
-}
+// getBoolValuesSF() async {
+//   Constants.prefs = await SharedPreferences.getInstance();
+//   //Return bool
+//   setState(() {
+//     var isLoggedIn = Constants.prefs.getBool('isLoggedIn');
+//     print(isLoggedIn);
+//     if (isLoggedIn==true){
+//       Navigator.pushReplacementNamed(context, MainPage.routeName);
+//     }
+//   });
+// }
 
   @override
   Widget build(BuildContext context) {
@@ -176,7 +177,7 @@ getBoolValuesSF() async {
                               //   context, 
                               //   MaterialPageRoute(
                               //     builder: ((context) => MainPage())));
-                              Navigator.pushNamed(context, MainPage.routeName);
+                              Navigator.pushReplacementNamed(context, MainPage.routeName);
                             }, 
                             child: Text("Ingresar"),
                             style: ElevatedButton.styleFrom(
