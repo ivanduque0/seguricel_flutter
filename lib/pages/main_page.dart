@@ -8,6 +8,7 @@ import 'dart:convert';
 
 import 'package:seguricel_flutter/screens/home_screen.dart';
 import 'package:seguricel_flutter/screens/invitados_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MainPage extends StatefulWidget {
   static const String routeName = "/main";
@@ -26,7 +27,10 @@ class _MainPageState extends State<MainPage> {
   //   path: '/dispositivosapimobile/754/');
   var url = Uri.parse('https://webseguricel.up.railway.app/dispositivosapimobile/orangepii96/');
   var data;
-  
+  Map datosUsuario={};
+  List contratos=[];
+  Map accesos={};
+
   int _selectedIndex=0;
   static final List<Widget>_widgetOptions = <Widget>[
     HomeScreen(),
@@ -49,13 +53,27 @@ class _MainPageState extends State<MainPage> {
   
 
   fetchData()async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var encodeDatosUsuario = prefs.getString('datosUsuario');
+    var encodeContratos = prefs.getString('contrtos');
+    var encodeAccesos = prefs.getString('contrtos');
+
+    datosUsuario = jsonDecode(encodeDatosUsuario.toString());
+    contratos = jsonDecode(encodeContratos.toString());
+    accesos = jsonDecode(encodeAccesos.toString());
+
+    print(datosUsuario);
+    print(contratos);
+    print(accesos);
+
+
     //print(this.url);
-    var client = BasicAuthClient('mobile_access', 'S3gur1c3l_mobile@');
-    var res = await client.post(url);
-    data = jsonDecode(res.body);
-    setState(() {
+    // var client = BasicAuthClient('mobile_access', 'S3gur1c3l_mobile@');
+    // var res = await client.post(url);
+    // data = jsonDecode(res.body);
+    // setState(() {
       
-    });
+    // });
   }
   
   @override
@@ -71,14 +89,20 @@ class _MainPageState extends State<MainPage> {
           ),
         actions: [
           IconButton(
-            onPressed: (() {
+            onPressed: (() async {
+              SharedPreferences prefs = await SharedPreferences.getInstance();
+              prefs.remove("datosUsuario");
+              prefs.remove("accesos");
+              prefs.remove("contratos");
+              prefs.remove("isLoggedIn");
               Navigator.pop(context);
+
             }), 
             icon: Icon(Icons.exit_to_app_rounded)
           ),
         ],
       ),
-      body: data!=null
+      body: datosUsuario!=null || contratos!=null
         ?Center(
           child: _widgetOptions[_selectedIndex]
         )

@@ -3,6 +3,7 @@ import 'package:seguricel_flutter/pages/main_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http_auth/http_auth.dart';
 import 'dart:convert';
+
 class LoginPage extends StatefulWidget {
   static const String routeName = "/login";
   @override
@@ -16,22 +17,102 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController _codeController = TextEditingController();
 
   //final _passwordController = TextEditingController();
-  var data;
+  var isLoggedIn;
 
   void dispose() {
     _codeController.dispose();
     super.dispose();
   }
 
-  fetchData()async{
-    //print(this.url);
+  @override
+  void initState() {
+    // TODO: implement initState
+    getBoolValuesSF();
+    super.initState();
+    // fetchData();
+    
+  }
+
+  fetchData() async{
+    var data;
+    var res;
+    List contratos=[];
+    String contratosEncode="";
+    String contrato="";
+    String cedula="";
+    String nombre="";
+    String beacon_uuid="";
+    String servidor="";
+    String accesos="";
+    Map AccesosPeatonales={};
+    Map AccesosVehiculares={};
+    String datosUsuario="";
     var client = BasicAuthClient('mobile_access', 'S3gur1c3l_mobile@');
-    var res = await client.get(Uri.parse('https://webseguricel.up.railway.app/dispositivosapimobile/${_codeController.text}/'));
+    res = await client.get(Uri.parse('https://webseguricel.up.railway.app/dispositivosapimobile/${_codeController.text}/'));//.timeout(Duration(seconds: 15));;
     data = jsonDecode(res.body);
+    for (var item in data) {
+      contratos.add(item['contrato']);
+      if (cedula=="" && beacon_uuid=="" && nombre==""){
+        cedula=item['cedula'];
+        beacon_uuid=item['beacon_uuid'];
+        nombre=item['nombre'];
+      }
+    }
+    if (contratos.length>0){
+      contrato= contratos[0];
+      res = await client.post(Uri.parse('https://webseguricel.up.railway.app/dispositivosapimobile/${contrato}/'));//.timeout(Duration(seconds: 15));;
+      data = jsonDecode(res.body);
+      var descripcionIteracion="";
+      for (var item in data) {
+        if (servidor=="" && item['descripcion']=="SERVIDOR LOCAL"){
+          servidor="${item['dispositivo']}:43157/";
+        } else {
+          descripcionIteracion=item['descripcion'];
+          if (descripcionIteracion.toLowerCase().contains('peatonal')){
+            AccesosPeatonales[item['acceso'].toString()]=item['descripcion'].substring(0, item['descripcion'].indexOf('('));
+          }
+          if (descripcionIteracion.toLowerCase().contains('vehicular')){
+            // print(item['descripcion']);
+            // print(acceso.runtimeType);
+            AccesosVehiculares[item['acceso'].toString()]=item['descripcion'].substring(0, item['descripcion'].indexOf('('));
+          }
+        }
+      }
+      // print(data);
+      // print(servidor);
+      // print(AccesosPeatonales);
+      // print(AccesosVehiculares);
+      datosUsuario=jsonEncode({'contrato':contrato, 'id_usuario':_codeController.text, 'cedula':cedula, 'nombre':nombre, 'beacon_uuid':beacon_uuid});
+      accesos=jsonEncode([AccesosPeatonales,AccesosVehiculares]);
+      contratosEncode=jsonEncode(contratos);
+      print(datosUsuario);
+      print(accesos);
+      print(contratosEncode);
+
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+
+      prefs.setString('datosUsuario', datosUsuario);
+      prefs.setString('accesos', accesos);
+      prefs.setString('contratos', contratosEncode);
+      prefs.setBool('isLoggedIn', true);
+
+    }
+
     // setState(() {
     // });
-    print(data);
   }
+
+getBoolValuesSF() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  //Return bool
+  setState(() {
+    var isLoggedIn = prefs.getBool('isLoggedIn');
+    print(isLoggedIn);
+    if (isLoggedIn==true){
+      Navigator.pushReplacementNamed(context, MainPage.routeName);
+    }
+  });
+}
 
   @override
   Widget build(BuildContext context) {
