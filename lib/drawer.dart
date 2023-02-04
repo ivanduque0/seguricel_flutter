@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class MyDrawer extends StatelessWidget {
-  //const MyWidget({super.key});
+  final datosUsuario;
+
+  const MyDrawer({super.key, required this.datosUsuario});
 
   @override
   Widget build(BuildContext context) {
@@ -10,8 +12,8 @@ class MyDrawer extends StatelessWidget {
           padding: const EdgeInsets.all(0),
           children: <Widget>[
             UserAccountsDrawerHeader(
-              accountName: Text("Ivan Jose Duque Luna", style: TextStyle( color: Colors.white),), 
-              accountEmail: Text("27488274", style: TextStyle( color: Colors.white),),
+              accountName: Text(datosUsuario['nombre'], style: TextStyle( color: Colors.white),), 
+              accountEmail: Text(datosUsuario['id_usuario'], style: TextStyle( color: Colors.white),),
               currentAccountPicture: CircleAvatar(
                 backgroundImage: NetworkImage("https://images.unsplash.com/photo-1566753323558-f4e0952af115?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=721&q=80"),
               )
@@ -22,21 +24,24 @@ class MyDrawer extends StatelessWidget {
             // ),
             ListTile(
               leading: Icon(Icons.person),
-              title: Text("Ivan Jose Duque Luna"),
+              title: Text(datosUsuario['nombre']),
               subtitle: Text("Propietario"),
               //trailing: Icon(Icons.edit),
-              onTap: () {},
+              onTap: () {
+                print(datosUsuario);
+                print("a");
+              },
             ),
             ListTile(
               leading: Icon(Icons.assignment_ind_rounded),
               title: Text("Cedula"),
-              subtitle: Text("27488274"),
+              subtitle: Text(datosUsuario['cedula']),
               //trailing: Icon(Icons.edit),
             ),
             ListTile(
               leading: Icon(Icons.house_rounded),
               title: Text("Contrato"),
-              subtitle: Text("Villa de campo"),
+              subtitle: Text(datosUsuario['contrato']),
               //trailing: Icon(Icons.edit),
             ),
           ],

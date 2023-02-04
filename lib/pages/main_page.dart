@@ -31,7 +31,7 @@ class _MainPageState extends State<MainPage> {
   var data;
   Map datosUsuario={};
   List contratos=[];
-  Map accesos={};
+  List accesos=[];
 
   int _selectedIndex=0;
   static final List<Widget>_widgetOptions = <Widget>[
@@ -50,25 +50,29 @@ class _MainPageState extends State<MainPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    fetchData();
+    fetchData2();
   }
   
 
-  fetchData()async{
+  fetchData2()async{
     //SharedPreferences prefs = await SharedPreferences.getInstance();
-    var encodeDatosUsuario = Constants.prefs.getString('datosUsuario');
-    var encodeContratos = Constants.prefs.getString('contrtos');
-    var encodeAccesos = Constants.prefs.getString('contrtos');
+    String encodeDatosUsuario = await Constants.prefs.getString('datosUsuario').toString();
+    String encodeContratos = await Constants.prefs.getString('contratos').toString();
+    String encodeAccesos = await Constants.prefs.getString('accesos').toString();
 
-    datosUsuario = jsonDecode(encodeDatosUsuario.toString());
-    contratos = jsonDecode(encodeContratos.toString());
-    accesos = jsonDecode(encodeAccesos.toString());
+    // print(encodeDatosUsuario);
+    // print(encodeContratos);
+    // print(encodeAccesos);
 
+    datosUsuario = await jsonDecode(encodeDatosUsuario);
+    contratos = await jsonDecode(encodeContratos);
+    accesos = await jsonDecode(encodeAccesos);
+  
     print(datosUsuario);
     print(contratos);
     print(accesos);
 
-
+    // setState(() { });
     //print(this.url);
     // var client = BasicAuthClient('mobile_access', 'S3gur1c3l_mobile@');
     // var res = await client.post(url);
@@ -105,7 +109,7 @@ class _MainPageState extends State<MainPage> {
           ),
         ],
       ),
-      body: datosUsuario!=null || contratos!=null
+      body: this.datosUsuario!={} || this.contratos!=[]
         ?Center(
           child: _widgetOptions[_selectedIndex]
         )
@@ -129,7 +133,7 @@ class _MainPageState extends State<MainPage> {
             )
           ),
         ),
-      drawer: MyDrawer(),
+      drawer: datosUsuario!={}?MyDrawer(datosUsuario: datosUsuario):MyDrawer(datosUsuario: {'nombre':"null", "contrato":"null","cedula":"null", "id_usuario":"null"}),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,

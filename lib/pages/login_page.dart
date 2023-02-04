@@ -86,17 +86,14 @@ class _LoginPageState extends State<LoginPage> {
       datosUsuario=jsonEncode({'contrato':contrato, 'id_usuario':_codeController.text, 'cedula':cedula, 'nombre':nombre, 'beacon_uuid':beacon_uuid});
       accesos=jsonEncode([AccesosPeatonales,AccesosVehiculares]);
       contratosEncode=jsonEncode(contratos);
-      print(datosUsuario);
-      print(accesos);
-      print(contratosEncode);
 
       //SharedPreferences prefs = await SharedPreferences.getInstance();
       
-      Constants.prefs.setString('datosUsuario', datosUsuario);
-      Constants.prefs.setString('accesos', accesos);
-      Constants.prefs.setString('contratos', contratosEncode);
-      Constants.prefs.setBool('isLoggedIn', true);
-
+      await Constants.prefs.setString('datosUsuario', datosUsuario);
+      await Constants.prefs.setString('accesos', accesos);
+      await Constants.prefs.setString('contratos', contratosEncode);
+      await Constants.prefs.setBool('isLoggedIn', true);
+      Navigator.pushReplacementNamed(context, MainPage.routeName);
     }
 
     // setState(() {
@@ -177,7 +174,7 @@ class _LoginPageState extends State<LoginPage> {
                               //   context, 
                               //   MaterialPageRoute(
                               //     builder: ((context) => MainPage())));
-                              Navigator.pushReplacementNamed(context, MainPage.routeName);
+                              //Navigator.pushReplacementNamed(context, MainPage.routeName);
                             }, 
                             child: Text("Ingresar"),
                             style: ElevatedButton.styleFrom(
