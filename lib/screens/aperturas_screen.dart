@@ -13,8 +13,8 @@ class AperturasScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             SizedBox(
-              width: 250,
-              height: 250,
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height/3,
               child: TextButton(
                 style: TextButton.styleFrom(
                   backgroundColor: Colors.green,
@@ -25,7 +25,7 @@ class AperturasScreen extends StatelessWidget {
                 }), 
                 child: Container(
                   child: Text("ENTRAR",
-                              style: TextStyle(fontSize: 24),),
+                              style: TextStyle(fontSize: 60),),
                   // child: Image.network("https://http2.mlstatic.com/D_NQ_NP_909774-MLV52690599466_122022-W.jpg"),
                   // decoration: BoxDecoration(
                   //   borderRadius: BorderRadius.circular(30)
@@ -34,8 +34,8 @@ class AperturasScreen extends StatelessWidget {
               ),
             ),
             SizedBox(
-              width: 250,
-              height: 250,
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height/3,
               child: TextButton(
                 style: TextButton.styleFrom(
                   backgroundColor: Colors.red,
@@ -46,7 +46,7 @@ class AperturasScreen extends StatelessWidget {
                 }), 
                 child: Container(
                   child: Text("SALIR",
-                          style: TextStyle(fontSize: 24),),
+                          style: TextStyle(fontSize: 60),),
                   // child: Image.network("https://http2.mlstatic.com/D_NQ_NP_909774-MLV52690599466_122022-W.jpg"),
                   // decoration: BoxDecoration(
                   //   borderRadius: BorderRadius.circular(20)
