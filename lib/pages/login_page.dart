@@ -139,7 +139,7 @@ class _LoginPageState extends State<LoginPage> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          Text(_codeController.text),
+                          //Text(_codeController.text),
                           TextFormField(
                             controller: _codeController,
                             keyboardType: TextInputType.text,

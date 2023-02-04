@@ -63,14 +63,18 @@ class _MainPageState extends State<MainPage> {
     // print(encodeDatosUsuario);
     // print(encodeContratos);
     // print(encodeAccesos);
-
-    datosUsuario = await jsonDecode(encodeDatosUsuario);
-    contratos = await jsonDecode(encodeContratos);
-    accesos = await jsonDecode(encodeAccesos);
+    setState(() {
+      datosUsuario = jsonDecode(encodeDatosUsuario);
+      contratos = jsonDecode(encodeContratos);
+      accesos = jsonDecode(encodeAccesos);
+    });
+    // datosUsuario = await jsonDecode(encodeDatosUsuario);
+    // contratos = await jsonDecode(encodeContratos);
+    // accesos = await jsonDecode(encodeAccesos);
   
-    print(datosUsuario);
-    print(contratos);
-    print(accesos);
+    // print(datosUsuario);
+    // print(contratos);
+    // print(accesos);
 
     // setState(() { });
     //print(this.url);
@@ -133,7 +137,7 @@ class _MainPageState extends State<MainPage> {
             )
           ),
         ),
-      drawer: datosUsuario!={}?MyDrawer(datosUsuario: datosUsuario):MyDrawer(datosUsuario: {'nombre':"null", "contrato":"null","cedula":"null", "id_usuario":"null"}),
+      drawer: MyDrawer(datosUsuario: datosUsuario),//datosUsuario!={}?MyDrawer(datosUsuario: datosUsuario):MyDrawer(datosUsuario: {'nombre':"null", "contrato":"null","cedula":"null", "id_usuario":"null"}),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
