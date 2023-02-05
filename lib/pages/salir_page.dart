@@ -21,12 +21,12 @@ class _SalirPageState extends State<SalirPage> {
   String servidor="";
   String contrato="";
   bool modoInternet=false;
-
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     obtenerAccesos();
+
   }
 
   obtenerAccesos() async{
@@ -48,7 +48,9 @@ class _SalirPageState extends State<SalirPage> {
       barrierDismissible: false,
       context: context,
       builder: (_) {
-        return LoadingWidget();
+        return WillPopScope(
+          onWillPop: () async => false,
+          child: LoadingWidget());
         // Dialog(
         //   // The background color
         //   backgroundColor: Colors.white,
@@ -154,7 +156,9 @@ class _SalirPageState extends State<SalirPage> {
                   barrierDismissible: false,
                   context: context,
                   builder: (_) {
-                    return LoadingWidget();
+                    return WillPopScope(
+                      onWillPop: () async => false,
+                      child: LoadingWidget());
                   }
                 );
                 try {
@@ -234,8 +238,9 @@ class _SalirPageState extends State<SalirPage> {
       Map jsonBody={"contrato":contrato, "acceso":acceso,"id_usuario":idUsuario};
       var client = BasicAuthClient('mobile_access', 'S3gur1c3l_mobile@');
       var res = await client.post(Uri.parse('https://webseguricel.up.railway.app/apertura/'), body: jsonBody).timeout(Duration(seconds: 5));
-      Navigator.of(context).pop();
+      
       //await Future.delayed(const Duration(seconds: 1));
+      Navigator.of(context).pop();
       AwesomeDialog(
         titleTextStyle: TextStyle(
           fontWeight: FontWeight.bold,

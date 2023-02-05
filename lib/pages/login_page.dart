@@ -41,7 +41,9 @@ class _LoginPageState extends State<LoginPage> {
       barrierDismissible: false,
       context: context,
       builder: (_) {
-        return LoadingWidget();
+        return WillPopScope(
+          onWillPop: () async => false,
+          child: LoadingWidget());
         // Dialog(
         //   // The background color
         //   backgroundColor: Colors.white,

@@ -48,7 +48,9 @@ class _EntrarPageState extends State<EntrarPage> {
       barrierDismissible: false,
       context: context,
       builder: (_) {
-        return LoadingWidget();
+        return WillPopScope(
+          onWillPop: () async => false,
+          child: LoadingWidget());
         // Dialog(
         //   // The background color
         //   backgroundColor: Colors.white,
@@ -154,7 +156,9 @@ class _EntrarPageState extends State<EntrarPage> {
                   barrierDismissible: false,
                   context: context,
                   builder: (_) {
-                    return LoadingWidget();
+                    return WillPopScope(
+                      onWillPop: () async => false,
+                      child: LoadingWidget());
                   }
                 );
                 try {
