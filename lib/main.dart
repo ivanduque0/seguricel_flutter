@@ -1,7 +1,9 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:seguricel_flutter/pages/entrar_page.dart';
 import 'package:seguricel_flutter/pages/main_page.dart';
 import 'package:seguricel_flutter/pages/login_page.dart';
+import 'package:seguricel_flutter/pages/salir_page.dart';
 import 'package:seguricel_flutter/utils/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -37,6 +39,8 @@ class MyApp extends StatelessWidget {
       routes: {
         LoginPage.routeName : (context) => LoginPage(),
         MainPage.routeName : (context) => MainPage(),
+        EntrarPage.routeName : (context) => EntrarPage(),
+        SalirPage.routeName : (context) => SalirPage(),
     },
   );
   }

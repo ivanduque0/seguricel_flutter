@@ -1,15 +1,15 @@
 import 'package:fluentui_icons/fluentui_icons.dart';
 import 'package:flutter/material.dart';
-import 'package:seguricel_flutter/drawer.dart';
+import 'package:seguricel_flutter/utils/drawer.dart';
 // import 'package:seguricel_flutter/name_card_widget.dart';
 import 'package:http_auth/http_auth.dart';
 import 'package:seguricel_flutter/pages/login_page.dart';
 import 'package:seguricel_flutter/screens/aperturas_screen.dart';
 import 'dart:convert';
-
 import 'package:seguricel_flutter/screens/home_screen.dart';
 import 'package:seguricel_flutter/screens/invitados_screen.dart';
 import 'package:seguricel_flutter/utils/constants.dart';
+import 'package:seguricel_flutter/utils/loading.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MainPage extends StatefulWidget {
@@ -53,12 +53,11 @@ class _MainPageState extends State<MainPage> {
     fetchData2();
   }
   
-
   fetchData2()async{
     //SharedPreferences prefs = await SharedPreferences.getInstance();
     String encodeDatosUsuario = await Constants.prefs.getString('datosUsuario').toString();
     String encodeContratos = await Constants.prefs.getString('contratos').toString();
-    String encodeAccesos = await Constants.prefs.getString('accesos').toString();
+    // String encodeAccesos = await Constants.prefs.getString('accesos').toString();
 
     // print(encodeDatosUsuario);
     // print(encodeContratos);
@@ -66,7 +65,7 @@ class _MainPageState extends State<MainPage> {
     setState(() {
       datosUsuario = jsonDecode(encodeDatosUsuario);
       contratos = jsonDecode(encodeContratos);
-      accesos = jsonDecode(encodeAccesos);
+      // accesos = jsonDecode(encodeAccesos);
     });
     // datosUsuario = await jsonDecode(encodeDatosUsuario);
     // contratos = await jsonDecode(encodeContratos);
@@ -127,16 +126,17 @@ class _MainPageState extends State<MainPage> {
         //   },
         //   itemCount: data.length,
         // )
-        :Center(
-          child: CircleAvatar(
-            backgroundColor: Colors.orange,
-            radius: 75,
-            child: CircleAvatar(
-              radius: 71,
-              backgroundImage: AssetImage("assets/images/gif_loading.gif"),
-            )
-          ),
-        ),
+        :LoadingWidget(),
+        // :Center(
+        //   child: CircleAvatar(
+        //     backgroundColor: Colors.orange,
+        //     radius: 75,
+        //     child: CircleAvatar(
+        //       radius: 71,
+        //       backgroundImage: AssetImage("assets/images/gif_loading.gif"),
+        //     )
+        //   ),
+        // ),
       drawer: MyDrawer(datosUsuario: datosUsuario),//datosUsuario!={}?MyDrawer(datosUsuario: datosUsuario):MyDrawer(datosUsuario: {'nombre':"null", "contrato":"null","cedula":"null", "id_usuario":"null"}),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,

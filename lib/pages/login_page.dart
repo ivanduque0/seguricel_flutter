@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:seguricel_flutter/pages/main_page.dart';
 import 'package:seguricel_flutter/utils/constants.dart';
+import 'package:seguricel_flutter/utils/loading.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http_auth/http_auth.dart';
 import 'dart:convert';
@@ -18,7 +19,7 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController _codeController = TextEditingController();
 
   //final _passwordController = TextEditingController();
-  var isLoggedIn;
+  bool isLoggedIn=false;
 
   void dispose() {
     _codeController.dispose();
@@ -34,7 +35,39 @@ class _LoginPageState extends State<LoginPage> {
     
   }
 
-  fetchData() async{
+  fetchData(BuildContext context, [bool mounted = true]) async{
+    showDialog(
+      // The user CANNOT close this dialog  by pressing outsite it
+      barrierDismissible: false,
+      context: context,
+      builder: (_) {
+        return LoadingWidget();
+        // Dialog(
+        //   // The background color
+        //   backgroundColor: Colors.white,
+        //   child: Padding(
+        //     padding: const EdgeInsets.symmetric(vertical: 20),
+        //     child: Column(
+        //       mainAxisSize: MainAxisSize.min,
+        //       children: const [
+        //         // The loading indicator
+        //         LoadingWidget(),
+        //         SizedBox(
+        //           height: 15,
+        //         ),
+        //         // Some text
+        //         Text('Espere por favor...', style: TextStyle(
+        //           fontWeight: FontWeight.bold,
+        //           color: Colors.orange,
+        //           fontSize: 30
+        //         ),)
+        //       ],
+        //     ),
+        //   ),
+        // );
+      }
+    );
+
     var data;
     var res;
     List contratos=[];
@@ -44,12 +77,15 @@ class _LoginPageState extends State<LoginPage> {
     String nombre="";
     String beacon_uuid="";
     String servidor="";
-    String accesos="";
-    Map AccesosPeatonales={};
-    Map AccesosVehiculares={};
+    String entradas="";
+    String salidas="";
+    List accesosEntradas=[];
+    List accesosSalidas=[];
+    // Map AccesosPeatonales={};
+    // Map AccesosVehiculares={};
     String datosUsuario="";
     var client = BasicAuthClient('mobile_access', 'S3gur1c3l_mobile@');
-    res = await client.get(Uri.parse('https://webseguricel.up.railway.app/dispositivosapimobile/${_codeController.text}/'));//.timeout(Duration(seconds: 15));;
+    res = await client.get(Uri.parse('https://webseguricel.up.railway.app/dispositivosapimobile/${_codeController.text}/')).timeout(Duration(seconds: 5));
     data = jsonDecode(res.body);
     for (var item in data) {
       contratos.add(item['contrato']);
@@ -61,7 +97,7 @@ class _LoginPageState extends State<LoginPage> {
     }
     if (contratos.length>0){
       contrato= contratos[0];
-      res = await client.post(Uri.parse('https://webseguricel.up.railway.app/dispositivosapimobile/${contrato}/'));//.timeout(Duration(seconds: 15));;
+      res = await client.post(Uri.parse('https://webseguricel.up.railway.app/dispositivosapimobile/${contrato}/')).timeout(Duration(seconds: 5));//.timeout(Duration(seconds: 15));;
       data = jsonDecode(res.body);
       var descripcionIteracion="";
       for (var item in data) {
@@ -69,33 +105,62 @@ class _LoginPageState extends State<LoginPage> {
           servidor="${item['dispositivo']}:43157/";
         } else {
           descripcionIteracion=item['descripcion'];
-          if (descripcionIteracion.toLowerCase().contains('peatonal')){
-            AccesosPeatonales[item['acceso'].toString()]=item['descripcion'].substring(0, item['descripcion'].indexOf('('));
+          
+          // if (descripcionIteracion.toLowerCase().contains('peatonal')){
+          if ((descripcionIteracion.toLowerCase().contains('peatonal') || descripcionIteracion.toLowerCase().contains('vehicular')) && !descripcionIteracion.toLowerCase().contains('salida') && !(descripcionIteracion.toLowerCase().contains('rfid') || descripcionIteracion.toLowerCase().contains('huella'))){
+            // print(descripcionIteracion);
+            accesosEntradas.add({'acceso':item['acceso'].toString(), 'descripcion':item['descripcion'].substring(0, item['descripcion'].indexOf('('))});
           }
-          if (descripcionIteracion.toLowerCase().contains('vehicular')){
-            // print(item['descripcion']);
-            // print(acceso.runtimeType);
-            AccesosVehiculares[item['acceso'].toString()]=item['descripcion'].substring(0, item['descripcion'].indexOf('('));
+          if ((descripcionIteracion.toLowerCase().contains('peatonal') || descripcionIteracion.toLowerCase().contains('vehicular')) && !descripcionIteracion.toLowerCase().contains('entrada') && !(descripcionIteracion.toLowerCase().contains('rfid') || descripcionIteracion.toLowerCase().contains('huella'))){
+            // print(descripcionIteracion);
+            accesosSalidas.add({'acceso':item['acceso'].toString(), 'descripcion':item['descripcion'].substring(0, item['descripcion'].indexOf('('))});
           }
+          //   AccesosPeatonales[item['acceso'].toString()]=item['descripcion'].substring(0, item['descripcion'].indexOf('('));
+          // }
+          // if (descripcionIteracion.toLowerCase().contains('vehicular')){
+          //   // print(item['descripcion']);
+          //   // print(acceso.runtimeType);
+          //   AccesosVehiculares[item['acceso'].toString()]=item['descripcion'].substring(0, item['descripcion'].indexOf('('));
+          // }
         }
       }
       // print(data);
       // print(servidor);
+      // print(accesosEntradas);
+      // print(accesosSalidas);
       // print(AccesosPeatonales);
       // print(AccesosVehiculares);
       datosUsuario=jsonEncode({'contrato':contrato, 'id_usuario':_codeController.text, 'cedula':cedula, 'nombre':nombre, 'beacon_uuid':beacon_uuid});
-      accesos=jsonEncode([AccesosPeatonales,AccesosVehiculares]);
+      // accesos=jsonEncode([AccesosPeatonales,AccesosVehiculares]);
+      entradas=jsonEncode(accesosEntradas);
+      salidas=jsonEncode(accesosSalidas);
       contratosEncode=jsonEncode(contratos);
 
       //SharedPreferences prefs = await SharedPreferences.getInstance();
       
       await Constants.prefs.setString('datosUsuario', datosUsuario);
-      await Constants.prefs.setString('accesos', accesos);
+      await Constants.prefs.setString('entradas', entradas);
+      await Constants.prefs.setString('salidas', salidas);
       await Constants.prefs.setString('contratos', contratosEncode);
+      await Constants.prefs.setString('servidor', servidor);
+      await Constants.prefs.setString('id_usuario', _codeController.text);
+      await Constants.prefs.setString('contrato', contrato);
       await Constants.prefs.setBool('isLoggedIn', true);
-      Navigator.pushReplacementNamed(context, MainPage.routeName);
+      await Constants.prefs.setBool('modoInternet', false);
+      
+      isLoggedIn=true;
+      // Navigator.pushReplacementNamed(context, MainPage.routeName);
     }
+    if (!mounted) return;
 
+    if (isLoggedIn){
+      Navigator.of(context).pop();
+      Navigator.pushReplacementNamed(context, MainPage.routeName);
+    } else {
+      // print("error de logg in");
+      Navigator.of(context).pop();
+    }
+    
     // setState(() {
     // });
   }
@@ -168,7 +233,7 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                           ElevatedButton(
                             onPressed: () {
-                              fetchData();
+                              fetchData(context);
                               // Constants.prefs?.setBool("loggedIn", true);
                               // Navigator.push(
                               //   context, 
