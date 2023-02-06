@@ -39,7 +39,7 @@ class LoadingWidget extends StatelessWidget {
                         
                         
                       ),
-                      child: Text("Espere Por favor"),
+                      child: Text("Espere por favor"),
                     ),
                   ),
                 ),

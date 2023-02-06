@@ -35,6 +35,36 @@ class _LoginPageState extends State<LoginPage> {
     
   }
 
+  invertirUUID(String uuid){
+    String uuidInvertido="";
+    int cont=36;
+    for( var i = 1 ; i <= 16; i++ ) { 
+      // print(encodeUUID.substring(cont-2, cont));
+      uuidInvertido=uuidInvertido+uuid.substring(cont-2, cont);
+      cont=cont-2;
+      // if (cont==8) {print(uuidInvertido);}
+      if (i==4){
+        uuidInvertido+='-';
+      }  
+      if (i==6){
+        cont=cont-1;
+        uuidInvertido+='-';
+      }
+      if (i==8){
+         cont=cont-1;
+        uuidInvertido+='-';
+      }
+      if (i==10){
+        cont=cont-1;
+        uuidInvertido+='-';
+      } 
+      if (i==12){
+        cont=cont-1;
+      }    
+    }
+    return uuidInvertido;
+  }
+
   fetchData(BuildContext context, [bool mounted = true]) async{
     showDialog(
       // The user CANNOT close this dialog  by pressing outsite it
@@ -147,9 +177,9 @@ class _LoginPageState extends State<LoginPage> {
       await Constants.prefs.setString('servidor', servidor);
       await Constants.prefs.setString('id_usuario', _codeController.text);
       await Constants.prefs.setString('contrato', contrato);
+      await Constants.prefs.setString('beacon_uuid', invertirUUID(beacon_uuid));
       await Constants.prefs.setBool('isLoggedIn', true);
       await Constants.prefs.setBool('modoInternet', false);
-      
       isLoggedIn=true;
       // Navigator.pushReplacementNamed(context, MainPage.routeName);
     }
