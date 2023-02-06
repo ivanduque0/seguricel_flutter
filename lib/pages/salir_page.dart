@@ -79,7 +79,7 @@ class _SalirPageState extends State<SalirPage> {
     if(!modoInternet){
       try {
         //print('${servidor}${idUsuario}/${acceso}/entrar/seguricel_wifi_activo/');
-        var res = await http.post(Uri.parse('${servidor}${idUsuario}/${acceso}/salir/seguricel_wifi_activo/')).timeout(Duration(seconds: 5));
+        var res = await http.post(Uri.parse('${servidor}${idUsuario}/${acceso}/salida/seguricel_wifi_activo/')).timeout(Duration(seconds: 5));
         Navigator.of(context).pop();
         AwesomeDialog(
           titleTextStyle: TextStyle(
@@ -162,7 +162,7 @@ class _SalirPageState extends State<SalirPage> {
                   }
                 );
                 try {
-                  Map jsonBody={"contrato":contrato, "acceso":acceso,"id_usuario":idUsuario};
+                  Map jsonBody={"contrato":contrato, "acceso":acceso,"id_usuario":idUsuario, "razon":"salida"};
                   var client = BasicAuthClient('mobile_access', 'S3gur1c3l_mobile@');
                   var res = await client.post(Uri.parse('https://webseguricel.up.railway.app/apertura/'), body: jsonBody).timeout(Duration(seconds: 5));
                   Navigator.of(context).pop();
@@ -235,7 +235,7 @@ class _SalirPageState extends State<SalirPage> {
       }
     } else {
       try {
-      Map jsonBody={"contrato":contrato, "acceso":acceso,"id_usuario":idUsuario};
+      Map jsonBody={"contrato":contrato, "acceso":acceso,"id_usuario":idUsuario, "razon":"salida"};
       var client = BasicAuthClient('mobile_access', 'S3gur1c3l_mobile@');
       var res = await client.post(Uri.parse('https://webseguricel.up.railway.app/apertura/'), body: jsonBody).timeout(Duration(seconds: 5));
       
