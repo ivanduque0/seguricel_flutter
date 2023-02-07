@@ -33,7 +33,7 @@ class _MainPageState extends State<MainPage> {
   List contratos=[];
   List accesos=[];
 
-  int _selectedIndex=0;
+  int _selectedIndex=1;
   static final List<Widget>_widgetOptions = <Widget>[
     HomeScreen(),
     AperturasScreen(),
@@ -137,7 +137,7 @@ class _MainPageState extends State<MainPage> {
         //     )
         //   ),
         // ),
-      drawer: MyDrawer(datosUsuario: datosUsuario),//datosUsuario!={}?MyDrawer(datosUsuario: datosUsuario):MyDrawer(datosUsuario: {'nombre':"null", "contrato":"null","cedula":"null", "id_usuario":"null"}),
+      //drawer: MyDrawer(datosUsuario: datosUsuario),//datosUsuario!={}?MyDrawer(datosUsuario: datosUsuario):MyDrawer(datosUsuario: {'nombre':"null", "contrato":"null","cedula":"null", "id_usuario":"null"}),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
@@ -154,12 +154,12 @@ class _MainPageState extends State<MainPage> {
             BottomNavigationBarItem(
               icon: Icon(FluentSystemIcons.ic_fluent_home_regular),
               activeIcon: Icon(FluentSystemIcons.ic_fluent_home_filled),
-              label: "home"),
-            BottomNavigationBarItem(icon: Icon(Icons.door_sliding_rounded),label: "aperturas"),
+              label: "Home"),
+            BottomNavigationBarItem(icon: Icon(Icons.door_sliding_rounded),label: "Aperturas"),
             BottomNavigationBarItem(
               icon: Icon(FluentSystemIcons.ic_fluent_people_community_add_regular),
               activeIcon: Icon(FluentSystemIcons.ic_fluent_people_community_add_filled),
-              label: "invitados"
+              label: "Visitantes"
               ),
           ]
       ),

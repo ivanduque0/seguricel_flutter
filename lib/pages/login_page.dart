@@ -100,6 +100,8 @@ class _LoginPageState extends State<LoginPage> {
       }
     );
 
+    if (_codeController.text!='')
+    {
     var data;
     var res;
     List contratos=[];
@@ -182,6 +184,7 @@ class _LoginPageState extends State<LoginPage> {
       await Constants.prefs.setBool('modoInternet', false);
       isLoggedIn=true;
       // Navigator.pushReplacementNamed(context, MainPage.routeName);
+    }
     }
     if (!mounted) return;
 

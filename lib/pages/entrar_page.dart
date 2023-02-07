@@ -78,8 +78,8 @@ class _EntrarPageState extends State<EntrarPage> {
     );
     if(!modoInternet){
       try {
-        //print('${servidor}${idUsuario}/${acceso}/entrar/seguricel_wifi_activo/');
-        var res = await http.post(Uri.parse('${servidor}${idUsuario}/${acceso}/entrada/seguricel_wifi_activo/')).timeout(Duration(seconds: 5));
+        //print('${servidor}${idUsuario}/${acceso}/entrada/seguricel_wifi_activo');
+        var res = await http.post(Uri.parse('${servidor}${idUsuario}/${acceso}/entrada/seguricel_wifi_activo')).timeout(Duration(seconds: 5));
         Navigator.of(context).pop();
         AwesomeDialog(
           titleTextStyle: TextStyle(

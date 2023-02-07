@@ -79,7 +79,7 @@ class _SalirPageState extends State<SalirPage> {
     if(!modoInternet){
       try {
         //print('${servidor}${idUsuario}/${acceso}/entrar/seguricel_wifi_activo/');
-        var res = await http.post(Uri.parse('${servidor}${idUsuario}/${acceso}/salida/seguricel_wifi_activo/')).timeout(Duration(seconds: 5));
+        var res = await http.post(Uri.parse('${servidor}${idUsuario}/${acceso}/salida/seguricel_wifi_activo')).timeout(Duration(seconds: 5));
         Navigator.of(context).pop();
         AwesomeDialog(
           titleTextStyle: TextStyle(
