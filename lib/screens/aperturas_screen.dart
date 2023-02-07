@@ -69,9 +69,13 @@ class _AperturasScreenState extends State<AperturasScreen> {
           Map<Permission, PermissionStatus> statuses = await [
           Permission.location,
           Permission.bluetooth,
+          Permission.bluetoothConnect,
           Permission.bluetoothAdvertise,
+          // Permission.locationWhenInUse,
+          // Permission.locationAlways
           ].request();
-          print(bluetoothEnable);
+          //print(statuses);
+          //print(bluetoothEnable);
           if (!bluetoothEnable){
             await FlutterBluetoothSerial.instance.requestEnable();
             // setState(() {
