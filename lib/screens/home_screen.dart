@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_switch/flutter_switch.dart';
+import 'package:seguricel_flutter/screens/infocontrato_screen.dart';
+import 'package:seguricel_flutter/screens/infousuario_screen.dart';
+import 'package:seguricel_flutter/screens/tipoaperturas_screen.dart';
 import 'package:seguricel_flutter/utils/constants.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -10,52 +13,153 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  bool modoInternet=false;
-
+  // bool modoInternet=false;
+  int screen=0;
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    cargarParametros();
-  }
+  // void initState() {
+  //   // TODO: implement initState
+  //   super.initState();
+  //   cargarParametros();
+  // }
 
-  cargarParametros(){
+  void updateScreen(int newScreen) {
     setState(() {
-      modoInternet= Constants.prefs.getBool('modoInternet') ?? false;
+      screen = newScreen;
     });
   }
+
+  // cargarParametros(){
+  //   setState(() {
+  //     modoInternet= Constants.prefs.getBool('modoInternet') ?? false;
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+      child: screen==0?Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Text("Aperturas por internet", 
-          style: TextStyle(
-            fontSize: 30
-          ),),
-          SizedBox(
-            height: 10,
+          Container(
+            width: MediaQuery.of(context).size.width/1.2,
+            height: MediaQuery.of(context).size.height/4.5,
+            child: InkWell(
+                  borderRadius: BorderRadius.circular(20),
+                  onTap: () {
+                    setState(() {
+                      screen=1;
+                      print("state 1");
+                    });
+                    
+                    //Navigator.pushNamed(context, EntrarPage.routeName);
+                  }, // Handle your callback.
+                  splashColor: Color.fromARGB(255, 255, 255, 255).withOpacity(0.5),
+                  child: Ink(
+                    child: Center(child: Text("Informacion\nde usuario", textAlign:TextAlign.center, style: TextStyle(fontSize: 40, ),)),
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height/3,
+                    decoration: BoxDecoration(
+                      color: Color.fromARGB(255, 168, 191, 241),
+                      borderRadius: BorderRadius.circular(20),
+                      // image: DecorationImage(
+                      //   image: NetworkImage('https://http2.mlstatic.com/D_NQ_NP_909774-MLV52690599466_122022-W.jpg'),
+                      //   fit: BoxFit.cover,
+                      // ),
+                    ),
+                  ),
+                ),
           ),
-          FlutterSwitch(
-            activeColor: Colors.orange,
-            width: 125.0,
-            height: 55.0,
-            valueFontSize: 25.0,
-            toggleSize: 45.0,
-            value: modoInternet,
-            borderRadius: 30.0,
-            padding: 8.0,
-            showOnOff: true,
-            onToggle: (value) {
-              setState(() {
-                modoInternet = value;
-              });
-              Constants.prefs.setBool('modoInternet', value);
-            },
+          Container(
+            width: MediaQuery.of(context).size.width/1.2,
+            height: MediaQuery.of(context).size.height/4.5,
+            child: InkWell(
+                  borderRadius: BorderRadius.circular(20),
+                  onTap: () {
+                    setState(() {
+                      screen=2;
+                      print("state 2");
+                    });
+                    //Navigator.pushNamed(context, EntrarPage.routeName);
+                  }, // Handle your callback.
+                  splashColor: Color.fromARGB(255, 255, 255, 255).withOpacity(0.5),
+                  child: Ink(
+                    child: Center(child: Text("Informacion\nde contrato", textAlign:TextAlign.center, style: TextStyle(fontSize: 40, ),)),
+                    // width: MediaQuery.of(context).size.width,
+                    // height: MediaQuery.of(context).size.height/3,
+                    decoration: BoxDecoration(
+                      color: Color.fromARGB(255, 168, 191, 241),
+                      borderRadius: BorderRadius.circular(20),
+                      // image: DecorationImage(
+                      //   image: NetworkImage('https://http2.mlstatic.com/D_NQ_NP_909774-MLV52690599466_122022-W.jpg'),
+                      //   fit: BoxFit.cover,
+                      // ),
+                    ),
+                  ),
+                ),
           ),
+          Container(
+            width: MediaQuery.of(context).size.width/1.2,
+            height: MediaQuery.of(context).size.height/4.5,
+            child: InkWell(
+                  borderRadius: BorderRadius.circular(20),
+                  onTap: () {
+                    setState(() {
+                      screen=3;
+                      print("state 3");
+                    });
+                    //Navigator.pushNamed(context, EntrarPage.routeName);
+                  }, // Handle your callback.
+                  splashColor: Color.fromARGB(255, 255, 255, 255).withOpacity(0.5),
+                  child: Ink(
+                    // color: Colors.grey,
+                    child: Center(child: Text("Mis tipos\nde apertura", textAlign:TextAlign.center, style: TextStyle(fontSize: 40, ),)),
+                    // width: MediaQuery.of(context).size.width,
+                    // height: MediaQuery.of(context).size.height/3,
+                    decoration: BoxDecoration(
+                      color: Color.fromARGB(255, 168, 191, 241),
+                      borderRadius: BorderRadius.circular(20),
+                      // image: DecorationImage(
+                      //   image: NetworkImage('https://http2.mlstatic.com/D_NQ_NP_909774-MLV52690599466_122022-W.jpg'),
+                      //   fit: BoxFit.cover,
+                      // ),
+                    ),
+                  ),
+                ),
+          ),
+          // Text("Aperturas por internet", 
+          // style: TextStyle(
+          //   fontSize: 30
+          // ),),
+          // SizedBox(
+          //   height: 10,
+          // ),
+          // FlutterSwitch(
+          //   activeColor: Colors.orange,
+          //   width: 125.0,
+          //   height: 55.0,
+          //   valueFontSize: 25.0,
+          //   toggleSize: 45.0,
+          //   value: modoInternet,
+          //   borderRadius: 30.0,
+          //   padding: 8.0,
+          //   showOnOff: true,
+          //   onToggle: (value) {
+          //     setState(() {
+          //       modoInternet = value;
+          //     });
+          //     Constants.prefs.setBool('modoInternet', value);
+          //   },
+          // ),
         ],
+      ):
+      screen==1?infoUsuarioScreen(
+        volver: updateScreen,
+      ):
+      screen==2?infoContratoScreen(
+        volver: updateScreen,
+      ):
+      tipoAperturaScreen(
+        volver: updateScreen,
       )
       
       

@@ -181,7 +181,9 @@ class _LoginPageState extends State<LoginPage> {
       await Constants.prefs.setString('contrato', contrato);
       await Constants.prefs.setString('beacon_uuid', invertirUUID(beacon_uuid));
       await Constants.prefs.setBool('isLoggedIn', true);
-      await Constants.prefs.setBool('modoInternet', false);
+      await Constants.prefs.setBool('modoInternet', true);
+      await Constants.prefs.setBool('modoWifi', false);
+      await Constants.prefs.setBool('modoBluetooth', true);
       isLoggedIn=true;
       // Navigator.pushReplacementNamed(context, MainPage.routeName);
     }
