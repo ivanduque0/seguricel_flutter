@@ -1,6 +1,8 @@
 import 'dart:convert';
 
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:http_auth/http_auth.dart';
 import 'package:seguricel_flutter/utils/constants.dart';
 import 'package:seguricel_flutter/utils/loading.dart';
 
@@ -15,8 +17,10 @@ class infoContratoScreen extends StatefulWidget {
 }
 
 class _infoContratoScreenState extends State<infoContratoScreen> {
-  List contratos=[];
+  List <String>contratos=[];
   Map datosUsuario={};
+  String seleccionContrato ="";
+  List <String>ContratosActualizar=[];
   
   @override
   void initState() {
@@ -29,26 +33,154 @@ class _infoContratoScreenState extends State<infoContratoScreen> {
     //SharedPreferences prefs = await SharedPreferences.getInstance();
     String encodeDatosUsuario = await Constants.prefs.getString('datosUsuario').toString();
     String encodeContratos = await Constants.prefs.getString('contratos').toString();
-    // String encodeAccesos = await Constants.prefs.getString('accesos').toString();
+    String idUsuario= await Constants.prefs.getString('id_usuario').toString();
 
     // print(encodeDatosUsuario);
     // print(encodeContratos);
     // print(encodeAccesos);
     setState (() {
       datosUsuario = jsonDecode(encodeDatosUsuario);
-      contratos = jsonDecode(encodeContratos);
+      contratos = (jsonDecode(encodeContratos) as List<dynamic>).cast<String>();
+      seleccionContrato = datosUsuario['contrato'];
       // accesos = jsonDecode(encodeAccesos);
     });
 
+    try{
+    var client = BasicAuthClient('mobile_access', 'S3gur1c3l_mobile@');
+    var res = await client.get(Uri.parse('https://webseguricel.up.railway.app/dispositivosapimobile/${idUsuario}/')).timeout(Duration(seconds: 5));
+    var data = jsonDecode(res.body);
+    for (var item in data) {
+      ContratosActualizar.add(item['contrato']);
+    }
+    if (contratos!=ContratosActualizar){
+      setState(() {
+        contratos=ContratosActualizar;
+      });
+      String contratosEncode=jsonEncode(contratos);
+      await Constants.prefs.setString('contratos', contratosEncode);
+    }
+    }catch(e){
+                    AwesomeDialog(
+                      titleTextStyle: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 30,
+                        color: Colors.red
+                      ),
+                      // descTextStyle: TextStyle(
+                      //   fontWeight: FontWeight.bold,
+                      //   fontSize: 20,
+                      // ),
+                      context: context,
+                      animType: AnimType.bottomSlide,
+                      headerAnimationLoop: false,
+                      dialogType: DialogType.error,
+                      showCloseIcon: true,
+                      title: "Sin conexion a internet",
+                      //desc:"Solicitud enviada",
+                      btnOkOnPress: () {
+                        //debugPrint('OnClcik');
+                      },
+                      btnOkColor: Colors.red,
+                      btnOkIcon: Icons.check_circle,
+                      // onDismissCallback: (type) {
+                      //   debugPrint('Dialog Dissmiss from callback $type');
+                      // },
+                    ).show();
+    }
+    
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
             body: 
-            (contratos.length!=0)
+            (contratos.length!=0 && seleccionContrato!="")
             ?Center(
-              child: Text(contratos[0]),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text("Seleccione el contrato\nal que desea cambiar",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 25,
+                    fontWeight: FontWeight.bold
+                  ),),
+                  SizedBox(
+                    height: 30,
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width/1.5,
+                    height: 70,
+                    child: DropdownButton<String>(
+                      value: seleccionContrato,
+                      isExpanded: true,
+                      icon: const Icon(Icons.arrow_downward_outlined),
+                      elevation: 16,
+                      menuMaxHeight: 220,
+                      style: const TextStyle(color: Color.fromARGB(255, 221, 113, 25), fontSize: 20),
+                      underline: Container(
+                        height: 2,
+                        color: Color.fromARGB(255, 221, 113, 25),
+                      ),
+                      onChanged: (String? value) async {
+                        showDialog(
+                          // The user CANNOT close this dialog  by pressing outsite it
+                          barrierDismissible: false,
+                          context: context,
+                          builder: (_) {
+                            return WillPopScope(
+                              onWillPop: () async => false,
+                              child: LoadingWidget());
+                          }
+                        );
+                        String servidor="";
+                        List accesosEntradas=[];
+                        List accesosSalidas=[];
+                        // This is called when the user selects an item.
+                        datosUsuario['contrato']=value;
+                        var client = BasicAuthClient('mobile_access', 'S3gur1c3l_mobile@');
+                        var res = await client.post(Uri.parse('https://webseguricel.up.railway.app/dispositivosapimobile/${value}/')).timeout(Duration(seconds: 5));//.timeout(Duration(seconds: 15));;
+                        var data = jsonDecode(res.body);
+                        var descripcionIteracion="";
+                        for (var item in data) {
+                          if (servidor=="" && item['descripcion']=="SERVIDOR LOCAL"){
+                            servidor="${item['dispositivo']}:43157/";
+                          } else {
+                            descripcionIteracion=item['descripcion'];
+                            
+                            if ((descripcionIteracion.toLowerCase().contains('peatonal') || descripcionIteracion.toLowerCase().contains('vehicular')) && !descripcionIteracion.toLowerCase().contains('salida') && !(descripcionIteracion.toLowerCase().contains('rfid') || descripcionIteracion.toLowerCase().contains('huella'))){
+                              accesosEntradas.add({'acceso':item['acceso'].toString(), 'descripcion':item['descripcion'].substring(0, item['descripcion'].indexOf('('))});
+                            }
+                            if ((descripcionIteracion.toLowerCase().contains('peatonal') || descripcionIteracion.toLowerCase().contains('vehicular')) && !descripcionIteracion.toLowerCase().contains('entrada') && !(descripcionIteracion.toLowerCase().contains('rfid') || descripcionIteracion.toLowerCase().contains('huella'))){
+                              accesosSalidas.add({'acceso':item['acceso'].toString(), 'descripcion':item['descripcion'].substring(0, item['descripcion'].indexOf('('))});
+                            }
+                          }
+                        }
+                        String datosUsuarioEnconde=jsonEncode(datosUsuario);
+                        // accesos=jsonEncode([AccesosPeatonales,AccesosVehiculares]);
+                        String entradas=jsonEncode(accesosEntradas);
+                        String salidas=jsonEncode(accesosSalidas);
+                        await Constants.prefs.setString('datosUsuario', datosUsuarioEnconde);
+                        await Constants.prefs.setString('entradas', entradas);
+                        await Constants.prefs.setString('salidas', salidas);
+                        await Constants.prefs.setString('servidor', servidor);
+                        await Constants.prefs.setString('contrato', value!);
+                        setState(() {
+                          seleccionContrato = value;
+                  
+                        });
+                        Navigator.of(context).pop();
+                      },
+                      items: contratos.map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                ],
+              ),
             )
             :LoadingWidget(),
             floatingActionButton: Padding(

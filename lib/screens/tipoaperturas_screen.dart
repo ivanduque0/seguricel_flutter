@@ -32,9 +32,6 @@ class _tipoAperturaScreenState extends State<tipoAperturaScreen> {
       internet= Constants.prefs.getBool('modoInternet') ?? false;
       bluetooth= Constants.prefs.getBool('modoBluetooth') ?? false;
       wifi= Constants.prefs.getBool('modoWifi') ?? false;
-      print(internet);
-      print(wifi);
-      print(bluetooth);
     });
   }
   @override
