@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
@@ -167,120 +168,124 @@ class _SalirPageState extends State<SalirPage> {
                   var res = await client.post(Uri.parse('https://webseguricel.up.railway.app/apertura/'), body: jsonBody).timeout(Duration(seconds: 5));
         
                   if (res.statusCode==201){
-                  int cantidadAperturas=0;
-                  int feedbacksProcesados=0;
-                  do {
-                    res = await client.get(Uri.parse('https://webseguricel.up.railway.app/aperturasusuarioapi/${idUsuario}/')).timeout(Duration(seconds: 5));
-                    var aperturasjson = await jsonDecode(res.body);
-                    // print(aperturasjson);
-                    cantidadAperturas = aperturasjson.length;
-                    feedbacksProcesados=0;
-                    try {
-                      for (var apertura in aperturasjson) {
-                        // print(apertura);
-                        // print(apertura['abriendo']);
-                        // print(apertura['feedback']);
-                        if (apertura['abriendo'] && !apertura['feedback']){
-                          //print(apertura);
-                            res = await client.put(Uri.parse('https://webseguricel.up.railway.app/aperturasusuarioapi/${apertura['id']}/')).timeout(Duration(seconds: 5));
-                            //print("FEEDBACK ENVIADO!");
+                    int cantidadAperturas=0;
+                    int feedbacksProcesados=0;
+                    int timeoutInternet=0;
+                    Timer.periodic(const Duration(seconds: 1), (timer) async {
+                      timeoutInternet++;
+                      res = await client.get(Uri.parse('https://webseguricel.up.railway.app/aperturasusuarioapi/${idUsuario}/${contrato}/')).timeout(Duration(seconds: 5));
+                      var aperturasjson = await jsonDecode(res.body);
+                      // print(aperturasjson);
+                      cantidadAperturas = aperturasjson.length;
+                      feedbacksProcesados=0;
+                      try {
+                        for (var apertura in aperturasjson) {
+                          // print(apertura);
+                          // print(apertura['abriendo']);
+                          // print(apertura['feedback']);
+                          if (apertura['abriendo'] && !apertura['feedback']){
+                            //print(apertura);
+                              res = await client.put(Uri.parse('https://webseguricel.up.railway.app/aperturasusuarioapi/${apertura['id']}/${contrato}/')).timeout(Duration(seconds: 5));
+                              //print("FEEDBACK ENVIADO!");
+                          }
+                          if (apertura['abriendo'] && apertura['feedback']){
+                            //print(apertura);
+                            feedbacksProcesados+=1;
+                          }
                         }
-                        if (apertura['abriendo'] && apertura['feedback']){
-                          //print(apertura);
-                          feedbacksProcesados+=1;
-                        }
+                      } catch (e) {
                       }
-                    } catch (e) {
-                      
-                    }
-
-                  } while (cantidadAperturas>feedbacksProcesados);
+                        if (cantidadAperturas==feedbacksProcesados) {
+                          timer.cancel();
+                          Navigator.of(context).pop();
+                          AwesomeDialog(
+                            titleTextStyle: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 30,
+                              color: Colors.green
+                            ),
+                            // descTextStyle: TextStyle(
+                            //   fontWeight: FontWeight.bold,
+                            //   fontSize: 20,
+                            // ),
+                            context: context,
+                            animType: AnimType.bottomSlide,
+                            headerAnimationLoop: false,
+                            dialogType: DialogType.success,
+                            showCloseIcon: true,
+                            title: "Solicitud recibida, abriendo acceso",
+                            //desc:"Solicitud enviada",
+                            btnOkOnPress: () {
+                              //debugPrint('OnClcik');
+                            },
+                            btnOkIcon: Icons.check_circle,
+                            // onDismissCallback: (type) {
+                            //   debugPrint('Dialog Dissmiss from callback $type');
+                            // },
+                          ).show();
+                          
+                        } else if(timeoutInternet == 15 && cantidadAperturas!=feedbacksProcesados) {
+                          timer.cancel();
+                          Navigator.of(context).pop();
+                          AwesomeDialog(
+                            titleTextStyle: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 30,
+                              color: Colors.red
+                            ),
+                            // descTextStyle: TextStyle(
+                            //   fontWeight: FontWeight.bold,
+                            //   fontSize: 20,
+                            // ),
+                            context: context,
+                            animType: AnimType.bottomSlide,
+                            headerAnimationLoop: false,
+                            dialogType: DialogType.error,
+                            showCloseIcon: true,
+                            title: "No hubo respuesta del servidor",
+                            //desc:"Solicitud enviada",
+                            btnOkOnPress: () {
+                              //debugPrint('OnClcik');
+                            },
+                            btnOkColor: Colors.red,
+                            btnOkIcon: Icons.check_circle,
+                            // onDismissCallback: (type) {
+                            //   debugPrint('Dialog Dissmiss from callback $type');
+                            // },
+                          ).show();
+                        }
+                    });
+                  }
+                } catch(e) {
                   Navigator.of(context).pop();
-                  if(cantidadAperturas==feedbacksProcesados){
-                    AwesomeDialog(
-                      titleTextStyle: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 30,
-                        color: Colors.green
-                      ),
-                      // descTextStyle: TextStyle(
-                      //   fontWeight: FontWeight.bold,
-                      //   fontSize: 20,
-                      // ),
-                      context: context,
-                      animType: AnimType.bottomSlide,
-                      headerAnimationLoop: false,
-                      dialogType: DialogType.success,
-                      showCloseIcon: true,
-                      title: "Solicitud recibida, abriendo acceso",
-                      //desc:"Solicitud enviada",
-                      btnOkOnPress: () {
-                        //debugPrint('OnClcik');
-                      },
-                      btnOkIcon: Icons.check_circle,
-                      // onDismissCallback: (type) {
-                      //   debugPrint('Dialog Dissmiss from callback $type');
-                      // },
-                    ).show();
-                  }
-                  } else {
-                    AwesomeDialog(
-                      titleTextStyle: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 30,
-                        color: Colors.red
-                      ),
-                      // descTextStyle: TextStyle(
-                      //   fontWeight: FontWeight.bold,
-                      //   fontSize: 20,
-                      // ),
-                      context: context,
-                      animType: AnimType.bottomSlide,
-                      headerAnimationLoop: false,
-                      dialogType: DialogType.error,
-                      showCloseIcon: true,
-                      title: "No hubo respuesta del servidor",
-                      //desc:"Solicitud enviada",
-                      btnOkOnPress: () {
-                        //debugPrint('OnClcik');
-                      },
-                      btnOkColor: Colors.red,
-                      btnOkIcon: Icons.check_circle,
-                      // onDismissCallback: (type) {
-                      //   debugPrint('Dialog Dissmiss from callback $type');
-                      // },
-                    ).show();
-                    }
-                  } catch(e) {
-                    Navigator.of(context).pop();
-                    AwesomeDialog(
-                      titleTextStyle: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 30,
-                        color: Colors.red
-                      ),
-                      // descTextStyle: TextStyle(
-                      //   fontWeight: FontWeight.bold,
-                      //   fontSize: 20,
-                      // ),
-                      context: context,
-                      animType: AnimType.bottomSlide,
-                      headerAnimationLoop: false,
-                      dialogType: DialogType.error,
-                      showCloseIcon: true,
-                      title: "Fallo al enviar la peticion",
-                      //desc:"Solicitud enviada",
-                      btnOkOnPress: () {
-                        //debugPrint('OnClcik');
-                      },
-                      btnOkColor: Colors.red,
-                      btnOkIcon: Icons.check_circle,
-                      // onDismissCallback: (type) {
-                      //   debugPrint('Dialog Dissmiss from callback $type');
-                      // },
-                    ).show();
-                    // print("fallo internet");
-                  }
+                  AwesomeDialog(
+                    titleTextStyle: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 30,
+                      color: Colors.red
+                    ),
+                    // descTextStyle: TextStyle(
+                    //   fontWeight: FontWeight.bold,
+                    //   fontSize: 20,
+                    // ),
+                    context: context,
+                    animType: AnimType.bottomSlide,
+                    headerAnimationLoop: false,
+                    dialogType: DialogType.error,
+                    showCloseIcon: true,
+                    title: "Fallo al enviar la peticion",
+                    //desc:"Solicitud enviada",
+                    btnOkOnPress: () {
+                      //debugPrint('OnClcik');
+                    },
+                    btnOkColor: Colors.red,
+                    btnOkIcon: Icons.check_circle,
+                    // onDismissCallback: (type) {
+                    //   debugPrint('Dialog Dissmiss from callback $type');
+                    // },
+                  ).show();
+                  // print("fallo internet");
+                }
               },
               // onDismissCallback: (type) {
               //   debugPrint('Dialog Dissmiss from callback $type');
@@ -325,90 +330,179 @@ class _SalirPageState extends State<SalirPage> {
       //   // },
       // ).show();
       if (res.statusCode==201){
-      int cantidadAperturas=0;
-      int feedbacksProcesados=0;
-      do {
-        res = await client.get(Uri.parse('https://webseguricel.up.railway.app/aperturasusuarioapi/${idUsuario}/')).timeout(Duration(seconds: 5));
-        var aperturasjson = await jsonDecode(res.body);
-        // print(aperturasjson);
-        cantidadAperturas = aperturasjson.length;
-        feedbacksProcesados=0;
-        try {
-          for (var apertura in aperturasjson) {
-            // print(apertura);
-            // print(apertura['abriendo']);
-            // print(apertura['feedback']);
-            if (apertura['abriendo'] && !apertura['feedback']){
-              //print(apertura);
-                res = await client.put(Uri.parse('https://webseguricel.up.railway.app/aperturasusuarioapi/${apertura['id']}/')).timeout(Duration(seconds: 5));
-                //print("FEEDBACK ENVIADO!");
+        int cantidadAperturas=0;
+        int feedbacksProcesados=0;
+        int timeoutInternet=0;
+        Timer.periodic(const Duration(seconds: 1), (timer) async {
+          timeoutInternet++;
+          res = await client.get(Uri.parse('https://webseguricel.up.railway.app/aperturasusuarioapi/${idUsuario}/${contrato}/')).timeout(Duration(seconds: 5));
+          var aperturasjson = await jsonDecode(res.body);
+          // print(aperturasjson);
+          cantidadAperturas = aperturasjson.length;
+          feedbacksProcesados=0;
+          try {
+            for (var apertura in aperturasjson) {
+              // print(apertura);
+              // print(apertura['abriendo']);
+              // print(apertura['feedback']);
+              if (apertura['abriendo'] && !apertura['feedback']){
+                //print(apertura);
+                  res = await client.put(Uri.parse('https://webseguricel.up.railway.app/aperturasusuarioapi/${apertura['id']}/${contrato}/')).timeout(Duration(seconds: 5));
+                  //print("FEEDBACK ENVIADO!");
+              }
+              if (apertura['abriendo'] && apertura['feedback']){
+                //print(apertura);
+                feedbacksProcesados+=1;
+              }
             }
-            if (apertura['abriendo'] && apertura['feedback']){
-              //print(apertura);
-              feedbacksProcesados+=1;
-            }
+          } catch (e) {
           }
-        } catch (e) {
-          
+            if (cantidadAperturas==feedbacksProcesados) {
+              timer.cancel();
+              Navigator.of(context).pop();
+              AwesomeDialog(
+                titleTextStyle: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 30,
+                  color: Colors.green
+                ),
+                // descTextStyle: TextStyle(
+                //   fontWeight: FontWeight.bold,
+                //   fontSize: 20,
+                // ),
+                context: context,
+                animType: AnimType.bottomSlide,
+                headerAnimationLoop: false,
+                dialogType: DialogType.success,
+                showCloseIcon: true,
+                title: "Solicitud recibida, abriendo acceso",
+                //desc:"Solicitud enviada",
+                btnOkOnPress: () {
+                  //debugPrint('OnClcik');
+                },
+                btnOkIcon: Icons.check_circle,
+                // onDismissCallback: (type) {
+                //   debugPrint('Dialog Dissmiss from callback $type');
+                // },
+              ).show();
+              
+            } else if(timeoutInternet == 15 && cantidadAperturas!=feedbacksProcesados) {
+              timer.cancel();
+              Navigator.of(context).pop();
+              AwesomeDialog(
+                titleTextStyle: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 30,
+                  color: Colors.red
+                ),
+                // descTextStyle: TextStyle(
+                //   fontWeight: FontWeight.bold,
+                //   fontSize: 20,
+                // ),
+                context: context,
+                animType: AnimType.bottomSlide,
+                headerAnimationLoop: false,
+                dialogType: DialogType.error,
+                showCloseIcon: true,
+                title: "No hubo respuesta del servidor",
+                //desc:"Solicitud enviada",
+                btnOkOnPress: () {
+                  //debugPrint('OnClcik');
+                },
+                btnOkColor: Colors.red,
+                btnOkIcon: Icons.check_circle,
+                // onDismissCallback: (type) {
+                //   debugPrint('Dialog Dissmiss from callback $type');
+                // },
+              ).show();
+            }
+          });
         }
 
-      } while (cantidadAperturas>feedbacksProcesados);
-      Navigator.of(context).pop();
-      if(cantidadAperturas==feedbacksProcesados){
-        AwesomeDialog(
-          titleTextStyle: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 30,
-            color: Colors.green
-          ),
-          // descTextStyle: TextStyle(
-          //   fontWeight: FontWeight.bold,
-          //   fontSize: 20,
-          // ),
-          context: context,
-          animType: AnimType.bottomSlide,
-          headerAnimationLoop: false,
-          dialogType: DialogType.success,
-          showCloseIcon: true,
-          title: "Solicitud recibida, abriendo acceso",
-          //desc:"Solicitud enviada",
-          btnOkOnPress: () {
-            //debugPrint('OnClcik');
-          },
-          btnOkIcon: Icons.check_circle,
-          // onDismissCallback: (type) {
-          //   debugPrint('Dialog Dissmiss from callback $type');
-          // },
-        ).show();
-      }
-      } else {
-        AwesomeDialog(
-          titleTextStyle: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 30,
-            color: Colors.red
-          ),
-          // descTextStyle: TextStyle(
-          //   fontWeight: FontWeight.bold,
-          //   fontSize: 20,
-          // ),
-          context: context,
-          animType: AnimType.bottomSlide,
-          headerAnimationLoop: false,
-          dialogType: DialogType.error,
-          showCloseIcon: true,
-          title: "No hubo respuesta del servidor",
-          //desc:"Solicitud enviada",
-          btnOkOnPress: () {
-            //debugPrint('OnClcik');
-          },
-          btnOkColor: Colors.red,
-          btnOkIcon: Icons.check_circle,
-          // onDismissCallback: (type) {
-          //   debugPrint('Dialog Dissmiss from callback $type');
-          // },
-        ).show();
-      }
+
+
+      // do {
+        
+      //   res = await client.get(Uri.parse('https://webseguricel.up.railway.app/aperturasusuarioapi/${idUsuario}/${contrato}/')).timeout(Duration(seconds: 5));
+      //   var aperturasjson = await jsonDecode(res.body);
+      //   // print(aperturasjson);
+      //   cantidadAperturas = aperturasjson.length;
+      //   feedbacksProcesados=0;
+      //   try {
+      //     for (var apertura in aperturasjson) {
+      //       // print(apertura);
+      //       // print(apertura['abriendo']);
+      //       // print(apertura['feedback']);
+      //       if (apertura['abriendo'] && !apertura['feedback']){
+      //         //print(apertura);
+      //           res = await client.put(Uri.parse('https://webseguricel.up.railway.app/aperturasusuarioapi/${apertura['id']}/${contrato}/')).timeout(Duration(seconds: 5));
+      //           //print("FEEDBACK ENVIADO!");
+      //       }
+      //       if (apertura['abriendo'] && apertura['feedback']){
+      //         //print(apertura);
+      //         feedbacksProcesados+=1;
+      //       }
+      //     }
+      //   } catch (e) {
+      //   }
+
+      // } while (cantidadAperturas>feedbacksProcesados);
+      // Navigator.of(context).pop();
+      // if(cantidadAperturas==feedbacksProcesados){
+      //   AwesomeDialog(
+      //     titleTextStyle: TextStyle(
+      //       fontWeight: FontWeight.bold,
+      //       fontSize: 30,
+      //       color: Colors.green
+      //     ),
+      //     // descTextStyle: TextStyle(
+      //     //   fontWeight: FontWeight.bold,
+      //     //   fontSize: 20,
+      //     // ),
+      //     context: context,
+      //     animType: AnimType.bottomSlide,
+      //     headerAnimationLoop: false,
+      //     dialogType: DialogType.success,
+      //     showCloseIcon: true,
+      //     title: "Solicitud recibida, abriendo acceso",
+      //     //desc:"Solicitud enviada",
+      //     btnOkOnPress: () {
+      //       //debugPrint('OnClcik');
+      //     },
+      //     btnOkIcon: Icons.check_circle,
+      //     // onDismissCallback: (type) {
+      //     //   debugPrint('Dialog Dissmiss from callback $type');
+      //     // },
+      //   ).show();
+      // }
+      // } else {
+      //   AwesomeDialog(
+      //     titleTextStyle: TextStyle(
+      //       fontWeight: FontWeight.bold,
+      //       fontSize: 30,
+      //       color: Colors.red
+      //     ),
+      //     // descTextStyle: TextStyle(
+      //     //   fontWeight: FontWeight.bold,
+      //     //   fontSize: 20,
+      //     // ),
+      //     context: context,
+      //     animType: AnimType.bottomSlide,
+      //     headerAnimationLoop: false,
+      //     dialogType: DialogType.error,
+      //     showCloseIcon: true,
+      //     title: "No hubo respuesta del servidor",
+      //     //desc:"Solicitud enviada",
+      //     btnOkOnPress: () {
+      //       //debugPrint('OnClcik');
+      //     },
+      //     btnOkColor: Colors.red,
+      //     btnOkIcon: Icons.check_circle,
+      //     // onDismissCallback: (type) {
+      //     //   debugPrint('Dialog Dissmiss from callback $type');
+      //     // },
+      //   ).show();
+      // }
       } catch(e) {
         Navigator.of(context).pop();
         AwesomeDialog(

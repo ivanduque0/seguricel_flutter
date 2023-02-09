@@ -60,32 +60,33 @@ class _infoContratoScreenState extends State<infoContratoScreen> {
       await Constants.prefs.setString('contratos', contratosEncode);
     }
     }catch(e){
-                    AwesomeDialog(
-                      titleTextStyle: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 30,
-                        color: Colors.red
-                      ),
-                      // descTextStyle: TextStyle(
-                      //   fontWeight: FontWeight.bold,
-                      //   fontSize: 20,
-                      // ),
-                      context: context,
-                      animType: AnimType.bottomSlide,
-                      headerAnimationLoop: false,
-                      dialogType: DialogType.error,
-                      showCloseIcon: true,
-                      title: "Sin conexion a internet",
-                      //desc:"Solicitud enviada",
-                      btnOkOnPress: () {
-                        //debugPrint('OnClcik');
-                      },
-                      btnOkColor: Colors.red,
-                      btnOkIcon: Icons.check_circle,
-                      // onDismissCallback: (type) {
-                      //   debugPrint('Dialog Dissmiss from callback $type');
-                      // },
-                    ).show();
+      AwesomeDialog(
+        titleTextStyle: TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 30,
+          color: Colors.red
+        ),
+        // descTextStyle: TextStyle(
+        //   fontWeight: FontWeight.bold,
+        //   fontSize: 20,
+        // ),
+        context: context,
+        animType: AnimType.bottomSlide,
+        headerAnimationLoop: false,
+        dialogType: DialogType.error,
+        showCloseIcon: true,
+        title: "Sin conexion a internet",
+        //desc:"Solicitud enviada",
+        btnOkOnPress: () {
+          //debugPrint('OnClcik');
+        },
+        btnOkColor: Colors.red,
+        btnOkIcon: Icons.check_circle,
+        // onDismissCallback: (type) {
+        //   debugPrint('Dialog Dissmiss from callback $type');
+        // },
+      ).show();
+                    // Navigator.of(context).pop();
     }
     
   }
@@ -102,7 +103,7 @@ class _infoContratoScreenState extends State<infoContratoScreen> {
                   SizedBox(
                     height:20
                   ),
-                  Text("Informacion de usuario", textAlign: TextAlign.center, style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),),
+                  Text("Informacion de contratos", textAlign: TextAlign.center, style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),),
                   SizedBox(
                     height:MediaQuery.of(context).size.height/15
                   ),
@@ -113,12 +114,8 @@ class _infoContratoScreenState extends State<infoContratoScreen> {
                     fontWeight: FontWeight.bold
                   ),),
                   SizedBox(
-                    height: 30,
+                    height: 10,
                   ),
-
-
-
-
                   // CustomScrollView(
                   //   slivers: [
                   //     SliverList(delegate: SliverChildBuilderDelegate((context, index) {
@@ -127,77 +124,288 @@ class _infoContratoScreenState extends State<infoContratoScreen> {
                   //   ],
                   // )
 
-
                   Container(
-                    width: MediaQuery.of(context).size.width/1.5,
-                    height: 70,
-                    child: DropdownButton<String>(
-                      value: seleccionContrato,
-                      isExpanded: true,
-                      icon: const Icon(Icons.arrow_downward_outlined),
-                      elevation: 16,
-                      menuMaxHeight: 220,
-                      style: const TextStyle(color: Color.fromARGB(255, 221, 113, 25), fontSize: 20),
-                      underline: Container(
-                        height: 2,
-                        color: Color.fromARGB(255, 221, 113, 25),
+                    width: MediaQuery.of(context).size.width/1.2,
+                    height: MediaQuery.of(context).size.height/3,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(
+                          color: Color.fromARGB(255, 240, 162, 73),
+                          width: 3,
+                        )
                       ),
-                      onChanged: (String? value) async {
-                        showDialog(
-                          // The user CANNOT close this dialog  by pressing outsite it
-                          barrierDismissible: false,
-                          context: context,
-                          builder: (_) {
-                            return WillPopScope(
-                              onWillPop: () async => false,
-                              child: LoadingWidget());
-                          }
-                        );
-                        String servidor="";
-                        List accesosEntradas=[];
-                        List accesosSalidas=[];
-                        // This is called when the user selects an item.
-                        datosUsuario['contrato']=value;
-                        var client = BasicAuthClient('mobile_access', 'S3gur1c3l_mobile@');
-                        var res = await client.post(Uri.parse('https://webseguricel.up.railway.app/dispositivosapimobile/${value}/')).timeout(Duration(seconds: 5));//.timeout(Duration(seconds: 15));;
-                        var data = jsonDecode(res.body);
-                        var descripcionIteracion="";
-                        for (var item in data) {
-                          if (servidor=="" && item['descripcion']=="SERVIDOR LOCAL"){
-                            servidor="${item['dispositivo']}:43157/";
-                          } else {
-                            descripcionIteracion=item['descripcion'];
-                            
-                            if ((descripcionIteracion.toLowerCase().contains('peatonal') || descripcionIteracion.toLowerCase().contains('vehicular')) && !descripcionIteracion.toLowerCase().contains('salida') && !(descripcionIteracion.toLowerCase().contains('rfid') || descripcionIteracion.toLowerCase().contains('huella'))){
-                              accesosEntradas.add({'acceso':item['acceso'].toString(), 'descripcion':item['descripcion'].substring(0, item['descripcion'].indexOf('('))});
-                            }
-                            if ((descripcionIteracion.toLowerCase().contains('peatonal') || descripcionIteracion.toLowerCase().contains('vehicular')) && !descripcionIteracion.toLowerCase().contains('entrada') && !(descripcionIteracion.toLowerCase().contains('rfid') || descripcionIteracion.toLowerCase().contains('huella'))){
-                              accesosSalidas.add({'acceso':item['acceso'].toString(), 'descripcion':item['descripcion'].substring(0, item['descripcion'].indexOf('('))});
-                            }
-                          }
-                        }
-                        String datosUsuarioEnconde=jsonEncode(datosUsuario);
-                        // accesos=jsonEncode([AccesosPeatonales,AccesosVehiculares]);
-                        String entradas=jsonEncode(accesosEntradas);
-                        String salidas=jsonEncode(accesosSalidas);
-                        await Constants.prefs.setString('datosUsuario', datosUsuarioEnconde);
-                        await Constants.prefs.setString('entradas', entradas);
-                        await Constants.prefs.setString('salidas', salidas);
-                        await Constants.prefs.setString('servidor', servidor);
-                        await Constants.prefs.setString('contrato', value!);
-                        setState(() {
-                          seleccionContrato = value;
+                    child: ListView.builder(
+                      itemCount: contratos.length,
+                      shrinkWrap: true,
+                      itemBuilder:(context, index) => Container(
+                        child: ListTile(
+                          title: (contratos[index]==seleccionContrato)
+                          ?Text(contratos[index], textAlign: TextAlign.center, style: TextStyle(fontSize: 20, color: Colors.orange, fontWeight: FontWeight.bold),)
+                          :Text(contratos[index], textAlign: TextAlign.center, style: TextStyle(fontSize: 20),),
+                          onTap: () async {
                   
-                        });
-                        Navigator.of(context).pop();
-                      },
-                      items: contratos.map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
+                            showDialog(
+                              // The user CANNOT close this dialog  by pressing outsite it
+                              barrierDismissible: false,
+                              context: context,
+                              builder: (_) {
+                                return WillPopScope(
+                                  onWillPop: () async => false,
+                                  child: LoadingWidget());
+                              }
+                            );
+                            String servidor="";
+                            List accesosEntradas=[];
+                            List accesosSalidas=[];
+                            // This is called when the user selects an item.
+                            datosUsuario['contrato']=contratos[index];
+                            try {
+                              var client = BasicAuthClient('mobile_access', 'S3gur1c3l_mobile@');
+                              var res = await client.post(Uri.parse('https://webseguricel.up.railway.app/dispositivosapimobile/${contratos[index]}/')).timeout(Duration(seconds: 5));//.timeout(Duration(seconds: 15));;
+                              var data = jsonDecode(res.body);
+                              var descripcionIteracion="";
+                              for (var item in data) {
+                                if (servidor=="" && item['descripcion']=="SERVIDOR LOCAL"){
+                                  servidor="${item['dispositivo']}:43157/";
+                                } else {
+                                  descripcionIteracion=item['descripcion'];
+                                  
+                                  if ((descripcionIteracion.toLowerCase().contains('peatonal') || descripcionIteracion.toLowerCase().contains('vehicular')) && !descripcionIteracion.toLowerCase().contains('salida') && !(descripcionIteracion.toLowerCase().contains('rfid') || descripcionIteracion.toLowerCase().contains('huella'))){
+                                    accesosEntradas.add({'acceso':item['acceso'].toString(), 'descripcion':item['descripcion'].substring(0, item['descripcion'].indexOf('('))});
+                                  }
+                                  if ((descripcionIteracion.toLowerCase().contains('peatonal') || descripcionIteracion.toLowerCase().contains('vehicular')) && !descripcionIteracion.toLowerCase().contains('entrada') && !(descripcionIteracion.toLowerCase().contains('rfid') || descripcionIteracion.toLowerCase().contains('huella'))){
+                                    accesosSalidas.add({'acceso':item['acceso'].toString(), 'descripcion':item['descripcion'].substring(0, item['descripcion'].indexOf('('))});
+                                  }
+                                }
+                              }
+                              String datosUsuarioEnconde=jsonEncode(datosUsuario);
+                              // accesos=jsonEncode([AccesosPeatonales,AccesosVehiculares]);
+                              String entradas=jsonEncode(accesosEntradas);
+                              String salidas=jsonEncode(accesosSalidas);
+                              await Constants.prefs.setString('datosUsuario', datosUsuarioEnconde);
+                              await Constants.prefs.setString('entradas', entradas);
+                              await Constants.prefs.setString('salidas', salidas);
+                              await Constants.prefs.setString('servidor', servidor);
+                              await Constants.prefs.setString('contrato', contratos[index]);
+                              setState(() {
+                                seleccionContrato = contratos[index];
+                        
+                              });
+                              Navigator.of(context).pop();
+                              AwesomeDialog(
+                                titleTextStyle: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 30,
+                                  color: Colors.green
+                                ),
+                                // descTextStyle: TextStyle(
+                                //   fontWeight: FontWeight.bold,
+                                //   fontSize: 20,
+                                // ),
+                                context: context,
+                                animType: AnimType.topSlide,
+                                headerAnimationLoop: false,
+                                dialogType: DialogType.success,
+                                showCloseIcon: true,
+                                title: "Contrato cambiado con exito",
+                                //desc:"Solicitud enviada",
+                                btnOkColor: Colors.green,
+                                btnOkOnPress: () {
+                                  //debugPrint('OnClcik');
+                                },
+                                btnOkIcon: Icons.check_circle,
+                                // onDismissCallback: (type) {
+                                //   debugPrint('Dialog Dissmiss from callback $type');
+                                // },
+                              ).show();
+                            } catch (e) {
+                              Navigator.of(context).pop();
+                              AwesomeDialog(
+                                titleTextStyle: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 30,
+                                  color: Colors.red
+                                ),
+                                // descTextStyle: TextStyle(
+                                //   fontWeight: FontWeight.bold,
+                                //   fontSize: 20,
+                                // ),
+                                context: context,
+                                animType: AnimType.bottomSlide,
+                                headerAnimationLoop: false,
+                                dialogType: DialogType.error,
+                                showCloseIcon: true,
+                                title: "Sin conexion a internet",
+                                //desc:"Solicitud enviada",
+                                btnOkOnPress: () {
+                                  //debugPrint('OnClcik');
+                                },
+                                btnOkColor: Colors.red,
+                                btnOkIcon: Icons.check_circle,
+                                // onDismissCallback: (type) {
+                                //   debugPrint('Dialog Dissmiss from callback $type');
+                                // },
+                              ).show();
+                            }
+                           },
+                        ),
+                      )
+                        
+                      , 
                     ),
+                  ),
+
+
+                  // Container(
+                  //   width: MediaQuery.of(context).size.width/1.5,
+                  //   height: 70,
+                  //   child: DropdownButton<String>(
+                  //     value: seleccionContrato,
+                  //     isExpanded: true,
+                  //     icon: const Icon(Icons.arrow_downward_outlined),
+                  //     elevation: 16,
+                  //     menuMaxHeight: 220,
+                  //     style: const TextStyle(color: Color.fromARGB(255, 221, 113, 25), fontSize: 20),
+                  //     underline: Container(
+                  //       height: 2,
+                  //       color: Color.fromARGB(255, 221, 113, 25),
+                  //     ),
+                  //     onChanged: (String? value) async {
+                  //       showDialog(
+                  //         // The user CANNOT close this dialog  by pressing outsite it
+                  //         barrierDismissible: false,
+                  //         context: context,
+                  //         builder: (_) {
+                  //           return WillPopScope(
+                  //             onWillPop: () async => false,
+                  //             child: LoadingWidget());
+                  //         }
+                  //       );
+                  //       String servidor="";
+                  //       List accesosEntradas=[];
+                  //       List accesosSalidas=[];
+                  //       // This is called when the user selects an item.
+                  //       datosUsuario['contrato']=value;
+                  //       try {
+                  //         var client = BasicAuthClient('mobile_access', 'S3gur1c3l_mobile@');
+                  //         var res = await client.post(Uri.parse('https://webseguricel.up.railway.app/dispositivosapimobile/${value}/')).timeout(Duration(seconds: 5));//.timeout(Duration(seconds: 15));;
+                  //         var data = jsonDecode(res.body);
+                  //         var descripcionIteracion="";
+                  //         for (var item in data) {
+                  //           if (servidor=="" && item['descripcion']=="SERVIDOR LOCAL"){
+                  //             servidor="${item['dispositivo']}:43157/";
+                  //           } else {
+                  //             descripcionIteracion=item['descripcion'];
+                              
+                  //             if ((descripcionIteracion.toLowerCase().contains('peatonal') || descripcionIteracion.toLowerCase().contains('vehicular')) && !descripcionIteracion.toLowerCase().contains('salida') && !(descripcionIteracion.toLowerCase().contains('rfid') || descripcionIteracion.toLowerCase().contains('huella'))){
+                  //               accesosEntradas.add({'acceso':item['acceso'].toString(), 'descripcion':item['descripcion'].substring(0, item['descripcion'].indexOf('('))});
+                  //             }
+                  //             if ((descripcionIteracion.toLowerCase().contains('peatonal') || descripcionIteracion.toLowerCase().contains('vehicular')) && !descripcionIteracion.toLowerCase().contains('entrada') && !(descripcionIteracion.toLowerCase().contains('rfid') || descripcionIteracion.toLowerCase().contains('huella'))){
+                  //               accesosSalidas.add({'acceso':item['acceso'].toString(), 'descripcion':item['descripcion'].substring(0, item['descripcion'].indexOf('('))});
+                  //             }
+                  //           }
+                  //         }
+                  //         String datosUsuarioEnconde=jsonEncode(datosUsuario);
+                  //         // accesos=jsonEncode([AccesosPeatonales,AccesosVehiculares]);
+                  //         String entradas=jsonEncode(accesosEntradas);
+                  //         String salidas=jsonEncode(accesosSalidas);
+                  //         await Constants.prefs.setString('datosUsuario', datosUsuarioEnconde);
+                  //         await Constants.prefs.setString('entradas', entradas);
+                  //         await Constants.prefs.setString('salidas', salidas);
+                  //         await Constants.prefs.setString('servidor', servidor);
+                  //         await Constants.prefs.setString('contrato', value!);
+                  //         setState(() {
+                  //           seleccionContrato = value;
+                    
+                  //         });
+                  //         Navigator.of(context).pop();
+                  //         AwesomeDialog(
+                  //           titleTextStyle: TextStyle(
+                  //             fontWeight: FontWeight.bold,
+                  //             fontSize: 30,
+                  //             color: Colors.green
+                  //           ),
+                  //           // descTextStyle: TextStyle(
+                  //           //   fontWeight: FontWeight.bold,
+                  //           //   fontSize: 20,
+                  //           // ),
+                  //           context: context,
+                  //           animType: AnimType.topSlide,
+                  //           headerAnimationLoop: false,
+                  //           dialogType: DialogType.success,
+                  //           showCloseIcon: true,
+                  //           title: "Contrato cambiado con exito",
+                  //           //desc:"Solicitud enviada",
+                  //           btnOkColor: Colors.green,
+                  //           btnOkOnPress: () {
+                  //             //debugPrint('OnClcik');
+                  //           },
+                  //           btnOkIcon: Icons.check_circle,
+                  //           // onDismissCallback: (type) {
+                  //           //   debugPrint('Dialog Dissmiss from callback $type');
+                  //           // },
+                  //         ).show();
+                  //       } catch (e) {
+                  //         Navigator.of(context).pop();
+                  //         AwesomeDialog(
+                  //     titleTextStyle: TextStyle(
+                  //       fontWeight: FontWeight.bold,
+                  //       fontSize: 30,
+                  //       color: Colors.red
+                  //     ),
+                  //     // descTextStyle: TextStyle(
+                  //     //   fontWeight: FontWeight.bold,
+                  //     //   fontSize: 20,
+                  //     // ),
+                  //     context: context,
+                  //     animType: AnimType.bottomSlide,
+                  //     headerAnimationLoop: false,
+                  //     dialogType: DialogType.error,
+                  //     showCloseIcon: true,
+                  //     title: "Sin conexion a internet",
+                  //     //desc:"Solicitud enviada",
+                  //     btnOkOnPress: () {
+                  //       //debugPrint('OnClcik');
+                  //     },
+                  //     btnOkColor: Colors.red,
+                  //     btnOkIcon: Icons.check_circle,
+                  //     // onDismissCallback: (type) {
+                  //     //   debugPrint('Dialog Dissmiss from callback $type');
+                  //     // },
+                  //   ).show();
+                  //       }
+                  //     },
+                  //     items: contratos.map<DropdownMenuItem<String>>((String value) {
+                  //       return DropdownMenuItem<String>(
+                  //         value: value,
+                  //         child: Text(value),
+                  //       );
+                  //     }).toList(),
+                  //   ),
+                  // ),
+                ],
+              ),
+            )
+            :(contratos.length==1 && seleccionContrato!="")
+            ?Center(
+              child: Column(
+                // mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    height:40
+                  ),
+                  Text("Informacion de contrato", textAlign: TextAlign.center, style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),),
+                  SizedBox(
+                    height:MediaQuery.of(context).size.height/15
+                  ),
+                  Text("Actualmente usted\npertenece solo al contrato:\n${seleccionContrato.toUpperCase()}",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 25,
+                    fontWeight: FontWeight.bold
+                  ),),
+                  SizedBox(
+                    height: 40,
                   ),
                 ],
               ),

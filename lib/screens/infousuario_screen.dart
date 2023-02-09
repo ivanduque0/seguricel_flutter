@@ -45,7 +45,7 @@ class _infoUsuarioScreenState extends State<infoUsuarioScreen> {
             ?Column(
               children: [
                 SizedBox(
-                  height:10
+                  height:20
                 ),
                 Text("Informacion de usuario", textAlign: TextAlign.center, style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),),
                 SizedBox(
@@ -120,11 +120,11 @@ class _infoUsuarioScreenState extends State<infoUsuarioScreen> {
                     }),
                   ),
                   SizedBox(
-                    width:MediaQuery.of(context).size.width/3.5,
+                    width:MediaQuery.of(context).size.width/5,
                   ),
                   OutlinedButton(
               style: OutlinedButton.styleFrom(
-                fixedSize: Size(150, 50),
+                fixedSize: Size(190, 50),
                 foregroundColor: Colors.red,
                 //disabledForegroundColor: Colors.red,
                 side: BorderSide(color: Colors.red, width: 3),
