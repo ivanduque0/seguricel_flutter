@@ -96,21 +96,21 @@ class _MainPageState extends State<MainPage> {
             color: Colors.white
           ),
           ),
-        actions: [
-          IconButton(
-            onPressed: (() async {
-              //SharedPreferences prefs = await SharedPreferences.getInstance();
-              Constants.prefs.remove("datosUsuario");
-              Constants.prefs.remove("accesos");
-              Constants.prefs.remove("contratos");
-              Constants.prefs.remove("isLoggedIn");
-              Navigator.pushReplacementNamed(context, LoginPage.routeName);
-              //Navigator.pop(context);
+        // actions: [
+        //   IconButton(
+        //     onPressed: (() async {
+        //       //SharedPreferences prefs = await SharedPreferences.getInstance();
+        //       Constants.prefs.remove("datosUsuario");
+        //       Constants.prefs.remove("accesos");
+        //       Constants.prefs.remove("contratos");
+        //       Constants.prefs.remove("isLoggedIn");
+        //       Navigator.pushReplacementNamed(context, LoginPage.routeName);
+        //       //Navigator.pop(context);
 
-            }), 
-            icon: Icon(Icons.exit_to_app_rounded)
-          ),
-        ],
+        //     }), 
+        //     icon: Icon(Icons.exit_to_app_rounded)
+        //   ),
+        // ],
       ),
       // body: this.datosUsuario!={}
       //   ?Center(

@@ -102,91 +102,95 @@ class _LoginPageState extends State<LoginPage> {
 
     if (_codeController.text!='')
     {
-    var data;
-    var res;
-    List contratos=[];
-    String contratosEncode="";
-    String contrato="";
-    String cedula="";
-    String nombre="";
-    String beacon_uuid="";
-    String servidor="";
-    String entradas="";
-    String salidas="";
-    List accesosEntradas=[];
-    List accesosSalidas=[];
-    // Map AccesosPeatonales={};
-    // Map AccesosVehiculares={};
-    String datosUsuario="";
-    var client = BasicAuthClient('mobile_access', 'S3gur1c3l_mobile@');
-    res = await client.get(Uri.parse('https://webseguricel.up.railway.app/dispositivosapimobile/${_codeController.text}/')).timeout(Duration(seconds: 5));
-    data = jsonDecode(res.body);
-    for (var item in data) {
-      contratos.add(item['contrato']);
-      if (cedula=="" && beacon_uuid=="" && nombre==""){
-        cedula=item['cedula'];
-        beacon_uuid=item['beacon_uuid'];
-        nombre=item['nombre'];
-      }
-    }
-    if (contratos.length>0){
-      contrato= contratos[0];
-      res = await client.post(Uri.parse('https://webseguricel.up.railway.app/dispositivosapimobile/${contrato}/')).timeout(Duration(seconds: 5));//.timeout(Duration(seconds: 15));;
-      data = jsonDecode(res.body);
-      var descripcionIteracion="";
-      for (var item in data) {
-        if (servidor=="" && item['descripcion']=="SERVIDOR LOCAL"){
-          servidor="${item['dispositivo']}:43157/";
-        } else {
-          descripcionIteracion=item['descripcion'];
-          
-          // if (descripcionIteracion.toLowerCase().contains('peatonal')){
-          if ((descripcionIteracion.toLowerCase().contains('peatonal') || descripcionIteracion.toLowerCase().contains('vehicular')) && !descripcionIteracion.toLowerCase().contains('salida') && !(descripcionIteracion.toLowerCase().contains('rfid') || descripcionIteracion.toLowerCase().contains('huella'))){
-            // print(descripcionIteracion);
-            accesosEntradas.add({'acceso':item['acceso'].toString(), 'descripcion':item['descripcion'].substring(0, item['descripcion'].indexOf('('))});
+      var data;
+      var res;
+      List contratos=[];
+      String contratosEncode="";
+      String contrato="";
+      String cedula="";
+      String nombre="";
+      String beacon_uuid="";
+      String servidor="";
+      String entradas="";
+      String salidas="";
+      List accesosEntradas=[];
+      List accesosSalidas=[];
+      // Map AccesosPeatonales={};
+      // Map AccesosVehiculares={};
+      String datosUsuario="";
+      try {
+        var client = BasicAuthClient('mobile_access', 'S3gur1c3l_mobile@');
+        res = await client.get(Uri.parse('https://webseguricel.up.railway.app/dispositivosapimobile/${_codeController.text}/')).timeout(Duration(seconds: 5));
+        data = jsonDecode(res.body);
+        for (var item in data) {
+          contratos.add(item['contrato']);
+          if (cedula=="" && beacon_uuid=="" && nombre==""){
+            cedula=item['cedula'];
+            beacon_uuid=item['beacon_uuid'];
+            nombre=item['nombre'];
           }
-          if ((descripcionIteracion.toLowerCase().contains('peatonal') || descripcionIteracion.toLowerCase().contains('vehicular')) && !descripcionIteracion.toLowerCase().contains('entrada') && !(descripcionIteracion.toLowerCase().contains('rfid') || descripcionIteracion.toLowerCase().contains('huella'))){
-            // print(descripcionIteracion);
-            accesosSalidas.add({'acceso':item['acceso'].toString(), 'descripcion':item['descripcion'].substring(0, item['descripcion'].indexOf('('))});
-          }
-          //   AccesosPeatonales[item['acceso'].toString()]=item['descripcion'].substring(0, item['descripcion'].indexOf('('));
-          // }
-          // if (descripcionIteracion.toLowerCase().contains('vehicular')){
-          //   // print(item['descripcion']);
-          //   // print(acceso.runtimeType);
-          //   AccesosVehiculares[item['acceso'].toString()]=item['descripcion'].substring(0, item['descripcion'].indexOf('('));
-          // }
         }
-      }
-      // print(data);
-      // print(servidor);
-      // print(accesosEntradas);
-      // print(accesosSalidas);
-      // print(AccesosPeatonales);
-      // print(AccesosVehiculares);
-      datosUsuario=jsonEncode({'contrato':contrato, 'id_usuario':_codeController.text, 'cedula':cedula, 'nombre':nombre, 'beacon_uuid':beacon_uuid});
-      // accesos=jsonEncode([AccesosPeatonales,AccesosVehiculares]);
-      entradas=jsonEncode(accesosEntradas);
-      salidas=jsonEncode(accesosSalidas);
-      contratosEncode=jsonEncode(contratos);
+        if (contratos.length>0){
+          contrato= contratos[0];
+          res = await client.post(Uri.parse('https://webseguricel.up.railway.app/dispositivosapimobile/${contrato}/')).timeout(Duration(seconds: 5));//.timeout(Duration(seconds: 15));;
+          data = jsonDecode(res.body);
+          var descripcionIteracion="";
+          for (var item in data) {
+            if (servidor=="" && item['descripcion']=="SERVIDOR LOCAL"){
+              servidor="${item['dispositivo']}:43157/";
+            } else {
+              descripcionIteracion=item['descripcion'];
+              
+              // if (descripcionIteracion.toLowerCase().contains('peatonal')){
+              if ((descripcionIteracion.toLowerCase().contains('peatonal') || descripcionIteracion.toLowerCase().contains('vehicular')) && !descripcionIteracion.toLowerCase().contains('salida') && !(descripcionIteracion.toLowerCase().contains('rfid') || descripcionIteracion.toLowerCase().contains('huella'))){
+                // print(descripcionIteracion);
+                accesosEntradas.add({'acceso':item['acceso'].toString(), 'descripcion':item['descripcion'].substring(0, item['descripcion'].indexOf('('))});
+              }
+              if ((descripcionIteracion.toLowerCase().contains('peatonal') || descripcionIteracion.toLowerCase().contains('vehicular')) && !descripcionIteracion.toLowerCase().contains('entrada') && !(descripcionIteracion.toLowerCase().contains('rfid') || descripcionIteracion.toLowerCase().contains('huella'))){
+                // print(descripcionIteracion);
+                accesosSalidas.add({'acceso':item['acceso'].toString(), 'descripcion':item['descripcion'].substring(0, item['descripcion'].indexOf('('))});
+              }
+              //   AccesosPeatonales[item['acceso'].toString()]=item['descripcion'].substring(0, item['descripcion'].indexOf('('));
+              // }
+              // if (descripcionIteracion.toLowerCase().contains('vehicular')){
+              //   // print(item['descripcion']);
+              //   // print(acceso.runtimeType);
+              //   AccesosVehiculares[item['acceso'].toString()]=item['descripcion'].substring(0, item['descripcion'].indexOf('('));
+              // }
+            }
+          }
+          // print(data);
+          // print(servidor);
+          // print(accesosEntradas);
+          // print(accesosSalidas);
+          // print(AccesosPeatonales);
+          // print(AccesosVehiculares);
+          datosUsuario=jsonEncode({'contrato':contrato, 'id_usuario':_codeController.text, 'cedula':cedula, 'nombre':nombre, 'beacon_uuid':beacon_uuid});
+          // accesos=jsonEncode([AccesosPeatonales,AccesosVehiculares]);
+          entradas=jsonEncode(accesosEntradas);
+          salidas=jsonEncode(accesosSalidas);
+          contratosEncode=jsonEncode(contratos);
 
-      //SharedPreferences prefs = await SharedPreferences.getInstance();
-      
-      await Constants.prefs.setString('datosUsuario', datosUsuario);
-      await Constants.prefs.setString('entradas', entradas);
-      await Constants.prefs.setString('salidas', salidas);
-      await Constants.prefs.setString('contratos', contratosEncode);
-      await Constants.prefs.setString('servidor', servidor);
-      await Constants.prefs.setString('id_usuario', _codeController.text);
-      await Constants.prefs.setString('contrato', contrato);
-      await Constants.prefs.setString('beacon_uuid', invertirUUID(beacon_uuid));
-      await Constants.prefs.setBool('isLoggedIn', true);
-      await Constants.prefs.setBool('modoInternet', true);
-      await Constants.prefs.setBool('modoWifi', false);
-      await Constants.prefs.setBool('modoBluetooth', true);
-      isLoggedIn=true;
-      // Navigator.pushReplacementNamed(context, MainPage.routeName);
-    }
+          //SharedPreferences prefs = await SharedPreferences.getInstance();
+          
+          await Constants.prefs.setString('datosUsuario', datosUsuario);
+          await Constants.prefs.setString('entradas', entradas);
+          await Constants.prefs.setString('salidas', salidas);
+          await Constants.prefs.setString('contratos', contratosEncode);
+          await Constants.prefs.setString('servidor', servidor);
+          await Constants.prefs.setString('id_usuario', _codeController.text);
+          await Constants.prefs.setString('contrato', contrato);
+          await Constants.prefs.setString('beacon_uuid', invertirUUID(beacon_uuid));
+          await Constants.prefs.setBool('isLoggedIn', true);
+          await Constants.prefs.setBool('modoInternet', true);
+          await Constants.prefs.setBool('modoWifi', false);
+          await Constants.prefs.setBool('modoBluetooth', true);
+          isLoggedIn=true;
+          // Navigator.pushReplacementNamed(context, MainPage.routeName);
+        }
+      } catch (e) {
+
+      }
     }
     if (!mounted) return;
 
@@ -246,8 +250,8 @@ class _LoginPageState extends State<LoginPage> {
                             controller: _codeController,
                             keyboardType: TextInputType.text,
                             decoration: InputDecoration(
-                              hintText: "Ingrese su codigo",
-                              labelText: "Codigo"
+                              hintText: "Ingrese su ID",
+                              labelText: "ID"
                             ),
                             onChanged: (value) {
                               setState(() {});

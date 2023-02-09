@@ -94,11 +94,18 @@ class _infoContratoScreenState extends State<infoContratoScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
             body: 
-            (contratos.length!=0 && seleccionContrato!="")
+            (contratos.length>1 && seleccionContrato!="")
             ?Center(
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+                // mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  SizedBox(
+                    height:20
+                  ),
+                  Text("Informacion de usuario", textAlign: TextAlign.center, style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),),
+                  SizedBox(
+                    height:MediaQuery.of(context).size.height/15
+                  ),
                   Text("Seleccione el contrato\nal que desea cambiar",
                   textAlign: TextAlign.center,
                   style: TextStyle(
@@ -108,6 +115,19 @@ class _infoContratoScreenState extends State<infoContratoScreen> {
                   SizedBox(
                     height: 30,
                   ),
+
+
+
+
+                  // CustomScrollView(
+                  //   slivers: [
+                  //     SliverList(delegate: SliverChildBuilderDelegate((context, index) {
+                        
+                  //     },))
+                  //   ],
+                  // )
+
+
                   Container(
                     width: MediaQuery.of(context).size.width/1.5,
                     height: 70,
