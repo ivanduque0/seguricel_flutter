@@ -38,8 +38,13 @@ class _infoUsuarioScreenState extends State<infoUsuarioScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
+  Widget build(BuildContext context) => WillPopScope(
+
+    onWillPop: () async {
+      widget.volver(0);
+      return false;
+    },
+    child: Scaffold(
             body: 
             (datosUsuario['nombre']!=null || datosUsuario['id_usuario']!=null || datosUsuario['contrato']!=null)
             ?Column(
@@ -175,6 +180,6 @@ class _infoUsuarioScreenState extends State<infoUsuarioScreen> {
               ),
             ),
             floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
-          );
-  }
+          ),
+  );
 }

@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter/material.dart';
 
 class InvitadosScreen extends StatelessWidget {
   const InvitadosScreen({super.key});
@@ -8,7 +6,116 @@ class InvitadosScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Text("Invitadosxd"),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Center(
+          child: Column(
+            children: [
+              SizedBox(
+                height: 30,
+              ),
+              Text("Configuracion de visitantes", textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 40,
+                  fontWeight: FontWeight.bold
+                ),
+              ),
+              SizedBox(
+                height: 30,
+              ),
+              InkWell(
+                borderRadius: BorderRadius.circular(20),
+                onTap: () {
+                  //Navigator.pushNamed(context, EntrarPage.routeName);
+                }, // Handle your callback.
+                splashColor: Color.fromARGB(255, 255, 175, 110).withOpacity(0.5),
+                child: OutlinedButton(
+                  style: OutlinedButton.styleFrom(
+                  fixedSize: Size(220, 100),
+                  foregroundColor: Colors.orange[300],
+                  //disabledForegroundColor: Colors.red,
+                  side: BorderSide(color: Colors.orange, width: 3),
+                ),
+                  onPressed: (() {
+                    //Navigator.pushNamed(context, EntrarPage.routeName);
+                  //print("SALIDAS SCREEN");
+                  }), 
+                  child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height/3,
+                    child: Center(
+                      child: Text("Mis\ninvitados", textAlign: TextAlign.center,
+                              style: TextStyle(fontSize: 40),),
+                    ),
+                    // child: Image.network("https://http2.mlstatic.com/D_NQ_NP_909774-MLV52690599466_122022-W.jpg"),
+                    // decoration: BoxDecoration(
+                    //   borderRadius: BorderRadius.circular(20)
+                      
+                    // ),
+                  ),
+                ),
+                // Ink(
+                //   width: MediaQuery.of(context).size.width,
+                //   height: MediaQuery.of(context).size.height/3,
+                //   decoration: BoxDecoration(
+                //     borderRadius: BorderRadius.circular(20),
+                //     image: DecorationImage(
+                //       image: NetworkImage('https://http2.mlstatic.com/D_NQ_NP_909774-MLV52690599466_122022-W.jpg'),
+                //       fit: BoxFit.cover,
+                //     ),
+                //   ),
+                // ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              InkWell(
+                borderRadius: BorderRadius.circular(20),
+                onTap: () {
+                  //Navigator.pushNamed(context, EntrarPage.routeName);
+                }, // Handle your callback.
+                splashColor: Color.fromARGB(255, 175, 255, 110).withOpacity(0.5),
+                child: OutlinedButton(
+                  style: OutlinedButton.styleFrom(
+                  fixedSize: Size(220, 100),
+                  foregroundColor: Colors.green[300],
+                  //disabledForegroundColor: Colors.red,
+                  side: BorderSide(color: Colors.green, width: 3),
+                ),
+                  onPressed: (() {
+                    //Navigator.pushNamed(context, EntrarPage.routeName);
+                  //print("SALIDAS SCREEN");
+                  }), 
+                  child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height/3,
+                    child: Center(
+                      child: Text("Agregar\ninvitados", textAlign: TextAlign.center,
+                              style: TextStyle(fontSize: 40),),
+                    ),
+                    // child: Image.network("https://http2.mlstatic.com/D_NQ_NP_909774-MLV52690599466_122022-W.jpg"),
+                    // decoration: BoxDecoration(
+                    //   borderRadius: BorderRadius.circular(20)
+                      
+                    // ),
+                  ),
+                ),
+                // Ink(
+                //   width: MediaQuery.of(context).size.width,
+                //   height: MediaQuery.of(context).size.height/3,
+                //   decoration: BoxDecoration(
+                //     borderRadius: BorderRadius.circular(20),
+                //     image: DecorationImage(
+                //       image: NetworkImage('https://http2.mlstatic.com/D_NQ_NP_909774-MLV52690599466_122022-W.jpg'),
+                //       fit: BoxFit.cover,
+                //     ),
+                //   ),
+                // ),
+              ),
+            ],
+          )
+        ),
+      ),
     );
   }
 }

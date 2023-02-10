@@ -36,8 +36,13 @@ class _tipoAperturaScreenState extends State<tipoAperturaScreen> {
     });
   }
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
+  Widget build(BuildContext context) => WillPopScope(
+
+    onWillPop: () async {
+      widget.volver(0);
+      return false;
+    },
+    child: Scaffold(
       body: Center(child: !(internet==false && wifi==false && bluetooth==false)
       ?Column(
         // mainAxisAlignment: MainAxisAlignment.center,
@@ -141,6 +146,6 @@ class _tipoAperturaScreenState extends State<tipoAperturaScreen> {
       ),
     ),
     floatingActionButtonLocation: FloatingActionButtonLocation.startFloat
-    );
-  }
+    ),
+  );
 }

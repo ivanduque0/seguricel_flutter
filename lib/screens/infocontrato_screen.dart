@@ -92,8 +92,13 @@ class _infoContratoScreenState extends State<infoContratoScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
+  Widget build(BuildContext context) => WillPopScope(
+
+    onWillPop: () async {
+      widget.volver(0);
+      return false;
+    },
+    child: Scaffold(
             body: 
             (contratos.length>1 && seleccionContrato!="")
             ?Center(
@@ -421,6 +426,6 @@ class _infoContratoScreenState extends State<infoContratoScreen> {
               ),
             ),
             floatingActionButtonLocation: FloatingActionButtonLocation.startFloat
-          );
-  }
+          )
+  );
 }
