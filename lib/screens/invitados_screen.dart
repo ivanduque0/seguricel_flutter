@@ -1,7 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:seguricel_flutter/screens/agregarinvitado_screen.dart';
+import 'package:seguricel_flutter/screens/verinvitados_screen.dart';
 
-class InvitadosScreen extends StatelessWidget {
+class InvitadosScreen extends StatefulWidget {
   const InvitadosScreen({super.key});
+
+  @override
+  State<InvitadosScreen> createState() => _InvitadosScreenState();
+}
+
+class _InvitadosScreenState extends State<InvitadosScreen> {
+  int screen=0;
+
+  void updateScreen(int newScreen) {
+    setState(() {
+      screen = newScreen;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -9,7 +24,7 @@ class InvitadosScreen extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Center(
-          child: Column(
+          child: screen==0?Column(
             children: [
               SizedBox(
                 height: 30,
@@ -37,8 +52,10 @@ class InvitadosScreen extends StatelessWidget {
                   side: BorderSide(color: Colors.orange, width: 3),
                 ),
                   onPressed: (() {
-                    //Navigator.pushNamed(context, EntrarPage.routeName);
-                  //print("SALIDAS SCREEN");
+                    setState(() {
+                      screen=1;
+                      // print("state 3");
+                    });
                   }), 
                   child: Container(
                     width: MediaQuery.of(context).size.width,
@@ -83,8 +100,10 @@ class InvitadosScreen extends StatelessWidget {
                   side: BorderSide(color: Colors.green, width: 3),
                 ),
                   onPressed: (() {
-                    //Navigator.pushNamed(context, EntrarPage.routeName);
-                  //print("SALIDAS SCREEN");
+                  setState(() {
+                      screen=2;
+                      // print("state 3");
+                    });
                   }), 
                   child: Container(
                     width: MediaQuery.of(context).size.width,
@@ -113,6 +132,11 @@ class InvitadosScreen extends StatelessWidget {
                 // ),
               ),
             ],
+          ):
+          screen==1?VerInvitadosScreen(
+            volver: updateScreen,
+          ):AgregarInvitadoScreen(
+            volver: updateScreen
           )
         ),
       ),

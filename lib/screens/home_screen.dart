@@ -15,7 +15,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   // bool modoInternet=false;
   int screen=0;
-  @override
+  //@override
   // void initState() {
   //   // TODO: implement initState
   //   super.initState();
@@ -48,7 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   onTap: () {
                     setState(() {
                       screen=1;
-                      print("state 1");
+                      // print("state 1");
                     });
                     
                     //Navigator.pushNamed(context, EntrarPage.routeName);
@@ -77,7 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   onTap: () {
                     setState(() {
                       screen=2;
-                      print("state 2");
+                      // print("state 2");
                     });
                     //Navigator.pushNamed(context, EntrarPage.routeName);
                   }, // Handle your callback.
@@ -105,7 +105,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   onTap: () {
                     setState(() {
                       screen=3;
-                      print("state 3");
+                      // print("state 3");
                     });
                     //Navigator.pushNamed(context, EntrarPage.routeName);
                   }, // Handle your callback.

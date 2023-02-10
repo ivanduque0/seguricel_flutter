@@ -45,6 +45,8 @@ dependencies:
   beacon_broadcast: ^0.3.1
   permission_handler: ^10.2.0
   flutter_bluetooth_serial: ^0.4.0
+  syncfusion_flutter_datepicker: ^20.4.49
+  intl: ^0.18.0
 
 dev_dependencies:
   flutter_test:
