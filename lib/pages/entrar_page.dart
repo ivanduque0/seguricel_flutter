@@ -163,7 +163,7 @@ class _EntrarPageState extends State<EntrarPage> {
                   }
                 );
                 try {
-                  Map jsonBody={"contrato":contrato, "acceso":acceso,"id_usuario":idUsuario, "razon":"entrada"};
+                  Map jsonBody={"contrato":contrato, "acceso":acceso,"codigo_usuario":idUsuario, "razon":"entrada"};
                   var client = BasicAuthClient('mobile_access', 'S3gur1c3l_mobile@');
                   var res = await client.post(Uri.parse('https://webseguricel.up.railway.app/apertura/'), body: jsonBody).timeout(Duration(seconds: 5));
         
@@ -175,7 +175,7 @@ class _EntrarPageState extends State<EntrarPage> {
                       timeoutInternet++;
                       res = await client.get(Uri.parse('https://webseguricel.up.railway.app/aperturasusuarioapi/${idUsuario}/${contrato}/')).timeout(Duration(seconds: 5));
                       var aperturasjson = await jsonDecode(res.body);
-                      // print(aperturasjson);
+                      print(aperturasjson);
                       cantidadAperturas = aperturasjson.length;
                       feedbacksProcesados=0;
                       try {
@@ -255,6 +255,34 @@ class _EntrarPageState extends State<EntrarPage> {
                           ).show();
                         }
                     });
+                  } else {
+                    Navigator.of(context).pop();
+                    AwesomeDialog(
+                      titleTextStyle: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 30,
+                        color: Colors.red
+                      ),
+                      // descTextStyle: TextStyle(
+                      //   fontWeight: FontWeight.bold,
+                      //   fontSize: 20,
+                      // ),
+                      context: context,
+                      animType: AnimType.bottomSlide,
+                      headerAnimationLoop: false,
+                      dialogType: DialogType.error,
+                      showCloseIcon: true,
+                      title: "No se pudo enviar la peticion",
+                      //desc:"Solicitud enviada",
+                      btnOkOnPress: () {
+                        //debugPrint('OnClcik');
+                      },
+                      btnOkColor: Colors.red,
+                      btnOkIcon: Icons.check_circle,
+                      // onDismissCallback: (type) {
+                      //   debugPrint('Dialog Dissmiss from callback $type');
+                      // },
+                    ).show();
                   }
                 } catch(e) {
                   Navigator.of(context).pop();
@@ -299,7 +327,7 @@ class _EntrarPageState extends State<EntrarPage> {
       }
     } else {
       try {
-      Map jsonBody={"contrato":contrato, "acceso":acceso,"id_usuario":idUsuario, "razon":"entrada"};
+      Map jsonBody={"contrato":contrato, "acceso":acceso,"codigo_usuario":idUsuario, "razon":"entrada"};
       var client = BasicAuthClient('mobile_access', 'S3gur1c3l_mobile@');
       var res = await client.post(Uri.parse('https://webseguricel.up.railway.app/apertura/'), body: jsonBody).timeout(Duration(seconds: 5));
       //await Future.delayed(const Duration(seconds: 1));
@@ -417,7 +445,35 @@ class _EntrarPageState extends State<EntrarPage> {
               ).show();
             }
           });
-        }
+      } else {
+        Navigator.of(context).pop();
+        AwesomeDialog(
+          titleTextStyle: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 30,
+            color: Colors.red
+          ),
+          // descTextStyle: TextStyle(
+          //   fontWeight: FontWeight.bold,
+          //   fontSize: 20,
+          // ),
+          context: context,
+          animType: AnimType.bottomSlide,
+          headerAnimationLoop: false,
+          dialogType: DialogType.error,
+          showCloseIcon: true,
+          title: "No se pudo enviar la peticion",
+          //desc:"Solicitud enviada",
+          btnOkOnPress: () {
+            //debugPrint('OnClcik');
+          },
+          btnOkColor: Colors.red,
+          btnOkIcon: Icons.check_circle,
+          // onDismissCallback: (type) {
+          //   debugPrint('Dialog Dissmiss from callback $type');
+          // },
+        ).show();
+      }
 
 
 

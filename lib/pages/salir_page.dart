@@ -163,7 +163,7 @@ class _SalirPageState extends State<SalirPage> {
                   }
                 );
                 try {
-                  Map jsonBody={"contrato":contrato, "acceso":acceso,"id_usuario":idUsuario, "razon":"salida"};
+                  Map jsonBody={"contrato":contrato, "acceso":acceso,"codigo_usuario":idUsuario, "razon":"salida"};
                   var client = BasicAuthClient('mobile_access', 'S3gur1c3l_mobile@');
                   var res = await client.post(Uri.parse('https://webseguricel.up.railway.app/apertura/'), body: jsonBody).timeout(Duration(seconds: 5));
         
@@ -255,6 +255,34 @@ class _SalirPageState extends State<SalirPage> {
                           ).show();
                         }
                     });
+                  } else {
+                    Navigator.of(context).pop();
+                    AwesomeDialog(
+                      titleTextStyle: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 30,
+                        color: Colors.red
+                      ),
+                      // descTextStyle: TextStyle(
+                      //   fontWeight: FontWeight.bold,
+                      //   fontSize: 20,
+                      // ),
+                      context: context,
+                      animType: AnimType.bottomSlide,
+                      headerAnimationLoop: false,
+                      dialogType: DialogType.error,
+                      showCloseIcon: true,
+                      title: "No se pudo enviar la peticion",
+                      //desc:"Solicitud enviada",
+                      btnOkOnPress: () {
+                        //debugPrint('OnClcik');
+                      },
+                      btnOkColor: Colors.red,
+                      btnOkIcon: Icons.check_circle,
+                      // onDismissCallback: (type) {
+                      //   debugPrint('Dialog Dissmiss from callback $type');
+                      // },
+                    ).show();
                   }
                 } catch(e) {
                   Navigator.of(context).pop();
@@ -299,9 +327,10 @@ class _SalirPageState extends State<SalirPage> {
       }
     } else {
       try {
-      Map jsonBody={"contrato":contrato, "acceso":acceso,"id_usuario":idUsuario, "razon":"salida"};
+      Map jsonBody={"contrato":contrato, "acceso":acceso,"codigo_usuario":idUsuario, "razon":"salida"};
       var client = BasicAuthClient('mobile_access', 'S3gur1c3l_mobile@');
       var res = await client.post(Uri.parse('https://webseguricel.up.railway.app/apertura/'), body: jsonBody).timeout(Duration(seconds: 5));
+      print(res.body);
       //await Future.delayed(const Duration(seconds: 1));
       // Navigator.of(context).pop();
       // AwesomeDialog(
@@ -417,7 +446,35 @@ class _SalirPageState extends State<SalirPage> {
               ).show();
             }
           });
-        }
+      } else {
+                    Navigator.of(context).pop();
+                    AwesomeDialog(
+                      titleTextStyle: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 30,
+                        color: Colors.red
+                      ),
+                      // descTextStyle: TextStyle(
+                      //   fontWeight: FontWeight.bold,
+                      //   fontSize: 20,
+                      // ),
+                      context: context,
+                      animType: AnimType.bottomSlide,
+                      headerAnimationLoop: false,
+                      dialogType: DialogType.error,
+                      showCloseIcon: true,
+                      title: "No se pudo enviar la peticion",
+                      //desc:"Solicitud enviada",
+                      btnOkOnPress: () {
+                        //debugPrint('OnClcik');
+                      },
+                      btnOkColor: Colors.red,
+                      btnOkIcon: Icons.check_circle,
+                      // onDismissCallback: (type) {
+                      //   debugPrint('Dialog Dissmiss from callback $type');
+                      // },
+                    ).show();
+                  }
 
 
 

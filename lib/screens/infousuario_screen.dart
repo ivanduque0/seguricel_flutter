@@ -89,7 +89,7 @@ class _infoUsuarioScreenState extends State<infoUsuarioScreen> {
             ListTile(
               leading: Icon(Icons.accessibility_new_rounded, size: 60,),
               title: Text("Rol", style: TextStyle(fontSize: 20),),
-              subtitle: Text("Propietario", style: TextStyle(fontSize: 20),),
+              subtitle: Text(datosUsuario['rol'], style: TextStyle(fontSize: 20),),
               onTap: () {
                 // print(datosUsuario);
                 // print("a");

@@ -109,6 +109,7 @@ class _LoginPageState extends State<LoginPage> {
       String contrato="";
       String cedula="";
       String nombre="";
+      String rol="";
       String beacon_uuid="";
       String servidor="";
       String entradas="";
@@ -122,18 +123,26 @@ class _LoginPageState extends State<LoginPage> {
         var client = BasicAuthClient('mobile_access', 'S3gur1c3l_mobile@');
         res = await client.get(Uri.parse('https://webseguricel.up.railway.app/dispositivosapimobile/${_codeController.text}/')).timeout(Duration(seconds: 5));
         data = jsonDecode(res.body);
+        //print(data);
+        res = await client.get(Uri.parse('https://webseguricel.up.railway.app/contratosmobiledeviceapi/${_codeController.text}/')).timeout(Duration(seconds: 5));
+        contratos = jsonDecode(res.body);
+        //print(contratos);
         for (var item in data) {
-          contratos.add(item['contrato']);
+          // contratos.add(item['contrato']);
           if (cedula=="" && beacon_uuid=="" && nombre==""){
             cedula=item['cedula'];
             beacon_uuid=item['beacon_uuid'];
             nombre=item['nombre'];
+            rol=item['rol'];
+
           }
         }
         if (contratos.length>0){
-          contrato= contratos[0];
+          contrato= contratos[0]['nombre'];
+          //print(contrato);
           res = await client.post(Uri.parse('https://webseguricel.up.railway.app/dispositivosapimobile/${contrato}/')).timeout(Duration(seconds: 5));//.timeout(Duration(seconds: 15));;
           data = jsonDecode(res.body);
+          //print(data);
           var descripcionIteracion="";
           for (var item in data) {
             if (servidor=="" && item['descripcion']=="SERVIDOR LOCAL"){
@@ -165,13 +174,13 @@ class _LoginPageState extends State<LoginPage> {
           // print(accesosSalidas);
           // print(AccesosPeatonales);
           // print(AccesosVehiculares);
-          datosUsuario=jsonEncode({'contrato':contrato, 'id_usuario':_codeController.text, 'cedula':cedula, 'nombre':nombre, 'beacon_uuid':beacon_uuid});
+          datosUsuario=jsonEncode({'contrato':contrato, 'id_usuario':_codeController.text, 'cedula':cedula, 'nombre':nombre, 'rol': rol, 'beacon_uuid':beacon_uuid});
           // accesos=jsonEncode([AccesosPeatonales,AccesosVehiculares]);
           entradas=jsonEncode(accesosEntradas);
           salidas=jsonEncode(accesosSalidas);
           contratosEncode=jsonEncode(contratos);
 
-          //SharedPreferences prefs = await SharedPreferences.getInstance();
+          SharedPreferences prefs = await SharedPreferences.getInstance();
           
           await Constants.prefs.setString('datosUsuario', datosUsuario);
           await Constants.prefs.setString('entradas', entradas);
@@ -186,7 +195,7 @@ class _LoginPageState extends State<LoginPage> {
           await Constants.prefs.setBool('modoWifi', false);
           await Constants.prefs.setBool('modoBluetooth', true);
           isLoggedIn=true;
-          // Navigator.pushReplacementNamed(context, MainPage.routeName);
+          Navigator.pushReplacementNamed(context, MainPage.routeName);
         }
       } catch (e) {
 

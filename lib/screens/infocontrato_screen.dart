@@ -17,7 +17,7 @@ class infoContratoScreen extends StatefulWidget {
 }
 
 class _infoContratoScreenState extends State<infoContratoScreen> {
-  List <String>contratos=[];
+  List contratos=[];
   Map datosUsuario={};
   String seleccionContrato ="";
   List <String>ContratosActualizar=[];
@@ -34,24 +34,26 @@ class _infoContratoScreenState extends State<infoContratoScreen> {
     String encodeDatosUsuario = await Constants.prefs.getString('datosUsuario').toString();
     String encodeContratos = await Constants.prefs.getString('contratos').toString();
     String idUsuario= await Constants.prefs.getString('id_usuario').toString();
+    //print(idUsuario);
 
     // print(encodeDatosUsuario);
     // print(encodeContratos);
     // print(encodeAccesos);
     setState (() {
       datosUsuario = jsonDecode(encodeDatosUsuario);
-      contratos = (jsonDecode(encodeContratos) as List<dynamic>).cast<String>();
+      contratos = (jsonDecode(encodeContratos) as List<dynamic>).cast<Map>();
       seleccionContrato = datosUsuario['contrato'];
       // accesos = jsonDecode(encodeAccesos);
     });
 
     try{
     var client = BasicAuthClient('mobile_access', 'S3gur1c3l_mobile@');
-    var res = await client.get(Uri.parse('https://webseguricel.up.railway.app/dispositivosapimobile/${idUsuario}/')).timeout(Duration(seconds: 5));
-    var data = jsonDecode(res.body);
-    for (var item in data) {
-      ContratosActualizar.add(item['contrato']);
-    }
+    var res = await client.get(Uri.parse('https://webseguricel.up.railway.app/contratosmobiledeviceapi/${idUsuario}/')).timeout(Duration(seconds: 5));
+    var ContratosActualizar = jsonDecode(res.body);
+    //print(ContratosActualizar);
+    // for (var item in data) {
+    //   ContratosActualizar.add(item['contrato']);
+    // }
     if (contratos!=ContratosActualizar){
       setState(() {
         contratos=ContratosActualizar;
@@ -144,9 +146,9 @@ class _infoContratoScreenState extends State<infoContratoScreen> {
                       shrinkWrap: true,
                       itemBuilder:(context, index) => Container(
                         child: ListTile(
-                          title: (contratos[index]==seleccionContrato)
-                          ?Text(contratos[index], textAlign: TextAlign.center, style: TextStyle(fontSize: 20, color: Colors.orange, fontWeight: FontWeight.bold),)
-                          :Text(contratos[index], textAlign: TextAlign.center, style: TextStyle(fontSize: 20),),
+                          title: (contratos[index]['nombre']==seleccionContrato)
+                          ?Text(contratos[index]['nombre'], textAlign: TextAlign.center, style: TextStyle(fontSize: 20, color: Colors.orange, fontWeight: FontWeight.bold),)
+                          :Text(contratos[index]['nombre'], textAlign: TextAlign.center, style: TextStyle(fontSize: 20),),
                           onTap: () async {
                   
                             showDialog(
@@ -163,10 +165,10 @@ class _infoContratoScreenState extends State<infoContratoScreen> {
                             List accesosEntradas=[];
                             List accesosSalidas=[];
                             // This is called when the user selects an item.
-                            datosUsuario['contrato']=contratos[index];
+                            datosUsuario['contrato']=contratos[index]['nombre'];
                             try {
                               var client = BasicAuthClient('mobile_access', 'S3gur1c3l_mobile@');
-                              var res = await client.post(Uri.parse('https://webseguricel.up.railway.app/dispositivosapimobile/${contratos[index]}/')).timeout(Duration(seconds: 5));//.timeout(Duration(seconds: 15));;
+                              var res = await client.post(Uri.parse('https://webseguricel.up.railway.app/dispositivosapimobile/${contratos[index]['nombre']}/')).timeout(Duration(seconds: 5));//.timeout(Duration(seconds: 15));;
                               var data = jsonDecode(res.body);
                               var descripcionIteracion="";
                               for (var item in data) {
@@ -191,9 +193,9 @@ class _infoContratoScreenState extends State<infoContratoScreen> {
                               await Constants.prefs.setString('entradas', entradas);
                               await Constants.prefs.setString('salidas', salidas);
                               await Constants.prefs.setString('servidor', servidor);
-                              await Constants.prefs.setString('contrato', contratos[index]);
+                              await Constants.prefs.setString('contrato', contratos[index]['nombre']);
                               setState(() {
-                                seleccionContrato = contratos[index];
+                                seleccionContrato = contratos[index]['nombre'];
                         
                               });
                               Navigator.of(context).pop();
