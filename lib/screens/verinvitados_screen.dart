@@ -110,7 +110,7 @@ class _VerInvitadosScreenState extends State<VerInvitadosScreen> {
                     child: ListView.builder(
                       itemCount: invitados.length,
                       shrinkWrap: true,
-                      itemBuilder:(context, index) => Container(
+                      itemBuilder:(_, index) => Container(
                         child: ListTile(
                           // leading: Icon(Icons.person),
                           title:Text("${invitados[index]['nombre']}", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
@@ -159,7 +159,7 @@ class _VerInvitadosScreenState extends State<VerInvitadosScreen> {
                                       showDialog(
                                         // The user CANNOT close this dialog  by pressing outsite it
                                         barrierDismissible: false,
-                                        context: context,
+                                        context: _,
                                         builder: (_) {
                                           return WillPopScope(
                                             onWillPop: () async => false,
@@ -167,18 +167,18 @@ class _VerInvitadosScreenState extends State<VerInvitadosScreen> {
                                         }
                                       );
                                       try {
-                                        //print(invitados[index]);
                                         var client = BasicAuthClient('mobile_access', 'S3gur1c3l_mobile@');
                                         var res = await client.delete(Uri.parse('https://webseguricel.up.railway.app/agregarinvitadosmobileapi/${invitados[index]['id']}/blank/blank/')).timeout(Duration(seconds: 5));
                                         var data = await jsonDecode(res.body);
-                                        setState(() {
+                                        // print(data);
+                                        if(res.statusCode==200){
+                                          setState(() {
                                           invitados.removeAt(index);
                                         });
                                         var invitadosEncode = await jsonEncode(invitados);
                                         await Constants.prefs.setString('datosInvitados', invitadosEncode);
-                                        if(res.statusCode==200){
-                                          Navigator.of(context).pop();
                                         cerrarLoading=true;
+                                        Navigator.of(context).pop();
                                         AwesomeDialog(
                                           titleTextStyle: TextStyle(
                                             fontWeight: FontWeight.bold,
