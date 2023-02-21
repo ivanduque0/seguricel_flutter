@@ -128,53 +128,53 @@ class _infoUsuarioScreenState extends State<infoUsuarioScreen> {
                     width:MediaQuery.of(context).size.width/5,
                   ),
                   OutlinedButton(
-              style: OutlinedButton.styleFrom(
-                fixedSize: Size(190, 50),
-                foregroundColor: Colors.red,
-                //disabledForegroundColor: Colors.red,
-                side: BorderSide(color: Colors.red, width: 3),
-              ),
-              onPressed:() {
-                AwesomeDialog(
-              btnCancelText: "NO",
-              btnOkText: "SI",
-              titleTextStyle: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 30,
-                color: Colors.black
-              ),
-              // descTextStyle: TextStyle(
-              //   fontWeight: FontWeight.bold,
-              //   fontSize: 20,
-              //   color: Colors.black
-              // ),
-              context: context,
-              animType: AnimType.bottomSlide,
-              headerAnimationLoop: false,
-              dialogType: DialogType.warning,
-              showCloseIcon: true,
-              title: "Seguro que desea cerrar su sesión?",
-              btnCancelOnPress: () {},
-              btnOkOnPress: () async {
-              Constants.prefs.remove("datosUsuario");
-              Constants.prefs.remove("accesos");
-              Constants.prefs.remove("contratos");
-              Constants.prefs.remove("isLoggedIn");
-              Constants.prefs.remove('entradas');
-              Constants.prefs.remove('salidas');
-              Constants.prefs.remove('servidor');
-              Constants.prefs.remove('id_usuario');
-              Constants.prefs.remove('contrato');
-              Constants.prefs.remove('beacon_uuid');
-              Constants.prefs.remove('modoInternet');
-              Constants.prefs.remove('modoWifi');
-              Constants.prefs.remove('modoBluetooth');
-              Navigator.pushReplacementNamed(context, LoginPage.routeName);
-              },
-            ).show();
-              }, 
-              child: Text("Cerrar sesión", style: TextStyle(fontSize: 18))
-            )
+                    style: OutlinedButton.styleFrom(
+                      fixedSize: Size(190, 50),
+                      foregroundColor: Colors.red,
+                      //disabledForegroundColor: Colors.red,
+                      side: BorderSide(color: Colors.red, width: 3),
+                    ),
+                    onPressed:() {
+                      AwesomeDialog(
+                        btnCancelText: "NO",
+                        btnOkText: "SI",
+                        titleTextStyle: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 30,
+                          color: Colors.black
+                        ),
+                        // descTextStyle: TextStyle(
+                        //   fontWeight: FontWeight.bold,
+                        //   fontSize: 20,
+                        //   color: Colors.black
+                        // ),
+                        context: context,
+                        animType: AnimType.bottomSlide,
+                        headerAnimationLoop: false,
+                        dialogType: DialogType.warning,
+                        showCloseIcon: true,
+                        title: "Seguro que desea cerrar su sesión?",
+                        btnCancelOnPress: () {},
+                        btnOkOnPress: () async {
+                        Constants.prefs.remove("datosUsuario");
+                        Constants.prefs.remove("accesos");
+                        Constants.prefs.remove("contratos");
+                        Constants.prefs.remove("isLoggedIn");
+                        Constants.prefs.remove('entradas');
+                        Constants.prefs.remove('salidas');
+                        Constants.prefs.remove('servidor');
+                        Constants.prefs.remove('id_usuario');
+                        Constants.prefs.remove('contrato');
+                        Constants.prefs.remove('beacon_uuid');
+                        Constants.prefs.remove('modoInternet');
+                        Constants.prefs.remove('modoWifi');
+                        Constants.prefs.remove('modoBluetooth');
+                        Navigator.pushReplacementNamed(context, LoginPage.routeName);
+                        },
+                      ).show();
+                      }, 
+                    child: Text("Cerrar sesión", style: TextStyle(fontSize: 18))
+                  )
                   
                 ],
               ),

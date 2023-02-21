@@ -173,12 +173,12 @@ class _SalirPageState extends State<SalirPage> {
                     int timeoutInternet=0;
                     Timer.periodic(const Duration(seconds: 1), (timer) async {
                       timeoutInternet++;
-                      res = await client.get(Uri.parse('https://webseguricel.up.railway.app/aperturasusuarioapi/${idUsuario}/${contrato}/')).timeout(Duration(seconds: 5));
-                      var aperturasjson = await jsonDecode(res.body);
-                      // print(aperturasjson);
-                      cantidadAperturas = aperturasjson.length;
-                      feedbacksProcesados=0;
                       try {
+                        res = await client.get(Uri.parse('https://webseguricel.up.railway.app/aperturasusuarioapi/${idUsuario}/${contrato}/')).timeout(Duration(seconds: 5));
+                        var aperturasjson = await jsonDecode(res.body);
+                        // print(aperturasjson);
+                        cantidadAperturas = aperturasjson.length;
+                        feedbacksProcesados=0;
                         for (var apertura in aperturasjson) {
                           // print(apertura);
                           // print(apertura['abriendo']);
@@ -330,7 +330,7 @@ class _SalirPageState extends State<SalirPage> {
       Map jsonBody={"contrato":contrato, "acceso":acceso,"codigo_usuario":idUsuario, "razon":"salida"};
       var client = BasicAuthClient('mobile_access', 'S3gur1c3l_mobile@');
       var res = await client.post(Uri.parse('https://webseguricel.up.railway.app/apertura/'), body: jsonBody).timeout(Duration(seconds: 5));
-      print(res.body);
+      //print(res.body);
       //await Future.delayed(const Duration(seconds: 1));
       // Navigator.of(context).pop();
       // AwesomeDialog(
@@ -364,12 +364,13 @@ class _SalirPageState extends State<SalirPage> {
         int timeoutInternet=0;
         Timer.periodic(const Duration(seconds: 1), (timer) async {
           timeoutInternet++;
-          res = await client.get(Uri.parse('https://webseguricel.up.railway.app/aperturasusuarioapi/${idUsuario}/${contrato}/')).timeout(Duration(seconds: 5));
-          var aperturasjson = await jsonDecode(res.body);
-          // print(aperturasjson);
-          cantidadAperturas = aperturasjson.length;
-          feedbacksProcesados=0;
+          //print(timeoutInternet);
           try {
+            res = await client.get(Uri.parse('https://webseguricel.up.railway.app/aperturasusuarioapi/${idUsuario}/${contrato}/')).timeout(Duration(seconds: 5));
+            var aperturasjson = await jsonDecode(res.body);
+            // print(aperturasjson);
+            cantidadAperturas = aperturasjson.length;
+            feedbacksProcesados=0;
             for (var apertura in aperturasjson) {
               // print(apertura);
               // print(apertura['abriendo']);

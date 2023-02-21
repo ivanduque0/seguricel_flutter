@@ -32,12 +32,65 @@ class _MainPageState extends State<MainPage> {
   //Map datosUsuario={};
   // List contratos=[];
   List accesos=[];
+  String rol="";
+
+  List<BottomNavigationBarItem> itemsPropietario=const [
+    // BottomNavigationBarItem(icon: Icon(Icons.home),label: "home"),
+    // BottomNavigationBarItem(icon: Icon(Icons.door_sliding_rounded),label: "aperturas"),
+    // BottomNavigationBarItem(icon: Icon(Icons.groups),label: "invitados"),
+    BottomNavigationBarItem(
+      icon: Icon(FluentSystemIcons.ic_fluent_home_regular),
+      activeIcon: Icon(FluentSystemIcons.ic_fluent_home_filled),
+      label: "Home"),
+    BottomNavigationBarItem(icon: Icon(Icons.door_sliding_rounded),label: "Aperturas"),
+    BottomNavigationBarItem(
+      icon: Icon(FluentSystemIcons.ic_fluent_people_community_add_regular),
+      activeIcon: Icon(FluentSystemIcons.ic_fluent_people_community_add_filled),
+      label: "Visitantes"
+      ),
+  ];
+
+  List<BottomNavigationBarItem> itemsSecVis=const [
+    // BottomNavigationBarItem(icon: Icon(Icons.home),label: "home"),
+    // BottomNavigationBarItem(icon: Icon(Icons.door_sliding_rounded),label: "aperturas"),
+    // BottomNavigationBarItem(icon: Icon(Icons.groups),label: "invitados"),
+    BottomNavigationBarItem(
+      icon: Icon(FluentSystemIcons.ic_fluent_home_regular),
+      activeIcon: Icon(FluentSystemIcons.ic_fluent_home_filled),
+      label: "Home"),
+    BottomNavigationBarItem(icon: Icon(Icons.door_sliding_rounded),label: "Aperturas")
+  ];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  obtenerRol();
+  }
+
+  obtenerRol() async {
+
+    String encodeDatosUsuario = await Constants.prefs.getString('datosUsuario').toString();
+
+    // print(encodeDatosUsuario);
+    setState (() {
+      rol= jsonDecode(encodeDatosUsuario)['rol'];
+      // print(rol);
+    });
+  }
+
+
 
   int _selectedIndex=1;
-  static final List<Widget>_widgetOptions = <Widget>[
+  static final List<Widget>_widgetOptionsPropietario = <Widget>[
     HomeScreen(),
     AperturasScreen(),
     InvitadosScreen(),
+  ];
+
+  static final List<Widget>_widgetOptionsSecVis = <Widget>[
+    HomeScreen(),
+    AperturasScreen(),
   ];
 
   void _onItemTapped(int index){
@@ -115,7 +168,9 @@ class _MainPageState extends State<MainPage> {
       // body: this.datosUsuario!={}
       //   ?Center(
         body: Center(
-          child: _widgetOptions[_selectedIndex]
+          child: rol=="Propietario"
+          ?_widgetOptionsPropietario[_selectedIndex]
+          :_widgetOptionsSecVis[_selectedIndex]
         ),
         //:LoadingWidget(),
       //drawer: MyDrawer(datosUsuario: datosUsuario),//datosUsuario!={}?MyDrawer(datosUsuario: datosUsuario):MyDrawer(datosUsuario: {'nombre':"null", "contrato":"null","cedula":"null", "id_usuario":"null"}),
@@ -127,22 +182,9 @@ class _MainPageState extends State<MainPage> {
         showUnselectedLabels: true,
         //selectedItemColor: Colors.blue,
         unselectedItemColor: Color.fromARGB(255, 109, 101, 94),
-        items: 
-          const [
-            // BottomNavigationBarItem(icon: Icon(Icons.home),label: "home"),
-            // BottomNavigationBarItem(icon: Icon(Icons.door_sliding_rounded),label: "aperturas"),
-            // BottomNavigationBarItem(icon: Icon(Icons.groups),label: "invitados"),
-            BottomNavigationBarItem(
-              icon: Icon(FluentSystemIcons.ic_fluent_home_regular),
-              activeIcon: Icon(FluentSystemIcons.ic_fluent_home_filled),
-              label: "Home"),
-            BottomNavigationBarItem(icon: Icon(Icons.door_sliding_rounded),label: "Aperturas"),
-            BottomNavigationBarItem(
-              icon: Icon(FluentSystemIcons.ic_fluent_people_community_add_regular),
-              activeIcon: Icon(FluentSystemIcons.ic_fluent_people_community_add_filled),
-              label: "Visitantes"
-              ),
-          ]
+        items: rol=="Propietario"
+        ?itemsPropietario
+        :itemsSecVis
       ),
       
       // floatingActionButton: FloatingActionButton(

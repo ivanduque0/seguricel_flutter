@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:seguricel_flutter/screens/agregarinvitado_screen.dart';
+import 'package:seguricel_flutter/screens/crearnuevoinvitado_screen.dart';
+import 'package:seguricel_flutter/screens/editarinvitado_screen.dart';
+import 'package:seguricel_flutter/screens/personalizartiempoinvitado_screen.dart';
+import 'package:seguricel_flutter/screens/seleccionarinvitado_screen.dart';
+import 'package:seguricel_flutter/screens/seleccionarinvitadoexistente_screen.dart';
+import 'package:seguricel_flutter/screens/tiempoinvitado_screen.dart';
 import 'package:seguricel_flutter/screens/verinvitados_screen.dart';
 
 class InvitadosScreen extends StatefulWidget {
@@ -109,7 +114,7 @@ class _InvitadosScreenState extends State<InvitadosScreen> {
                     width: MediaQuery.of(context).size.width,
                     height: MediaQuery.of(context).size.height/3,
                     child: Center(
-                      child: Text("Agregar\ninvitados", textAlign: TextAlign.center,
+                      child: Text("Crear\ninvitacion", textAlign: TextAlign.center,
                               style: TextStyle(fontSize: 40),),
                     ),
                     // child: Image.network("https://http2.mlstatic.com/D_NQ_NP_909774-MLV52690599466_122022-W.jpg"),
@@ -132,10 +137,19 @@ class _InvitadosScreenState extends State<InvitadosScreen> {
                 // ),
               ),
             ],
-          ):
-          screen==1?VerInvitadosScreen(
+          ):screen==1?VerInvitadosScreen(
             volver: updateScreen,
-          ):AgregarInvitadoScreen(
+          ):screen==2?TiempoInvitadoScreen(
+            volver: updateScreen
+          ):screen==3?PersonalizarTiempoInvitadoScreen(
+            volver: updateScreen
+          ):screen==4?SeleccionarInvitadoScreen(
+            volver: updateScreen
+          ):screen==5?CrearNuevoInvitadoScreen(
+            volver: updateScreen
+          ):screen==6?EditarInvitadosScreen(
+            volver: updateScreen,
+          ):SeleccionarInvitadoExistenteScreen(
             volver: updateScreen
           )
         ),

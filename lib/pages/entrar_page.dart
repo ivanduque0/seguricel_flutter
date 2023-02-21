@@ -173,12 +173,12 @@ class _EntrarPageState extends State<EntrarPage> {
                     int timeoutInternet=0;
                     Timer.periodic(const Duration(seconds: 1), (timer) async {
                       timeoutInternet++;
-                      res = await client.get(Uri.parse('https://webseguricel.up.railway.app/aperturasusuarioapi/${idUsuario}/${contrato}/')).timeout(Duration(seconds: 5));
-                      var aperturasjson = await jsonDecode(res.body);
-                      print(aperturasjson);
-                      cantidadAperturas = aperturasjson.length;
-                      feedbacksProcesados=0;
                       try {
+                        res = await client.get(Uri.parse('https://webseguricel.up.railway.app/aperturasusuarioapi/${idUsuario}/${contrato}/')).timeout(Duration(seconds: 5));
+                        var aperturasjson = await jsonDecode(res.body);
+                        //print(aperturasjson);
+                        cantidadAperturas = aperturasjson.length;
+                        feedbacksProcesados=0;
                         for (var apertura in aperturasjson) {
                           // print(apertura);
                           // print(apertura['abriendo']);
@@ -363,12 +363,12 @@ class _EntrarPageState extends State<EntrarPage> {
         int timeoutInternet=0;
         Timer.periodic(const Duration(seconds: 1), (timer) async {
           timeoutInternet++;
-          res = await client.get(Uri.parse('https://webseguricel.up.railway.app/aperturasusuarioapi/${idUsuario}/${contrato}/')).timeout(Duration(seconds: 5));
-          var aperturasjson = await jsonDecode(res.body);
-          // print(aperturasjson);
-          cantidadAperturas = aperturasjson.length;
-          feedbacksProcesados=0;
           try {
+            res = await client.get(Uri.parse('https://webseguricel.up.railway.app/aperturasusuarioapi/${idUsuario}/${contrato}/')).timeout(Duration(seconds: 5));
+            var aperturasjson = await jsonDecode(res.body);
+            // print(aperturasjson);
+            cantidadAperturas = aperturasjson.length;
+            feedbacksProcesados=0;
             for (var apertura in aperturasjson) {
               // print(apertura);
               // print(apertura['abriendo']);

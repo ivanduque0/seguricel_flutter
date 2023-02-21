@@ -166,6 +166,8 @@ class _infoContratoScreenState extends State<infoContratoScreen> {
                             List accesosSalidas=[];
                             // This is called when the user selects an item.
                             datosUsuario['contrato']=contratos[index]['nombre'];
+                            datosUsuario['contrato_id']=contratos[index]['id'];
+                            datosUsuario['unidad']=contratos[index]['unidad'];
                             try {
                               var client = BasicAuthClient('mobile_access', 'S3gur1c3l_mobile@');
                               var res = await client.post(Uri.parse('https://webseguricel.up.railway.app/dispositivosapimobile/${contratos[index]['nombre']}/')).timeout(Duration(seconds: 5));//.timeout(Duration(seconds: 15));;

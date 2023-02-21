@@ -107,6 +107,7 @@ class _LoginPageState extends State<LoginPage> {
       List contratos=[];
       String contratosEncode="";
       String contrato="";
+      int unidad=0;
       String cedula="";
       String nombre="";
       String rol="";
@@ -134,15 +135,13 @@ class _LoginPageState extends State<LoginPage> {
             beacon_uuid=item['beacon_uuid'];
             nombre=item['nombre'];
             rol=item['rol'];
-
           }
         }
         if (contratos.length>0){
+          //print(contratos[0]);
           contrato= contratos[0]['nombre'];
-          //print(contrato);
           res = await client.post(Uri.parse('https://webseguricel.up.railway.app/dispositivosapimobile/${contrato}/')).timeout(Duration(seconds: 5));//.timeout(Duration(seconds: 15));;
           data = jsonDecode(res.body);
-          //print(data);
           var descripcionIteracion="";
           for (var item in data) {
             if (servidor=="" && item['descripcion']=="SERVIDOR LOCAL"){
@@ -168,21 +167,25 @@ class _LoginPageState extends State<LoginPage> {
               // }
             }
           }
+          res = await client.get(Uri.parse('https://webseguricel.up.railway.app/agregarinvitadosmobileapi/${contratos[0]['id']}/${cedula}/Visitante/')).timeout(Duration(seconds: 5));
+          var datosInvitados = res.body;
+          //print(datosInvitados);
           // print(data);
           // print(servidor);
           // print(accesosEntradas);
           // print(accesosSalidas);
           // print(AccesosPeatonales);
           // print(AccesosVehiculares);
-          datosUsuario=jsonEncode({'contrato':contrato, 'id_usuario':_codeController.text, 'cedula':cedula, 'nombre':nombre, 'rol': rol, 'beacon_uuid':beacon_uuid});
+          datosUsuario=jsonEncode({'contrato':contrato, 'contrato_id':contratos[0]['id'], 'unidad':contratos[0]['unidad'], 'id_usuario':_codeController.text, 'cedula':cedula, 'nombre':nombre, 'rol': rol, 'beacon_uuid':beacon_uuid});
           // accesos=jsonEncode([AccesosPeatonales,AccesosVehiculares]);
           entradas=jsonEncode(accesosEntradas);
           salidas=jsonEncode(accesosSalidas);
           contratosEncode=jsonEncode(contratos);
 
-          SharedPreferences prefs = await SharedPreferences.getInstance();
+          //SharedPreferences prefs = await SharedPreferences.getInstance();
           
           await Constants.prefs.setString('datosUsuario', datosUsuario);
+          await Constants.prefs.setString('datosInvitados', datosInvitados);
           await Constants.prefs.setString('entradas', entradas);
           await Constants.prefs.setString('salidas', salidas);
           await Constants.prefs.setString('contratos', contratosEncode);
