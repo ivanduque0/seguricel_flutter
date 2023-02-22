@@ -213,7 +213,7 @@ class _SalirPageState extends State<SalirPage> {
                             headerAnimationLoop: false,
                             dialogType: DialogType.success,
                             showCloseIcon: true,
-                            title: "Solicitud recibida, abriendo acceso",
+                            title: "¡Solicitud recibida!",
                             //desc:"Solicitud enviada",
                             btnOkOnPress: () {
                               //debugPrint('OnClcik');
@@ -405,7 +405,7 @@ class _SalirPageState extends State<SalirPage> {
                 headerAnimationLoop: false,
                 dialogType: DialogType.success,
                 showCloseIcon: true,
-                title: "Solicitud recibida, abriendo acceso",
+                title: "¡Solicitud recibida!",
                 //desc:"Solicitud enviada",
                 btnOkOnPress: () {
                   //debugPrint('OnClcik');
@@ -522,7 +522,7 @@ class _SalirPageState extends State<SalirPage> {
       //     headerAnimationLoop: false,
       //     dialogType: DialogType.success,
       //     showCloseIcon: true,
-      //     title: "Solicitud recibida, abriendo acceso",
+      //     title: "¡Solicitud recibida!",
       //     //desc:"Solicitud enviada",
       //     btnOkOnPress: () {
       //       //debugPrint('OnClcik');
