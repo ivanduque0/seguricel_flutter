@@ -85,15 +85,15 @@ class _EditarInvitadosScreenState extends State<EditarInvitadosScreen> {
                       ),
                       ),
                       SizedBox(
-                        height: 10,
+                        height: 30,
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Expanded(
                             child: ListTile(
-                              title: Text("Nombre", style: TextStyle(fontSize: 20),textAlign: TextAlign.center,),
-                              subtitle: Text(datosInvitado['nombre'], style: TextStyle(fontSize: 20),textAlign: TextAlign.center,),
+                              title: Text("Nombre", style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),textAlign: TextAlign.center,),
+                              subtitle: Text(datosInvitado['nombre'], style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),textAlign: TextAlign.center,),
                               //trailing: Icon(Icons.edit),
                               onTap: () {
                                 // print(datosUsuario);
@@ -103,8 +103,8 @@ class _EditarInvitadosScreenState extends State<EditarInvitadosScreen> {
                           ),
                           Expanded(
                             child: ListTile(
-                              title: Text("Codigo", style: TextStyle(fontSize: 20),textAlign: TextAlign.center,),
-                              subtitle: Text(datosInvitado['codigo'], style: TextStyle(fontSize: 20),textAlign: TextAlign.center,),
+                              title: Text("Codigo", style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),textAlign: TextAlign.center,),
+                              subtitle: Text(datosInvitado['codigo'], style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),textAlign: TextAlign.center,),
                               //trailing: Icon(Icons.edit),
                               onTap: () {
                                 // print(datosUsuario);
@@ -130,11 +130,11 @@ class _EditarInvitadosScreenState extends State<EditarInvitadosScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          Text("Entrada", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),),
+                          Text("Entrada", style: TextStyle(fontWeight: FontWeight.normal, fontSize: 17),),
                           SizedBox(
                             width: MediaQuery.of(context).size.width/5,
                           ),
-                          Text("Salida", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),)
+                          Text("Salida", style: TextStyle(fontWeight: FontWeight.normal, fontSize: 17),)
                         ],
                       ),
                       Container(
@@ -305,98 +305,98 @@ class _EditarInvitadosScreenState extends State<EditarInvitadosScreen> {
                       ),
                     ),
                     SizedBox(
-                      height: 15,
+                      height: 30,
                     ),
                     Text("Status de servicios\npara el invitado", textAlign: TextAlign.center, style: TextStyle(fontSize: 20),),
                     SizedBox(
                       height: 10,
                     ),
-                    SwitchListTile(
-                      title: const Text('DATOS', style: TextStyle(fontSize: 30),),
-                      value: datosInvitado['internet'],
-                      onChanged: (bool value) async {
-                        showDialog(
-                          // The user CANNOT close this dialog  by pressing outsite it
-                          barrierDismissible: false,
-                          context: context,
-                          builder: (_) {
-                            return WillPopScope(
-                              onWillPop: () async => false,
-                              child: LoadingWidget());
-                          }
-                        );
-                        try {
-                          Map jsonUsuario={"telefonoInternet":value.toString()};
-                          var client = BasicAuthClient('mobile_access', 'S3gur1c3l_mobile@');
-                          var res = await client.put(Uri.parse('https://webseguricel.up.railway.app/agregarinvitadosmobileapi/${datosInvitado['id']}/blank/blank/'), body: jsonUsuario).timeout(Duration(seconds: 5));
-                          //print(res.body);
-                          var dataUsuario = await jsonDecode(res.body);
+                    // SwitchListTile(
+                    //   title: const Text('DATOS', style: TextStyle(fontSize: 30),),
+                    //   value: datosInvitado['internet'],
+                    //   onChanged: (bool value) async {
+                    //     showDialog(
+                    //       // The user CANNOT close this dialog  by pressing outsite it
+                    //       barrierDismissible: false,
+                    //       context: context,
+                    //       builder: (_) {
+                    //         return WillPopScope(
+                    //           onWillPop: () async => false,
+                    //           child: LoadingWidget());
+                    //       }
+                    //     );
+                    //     try {
+                    //       Map jsonUsuario={"telefonoInternet":value.toString()};
+                    //       var client = BasicAuthClient('mobile_access', 'S3gur1c3l_mobile@');
+                    //       var res = await client.put(Uri.parse('https://webseguricel.up.railway.app/agregarinvitadosmobileapi/${datosInvitado['id']}/blank/blank/'), body: jsonUsuario).timeout(Duration(seconds: 5));
+                    //       //print(res.body);
+                    //       var dataUsuario = await jsonDecode(res.body);
                           
-                          setState(() {
-                            datosInvitado['internet'] = value;
-                          });
-                          Navigator.of(context).pop();
-                          AwesomeDialog(
-                            titleTextStyle: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 30,
-                              color: Colors.green
-                            ),
-                            // descTextStyle: TextStyle(
-                            //   fontWeight: FontWeight.bold,
-                            //   fontSize: 20,
-                            // ),
-                            context: context,
-                            animType: AnimType.topSlide,
-                            headerAnimationLoop: false,
-                            dialogType: DialogType.success,
-                            showCloseIcon: true,
-                            title: "¡Permiso de uso de servicio cambiado con exito!",
-                            //desc:"Solicitud enviada",
-                            btnOkColor: Colors.green,
-                            btnOkOnPress: () {
-                              //debugPrint('OnClcik');
-                            },
-                            btnOkIcon: Icons.check_circle,
-                            // onDismissCallback: (type) {
-                            //   debugPrint('Dialog Dissmiss from callback $type');
-                            // },
-                          ).show();
-                        } catch (e) {
-                          Navigator.of(context).pop();
-                          AwesomeDialog(
-                            titleTextStyle: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 30,
-                              color: Colors.red
-                            ),
-                            // descTextStyle: TextStyle(
-                            //   fontWeight: FontWeight.bold,
-                            //   fontSize: 20,
-                            // ),
-                            context: context,
-                            animType: AnimType.bottomSlide,
-                            headerAnimationLoop: false,
-                            dialogType: DialogType.error,
-                            showCloseIcon: true,
-                            title: "No hubo respuesta del servidor",
-                            //desc:"Solicitud enviada",
-                            btnOkOnPress: () {
-                              //debugPrint('OnClcik');
-                            },
-                            btnOkColor: Colors.red,
-                            btnOkIcon: Icons.check_circle,
-                            // onDismissCallback: (type) {
-                            //   debugPrint('Dialog Dissmiss from callback $type');
-                            // },
-                          ).show();
-                        }
+                    //       setState(() {
+                    //         datosInvitado['internet'] = value;
+                    //       });
+                    //       Navigator.of(context).pop();
+                    //       AwesomeDialog(
+                    //         titleTextStyle: TextStyle(
+                    //           fontWeight: FontWeight.bold,
+                    //           fontSize: 30,
+                    //           color: Colors.green
+                    //         ),
+                    //         // descTextStyle: TextStyle(
+                    //         //   fontWeight: FontWeight.bold,
+                    //         //   fontSize: 20,
+                    //         // ),
+                    //         context: context,
+                    //         animType: AnimType.topSlide,
+                    //         headerAnimationLoop: false,
+                    //         dialogType: DialogType.success,
+                    //         showCloseIcon: true,
+                    //         title: "¡Permiso de uso de servicio cambiado con exito!",
+                    //         //desc:"Solicitud enviada",
+                    //         btnOkColor: Colors.green,
+                    //         btnOkOnPress: () {
+                    //           //debugPrint('OnClcik');
+                    //         },
+                    //         btnOkIcon: Icons.check_circle,
+                    //         // onDismissCallback: (type) {
+                    //         //   debugPrint('Dialog Dissmiss from callback $type');
+                    //         // },
+                    //       ).show();
+                    //     } catch (e) {
+                    //       Navigator.of(context).pop();
+                    //       AwesomeDialog(
+                    //         titleTextStyle: TextStyle(
+                    //           fontWeight: FontWeight.bold,
+                    //           fontSize: 30,
+                    //           color: Colors.red
+                    //         ),
+                    //         // descTextStyle: TextStyle(
+                    //         //   fontWeight: FontWeight.bold,
+                    //         //   fontSize: 20,
+                    //         // ),
+                    //         context: context,
+                    //         animType: AnimType.bottomSlide,
+                    //         headerAnimationLoop: false,
+                    //         dialogType: DialogType.error,
+                    //         showCloseIcon: true,
+                    //         title: "No hubo respuesta del servidor",
+                    //         //desc:"Solicitud enviada",
+                    //         btnOkOnPress: () {
+                    //           //debugPrint('OnClcik');
+                    //         },
+                    //         btnOkColor: Colors.red,
+                    //         btnOkIcon: Icons.check_circle,
+                    //         // onDismissCallback: (type) {
+                    //         //   debugPrint('Dialog Dissmiss from callback $type');
+                    //         // },
+                    //       ).show();
+                    //     }
                         
-                      },
-                      //secondary: const Icon(Icons.lightbulb_outline),
-                    ),
+                    //   },
+                    //   //secondary: const Icon(Icons.lightbulb_outline),
+                    // ),
                     SwitchListTile(
-                      title: const Text('WIFI', style: TextStyle(fontSize: 30),),
+                      title: const Text('WIFI (Proximidad)', style: TextStyle(fontSize: 25),),
                       value: datosInvitado['wifi'],
                       onChanged: (bool value) async {
                         showDialog(
@@ -478,7 +478,7 @@ class _EditarInvitadosScreenState extends State<EditarInvitadosScreen> {
                       //secondary: const Icon(Icons.lightbulb_outline),
                     ),
                     SwitchListTile(
-                      title: const Text('BLUETOOTH', style: TextStyle(fontSize: 30),),
+                      title: const Text('BLUETOOTH', style: TextStyle(fontSize: 28),),
                       value: datosInvitado['bluetooth'],
                       onChanged: (bool value) async{
                         showDialog(

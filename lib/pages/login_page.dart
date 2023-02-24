@@ -111,6 +111,7 @@ class _LoginPageState extends State<LoginPage> {
       String cedula="";
       String nombre="";
       String rol="";
+      String numeroTelefonico="";
       String beacon_uuid="";
       String servidor="";
       String entradas="";
@@ -129,12 +130,15 @@ class _LoginPageState extends State<LoginPage> {
         contratos = jsonDecode(res.body);
         //print(contratos);
         for (var item in data) {
+          print(item);
           // contratos.add(item['contrato']);
           if (cedula=="" && beacon_uuid=="" && nombre==""){
             cedula=item['cedula'];
             beacon_uuid=item['beacon_uuid'];
             nombre=item['nombre'];
             rol=item['rol'];
+            numeroTelefonico=item['numero_telefonico'].substring(1);
+            print(numeroTelefonico);
           }
         }
         if (contratos.length>0){
@@ -176,7 +180,7 @@ class _LoginPageState extends State<LoginPage> {
           // print(accesosSalidas);
           // print(AccesosPeatonales);
           // print(AccesosVehiculares);
-          datosUsuario=jsonEncode({'contrato':contrato, 'contrato_id':contratos[0]['id'], 'unidad':contratos[0]['unidad'], 'id_usuario':_codeController.text, 'cedula':cedula, 'nombre':nombre, 'rol': rol, 'beacon_uuid':beacon_uuid});
+          datosUsuario=jsonEncode({'contrato':contrato, 'contrato_id':contratos[0]['id'], 'unidad':contratos[0]['unidad'], 'id_usuario':_codeController.text, 'cedula':cedula, 'nombre':nombre, 'rol': rol, 'beacon_uuid':beacon_uuid, 'numero_telefonico':numeroTelefonico});
           // accesos=jsonEncode([AccesosPeatonales,AccesosVehiculares]);
           entradas=jsonEncode(accesosEntradas);
           salidas=jsonEncode(accesosSalidas);

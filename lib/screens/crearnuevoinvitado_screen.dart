@@ -28,7 +28,11 @@ class _CrearNuevoInvitadoScreenState extends State<CrearNuevoInvitadoScreen> {
   int acompanantes=0;
   Map datosPropietario={};
   Map tiempoInvitado={};
-
+  String linkAndroid='https://webseguricel.up.railway.app/inicio';
+  String linkIOS='https://webseguricel.up.railway.app/inicio';
+  String numeroBot='584122810793';
+  String apiKeyBot='5525175';
+  
   void dispose() {
     _nombreController.dispose();
     _cedulaController.dispose();
@@ -238,7 +242,7 @@ class _CrearNuevoInvitadoScreenState extends State<CrearNuevoInvitadoScreen> {
                                 var client = BasicAuthClient('mobile_access', 'S3gur1c3l_mobile@');
                                 var res = await client.post(Uri.parse('https://webseguricel.up.railway.app/agregarinvitadosmobileapi/$contratoId/$cedulaId/Visitante/'), body: jsonUsuario).timeout(Duration(seconds: 5));
                                 var dataUsuario = await jsonDecode(res.body);
-                                //print(dataUsuario);
+                                // print(dataUsuario);
                                 if (dataUsuario['id']==null){
                                   Navigator.of(context).pop();
                                   AwesomeDialog(
@@ -275,9 +279,11 @@ class _CrearNuevoInvitadoScreenState extends State<CrearNuevoInvitadoScreen> {
                                   tiempoInvitado['contrato']=datosPropietario['contrato_id'].toString();
                                   tiempoInvitado['acompanantes'] = acompanantes.toString();
                                   res = await client.post(Uri.parse('https://webseguricel.up.railway.app/editarhorariosvisitantesapi/${tiempoInvitado['usuario'].toString()}/'), body: tiempoInvitado).timeout(Duration(seconds: 5));
-                                  var data = await jsonDecode(res.body);
-                                  //print(" horas: $data");
-                                  //print("acompanantes: $data");
+                                  var dataHorarios = await jsonDecode(res.body);
+                                  String mensaje='INVITACION RES. ${datosPropietario['contrato']}\n\nNombre: ${dataUsuario['nombre']}\nCodigo: ${dataUsuario['codigo']}\nFecha: ${tiempoInvitado['fecha_entrada']}\nAcompañantes: $acompanantes\n\nSi desea abrir con su telefono por proximidad via Bluetooth, descargue la aplicacion.\n\nAndroid: ${linkAndroid}\n\niOs: ${linkIOS}';
+                                  res = await client.get(Uri.parse('https://api.callmebot.com/whatsapp.php?phone=${numeroBot}&text=!sendto+${datosPropietario['numero_telefonico']}+${mensaje}&apikey=${apiKeyBot}')).timeout(Duration(seconds: 5));
+                                  var dataMensajes = res.body;
+                                  //print(dataMensajes);
                                   Navigator.of(context).pop();
                                   
                                   ScaffoldMessenger.of(context).showSnackBar(
@@ -318,7 +324,7 @@ class _CrearNuevoInvitadoScreenState extends State<CrearNuevoInvitadoScreen> {
                               }
                             }
                           },
-                          child: Text("Agregar", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
+                          child: Text("Agregar y enviar", textAlign: TextAlign.center, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Color.fromARGB(255, 135, 253, 106), // Background color
                           ),
