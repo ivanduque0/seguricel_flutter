@@ -1,14 +1,16 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:seguricel_flutter/controllers/screens_visitantes_controller.dart';
 import 'package:seguricel_flutter/utils/constants.dart';
 import 'package:seguricel_flutter/utils/loading.dart';
 import 'package:intl/intl.dart';
+import 'package:get/get.dart';
 
 typedef void ScreenCallback(int id);
 
 class TiempoInvitadoScreen extends StatefulWidget {
-  final ScreenCallback volver;
-  TiempoInvitadoScreen({required this.volver});
+  // final ScreenCallback volver;
+  // TiempoInvitadoScreen({required this.volver});
 
   @override
   State<TiempoInvitadoScreen> createState() => _TiempoInvitadoScreenState();
@@ -21,11 +23,14 @@ class _TiempoInvitadoScreenState extends State<TiempoInvitadoScreen> {
   String horaDesde = '';
   String horaHasta = '';
 
+  ScreensVisitantesController controller = Get.find();
+
   @override
   Widget build(BuildContext context) => WillPopScope(
 
     onWillPop: () async {
-      widget.volver(0);
+      controller.cambiarScreen(0);
+      // widget.volver(0);
       return false;
     },
     child: Scaffold(
@@ -90,8 +95,8 @@ class _TiempoInvitadoScreenState extends State<TiempoInvitadoScreen> {
                 //     // print("state 3");
                 //   });
                 Navigator.of(context).pop();
-                widget.volver(4);
-
+                // widget.volver(4);
+                controller.cambiarScreen(4);
                 }), 
                 child: Container(
                   width: MediaQuery.of(context).size.width,
@@ -136,7 +141,8 @@ class _TiempoInvitadoScreenState extends State<TiempoInvitadoScreen> {
                 side: BorderSide(color: Colors.blue, width: 3),
               ),
                 onPressed: (() {
-                  widget.volver(3);
+                  // widget.volver(3);
+                  controller.cambiarScreen(3);
                 // setState(() {
                     
                 //     // print("state 3");
@@ -241,7 +247,8 @@ class _TiempoInvitadoScreenState extends State<TiempoInvitadoScreen> {
         child: FloatingActionButton( 
           child: Icon(Icons.arrow_back_rounded, size: 40,),  
           onPressed: (() {
-            widget.volver(0);
+            controller.cambiarScreen(0);
+            // widget.volver(0);
           }),
         ),
       ),

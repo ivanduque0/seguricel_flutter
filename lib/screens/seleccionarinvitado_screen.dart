@@ -1,12 +1,14 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:seguricel_flutter/controllers/screens_visitantes_controller.dart';
 import 'package:seguricel_flutter/utils/constants.dart';
+import 'package:get/get.dart';
 
 typedef void ScreenCallback(int id);
 
 class SeleccionarInvitadoScreen extends StatefulWidget {
-  final ScreenCallback volver;
-  SeleccionarInvitadoScreen({required this.volver});
+  // final ScreenCallback volver;
+  // SeleccionarInvitadoScreen({required this.volver});
 
   @override
   State<SeleccionarInvitadoScreen> createState() => _SeleccionarInvitadoScreenState();
@@ -15,6 +17,8 @@ class SeleccionarInvitadoScreen extends StatefulWidget {
 class _SeleccionarInvitadoScreenState extends State<SeleccionarInvitadoScreen> {
 
   List invitados=[];
+
+  ScreensVisitantesController controller = Get.find();
 
   void dispose() {
     super.dispose();
@@ -38,7 +42,8 @@ class _SeleccionarInvitadoScreenState extends State<SeleccionarInvitadoScreen> {
   Widget build(BuildContext context) => WillPopScope(
 
     onWillPop: () async {
-      widget.volver(2);
+      // widget.volver(2);
+      controller.cambiarScreen(2);
       return false;
     },
     child: Scaffold(
@@ -75,7 +80,8 @@ class _SeleccionarInvitadoScreenState extends State<SeleccionarInvitadoScreen> {
                 side: BorderSide(color: Colors.orange, width: 3),
               ),
                 onPressed: (() async {
-                  widget.volver(7);
+                  controller.cambiarScreen(7);
+                  // widget.volver(7);
                 }), 
                 child: Container(
                   width: MediaQuery.of(context).size.width,
@@ -106,7 +112,8 @@ class _SeleccionarInvitadoScreenState extends State<SeleccionarInvitadoScreen> {
                 side: BorderSide(color: Colors.green, width: 3),
               ),
                 onPressed: (() {
-                  widget.volver(5);
+                  controller.cambiarScreen(5);
+                  // widget.volver(5);
                 // setState(() {
                     
                 //     // print("state 3");
@@ -134,7 +141,8 @@ class _SeleccionarInvitadoScreenState extends State<SeleccionarInvitadoScreen> {
             FloatingActionButton( 
               child: Icon(Icons.arrow_back_rounded, size: 40,),  
               onPressed: (() {
-                widget.volver(2);
+                controller.cambiarScreen(2);
+                // widget.volver(2);
               }),
             ),
             SizedBox(

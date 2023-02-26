@@ -1,16 +1,18 @@
 import 'dart:convert';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:seguricel_flutter/controllers/screens_visitantes_controller.dart';
 import 'package:seguricel_flutter/utils/constants.dart';
 import 'package:seguricel_flutter/utils/loading.dart';
+import 'package:get/get.dart';
 // import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:intl/intl.dart';
 
 typedef void ScreenCallback(int id);
 
 class PersonalizarTiempoInvitadoScreen extends StatefulWidget {
-  final ScreenCallback volver;
-  PersonalizarTiempoInvitadoScreen({required this.volver});
+  // final ScreenCallback volver;
+  // PersonalizarTiempoInvitadoScreen({required this.volver});
 
   @override
   State<PersonalizarTiempoInvitadoScreen> createState() => _PersonalizarTiempoInvitadoScreenState();
@@ -43,7 +45,7 @@ class _PersonalizarTiempoInvitadoScreenState extends State<PersonalizarTiempoInv
   bool cambiohoraDesde=false;
   bool cambiohoraHasta=false;
 
-
+  ScreensVisitantesController controller = Get.find();
 
   DateTimeRange rangoFechas=DateTimeRange(start: DateTime.now(), end: DateTime.now().add(Duration(days: 1)));
 
@@ -59,7 +61,8 @@ class _PersonalizarTiempoInvitadoScreenState extends State<PersonalizarTiempoInv
   Widget build(BuildContext context) => WillPopScope(
 
     onWillPop: () async {
-      widget.volver(2);
+      controller.cambiarScreen(2);
+      // widget.volver(2);
       return false;
     },
     child: Scaffold(
@@ -548,7 +551,8 @@ class _PersonalizarTiempoInvitadoScreenState extends State<PersonalizarTiempoInv
             FloatingActionButton( 
               child: Icon(Icons.arrow_back_rounded, size: 40,),  
               onPressed: (() {
-                widget.volver(2);
+                // widget.volver(2);
+                controller.cambiarScreen(2);
               }),
             ),
             SizedBox(
@@ -573,7 +577,8 @@ class _PersonalizarTiempoInvitadoScreenState extends State<PersonalizarTiempoInv
                   String tiempoEstadiaInvitado= await jsonEncode({'fecha_entrada':fechaDesde, 'fecha_salida':fechaHasta, 'entrada':horaDesde, 'salida':horaHasta});
                   await Constants.prefs.setString('tiempoInvitado', tiempoEstadiaInvitado);
                   Navigator.of(context).pop();
-                  widget.volver(4);
+                  // widget.volver(4);
+                  controller.cambiarScreen(4);
                 },
                 child: Text("Continuar", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
                 style: ElevatedButton.styleFrom(

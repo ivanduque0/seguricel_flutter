@@ -2,14 +2,16 @@ import 'dart:convert';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:http_auth/http_auth.dart';
+import 'package:seguricel_flutter/controllers/screens_visitantes_controller.dart';
 import 'package:seguricel_flutter/utils/constants.dart';
 import 'package:seguricel_flutter/utils/loading.dart';
+import 'package:get/get.dart';
 
 typedef void ScreenCallback(int id);
 
 class SeleccionarInvitadoExistenteScreen extends StatefulWidget {
-  final ScreenCallback volver;
-  SeleccionarInvitadoExistenteScreen({required this.volver});
+  // final ScreenCallback volver;
+  // SeleccionarInvitadoExistenteScreen({required this.volver});
 
   @override
   State<SeleccionarInvitadoExistenteScreen> createState() => _SeleccionarInvitadoExistenteScreenState();
@@ -25,6 +27,8 @@ class _SeleccionarInvitadoExistenteScreenState extends State<SeleccionarInvitado
   String linkIOS='https://webseguricel.up.railway.app/inicio';
   String numeroBot='584122810793';
   String apiKeyBot='5525175';
+
+  ScreensVisitantesController controller = Get.find();
 
   void dispose() {
     super.dispose();
@@ -57,7 +61,8 @@ class _SeleccionarInvitadoExistenteScreenState extends State<SeleccionarInvitado
   Widget build(BuildContext context) => WillPopScope(
 
     onWillPop: () async {
-      widget.volver(4);
+      controller.cambiarScreen(4);
+      // widget.volver(4);
       return false;
     },
     child: Scaffold(
@@ -254,10 +259,41 @@ class _SeleccionarInvitadoExistenteScreenState extends State<SeleccionarInvitado
                         usuariosAgregados++;
                       }
                       Navigator.of(context).pop();
-                      ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Invitaciones registradas!')),
-                        );
-                      widget.volver(1);
+
+                      AwesomeDialog(
+                        //autoHide: Duration(seconds: 3),
+                        titleTextStyle: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 30,
+                          color: Colors.green
+                        ),
+                        // descTextStyle: TextStyle(
+                        //   fontWeight: FontWeight.bold,
+                        //   fontSize: 20,
+                        // ),
+                        context: context,
+                        animType: AnimType.topSlide,
+                        headerAnimationLoop: false,
+                        dialogType: DialogType.success,
+                        showCloseIcon: true,
+                        title: invitadosAgregados.length==1?"Invitacion registrada y enviada, por favor revise su whatsapp":"Invitaciones registradas y enviadas, por favor revise su whatsapp",
+                        //desc:"Solicitud enviada",
+                        btnOkColor: Colors.green,
+                        btnOkOnPress: () {
+                          
+                          //debugPrint('OnClcik');
+                        },
+                        btnOkIcon: Icons.check_circle,
+                        onDismissCallback: (type) {
+                          controller.cambiarScreen(1);
+                          //debugPrint('Dialog Dissmiss from callback $type');
+                        },
+                      ).show();
+                      // ScaffoldMessenger.of(context).showSnackBar(
+                      //     const SnackBar(content: Text('Invitaciones registradas!')),
+                      //   );
+                      // widget.volver(1);
+                      
                     } catch (e) {
                       Navigator.of(context).pop();
                       AwesomeDialog(
@@ -288,7 +324,7 @@ class _SeleccionarInvitadoExistenteScreenState extends State<SeleccionarInvitado
                       ).show();
                     }
                 },
-                child: Text("Agregar", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
+                child: Text("Enviar invitacion", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color.fromARGB(255, 135, 253, 106), // Background color
                 ),

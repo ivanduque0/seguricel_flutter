@@ -1,5 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:seguricel_flutter/pages/eliminar_invitados_page.dart';
 import 'package:seguricel_flutter/pages/entrar_page.dart';
 import 'package:seguricel_flutter/pages/main_page.dart';
 import 'package:seguricel_flutter/pages/login_page.dart';
@@ -28,20 +30,28 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp (
       debugShowCheckedModeBanner: false,
-      home: Constants.prefs.getBool('isLoggedIn')==true?
-      MainPage():
-      LoginPage(),
+      // home: Constants.prefs.getBool('isLoggedIn')==true?
+      // MainPage():
+      // LoginPage(),
       theme: ThemeData(
         primarySwatch: Colors.orange,
       ),
-      routes: {
-        LoginPage.routeName : (context) => LoginPage(),
-        MainPage.routeName : (context) => MainPage(),
-        EntrarPage.routeName : (context) => EntrarPage(),
-        SalirPage.routeName : (context) => SalirPage(),
-    },
+      initialRoute: Constants.prefs.getBool('isLoggedIn')==true?"/main":"/login",
+      getPages: [
+        GetPage(name: "/main", page: ()=>MainPage()),
+        GetPage(name: "/login", page: ()=>LoginPage()),
+        GetPage(name: "/entrar", page: ()=>EntrarPage()),
+        GetPage(name: "/salir", page: ()=>SalirPage()),
+        GetPage(name: "/eliminarinvitados", page: ()=>EliminarInvitadosPage()),
+      ],
+    //   routes: {
+    //     LoginPage.routeName : (context) => LoginPage(),
+    //     MainPage.routeName : (context) => MainPage(),
+    //     EntrarPage.routeName : (context) => EntrarPage(),
+    //     SalirPage.routeName : (context) => SalirPage(),
+    // },
   );
   }
 }

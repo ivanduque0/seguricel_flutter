@@ -1,6 +1,7 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:beacon_broadcast/beacon_broadcast.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:seguricel_flutter/pages/entrar_page.dart';
 import 'package:seguricel_flutter/pages/salir_page.dart';
@@ -77,7 +78,8 @@ class _AperturasScreenState extends State<AperturasScreen> {
                     primary: Colors.black,
                   ),
                   onPressed: (() {
-                    Navigator.pushNamed(context, EntrarPage.routeName);
+                    Get.toNamed("/entrar");
+                    // Navigator.pushNamed(context, EntrarPage.routeName);
                   //print("SALIDAS SCREEN");
                   }), 
                   child: Container(
@@ -118,7 +120,8 @@ class _AperturasScreenState extends State<AperturasScreen> {
                     primary: Colors.black,
                   ),
                   onPressed: (() {
-                    Navigator.pushNamed(context, SalirPage.routeName);
+                    Get.toNamed("/salir");
+                    // Navigator.pushNamed(context, SalirPage.routeName);
                   //print("SALIDAS SCREEN");
                   }), 
                   child: Container(

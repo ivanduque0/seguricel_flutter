@@ -4,15 +4,16 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http_auth/http_auth.dart';
-import 'package:intl/intl.dart';
+import 'package:seguricel_flutter/controllers/screens_visitantes_controller.dart';
 import 'package:seguricel_flutter/utils/constants.dart';
 import 'package:seguricel_flutter/utils/loading.dart';
+import 'package:get/get.dart';
 
 typedef void ScreenCallback(int id);
 
 class CrearNuevoInvitadoScreen extends StatefulWidget {
-  final ScreenCallback volver;
-  CrearNuevoInvitadoScreen({required this.volver});
+  // final ScreenCallback volver;
+  // CrearNuevoInvitadoScreen({required this.volver});
 
   @override
   State<CrearNuevoInvitadoScreen> createState() => _CrearNuevoInvitadoScreenState();
@@ -32,6 +33,8 @@ class _CrearNuevoInvitadoScreenState extends State<CrearNuevoInvitadoScreen> {
   String linkIOS='https://webseguricel.up.railway.app/inicio';
   String numeroBot='584122810793';
   String apiKeyBot='5525175';
+
+  ScreensVisitantesController controller = Get.find();
   
   void dispose() {
     _nombreController.dispose();
@@ -67,7 +70,8 @@ class _CrearNuevoInvitadoScreenState extends State<CrearNuevoInvitadoScreen> {
   Widget build(BuildContext context) => WillPopScope(
 
     onWillPop: () async {
-      widget.volver(4);
+      controller.cambiarScreen(4);
+      // widget.volver(4);
       return false;
     },
     child: Scaffold(
@@ -285,11 +289,42 @@ class _CrearNuevoInvitadoScreenState extends State<CrearNuevoInvitadoScreen> {
                                   var dataMensajes = res.body;
                                   //print(dataMensajes);
                                   Navigator.of(context).pop();
+
+                                  AwesomeDialog(
+                                    //autoHide: Duration(seconds: 3),
+                                    titleTextStyle: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 30,
+                                      color: Colors.green
+                                    ),
+                                    // descTextStyle: TextStyle(
+                                    //   fontWeight: FontWeight.bold,
+                                    //   fontSize: 20,
+                                    // ),
+                                    context: context,
+                                    animType: AnimType.topSlide,
+                                    headerAnimationLoop: false,
+                                    dialogType: DialogType.success,
+                                    showCloseIcon: true,
+                                    title: "Invitacion registrada y enviada, por favor revise su whatsapp",
+                                    //desc:"Solicitud enviada",
+                                    btnOkColor: Colors.green,
+                                    btnOkOnPress: () {
+                                      
+                                      //debugPrint('OnClcik');
+                                    },
+                                    btnOkIcon: Icons.check_circle,
+                                    onDismissCallback: (type) {
+                                      controller.cambiarScreen(1);
+                                      //debugPrint('Dialog Dissmiss from callback $type');
+                                    },
+                                  ).show();
                                   
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(content: Text('Invitado registrado!')),
-                                  );
-                                  widget.volver(1);
+                                  // ScaffoldMessenger.of(context).showSnackBar(
+                                  //   const SnackBar(content: Text('Invitado registrado!')),
+                                  // );
+                                  // widget.volver(1);
+                                  
                                 }
                                 //widget.volver(1);
                               
@@ -346,7 +381,8 @@ class _CrearNuevoInvitadoScreenState extends State<CrearNuevoInvitadoScreen> {
             FloatingActionButton( 
               child: Icon(Icons.arrow_back_rounded, size: 40,),  
               onPressed: (() {
-                widget.volver(4);
+                controller.cambiarScreen(4);
+                // widget.volver(4);
               }),
             ),
             SizedBox(

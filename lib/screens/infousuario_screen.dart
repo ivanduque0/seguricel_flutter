@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:seguricel_flutter/pages/login_page.dart';
 import 'package:seguricel_flutter/utils/constants.dart';
 import 'package:seguricel_flutter/utils/loading.dart';
@@ -169,7 +170,8 @@ class _infoUsuarioScreenState extends State<infoUsuarioScreen> {
                         Constants.prefs.remove('modoInternet');
                         Constants.prefs.remove('modoWifi');
                         Constants.prefs.remove('modoBluetooth');
-                        Navigator.pushReplacementNamed(context, LoginPage.routeName);
+                        Get.offNamed("/login");
+                        // Navigator.pushReplacementNamed(context, LoginPage.routeName);
                         },
                       ).show();
                       }, 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:seguricel_flutter/pages/main_page.dart';
 import 'package:seguricel_flutter/utils/constants.dart';
 import 'package:seguricel_flutter/utils/loading.dart';
@@ -130,7 +131,7 @@ class _LoginPageState extends State<LoginPage> {
         contratos = jsonDecode(res.body);
         //print(contratos);
         for (var item in data) {
-          print(item);
+          //print(item);
           // contratos.add(item['contrato']);
           if (cedula=="" && beacon_uuid=="" && nombre==""){
             cedula=item['cedula'];
@@ -138,7 +139,7 @@ class _LoginPageState extends State<LoginPage> {
             nombre=item['nombre'];
             rol=item['rol'];
             numeroTelefonico=item['numero_telefonico'].substring(1);
-            print(numeroTelefonico);
+            //print(numeroTelefonico);
           }
         }
         if (contratos.length>0){
@@ -212,7 +213,8 @@ class _LoginPageState extends State<LoginPage> {
 
     if (isLoggedIn){
       Navigator.of(context).pop();
-      Navigator.pushReplacementNamed(context, MainPage.routeName);
+      Get.offNamed("/main");
+      // Navigator.pushReplacementNamed(context, MainPage.routeName);
     } else {
       // print("error de logg in");
       Navigator.of(context).pop();
