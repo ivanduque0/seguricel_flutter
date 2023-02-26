@@ -22,7 +22,7 @@ class EditarInvitadosScreen extends StatefulWidget {
 }
 
 class _EditarInvitadosScreenState extends State<EditarInvitadosScreen> {
-
+  Map datosPropietario={};
   Map datosInvitado={};
   ScreensVisitantesController controller = Get.find();
   HorariosController horariosController = Get.put(HorariosController());
@@ -36,6 +36,7 @@ class _EditarInvitadosScreenState extends State<EditarInvitadosScreen> {
   obtenerInvitado() async {
     horariosController.cambiarhorarios([]);
     String encodeDatosInvitado = await Constants.prefs.getString('datosInvitadoEditar').toString();
+    String encodeDatosUsuario = await Constants.prefs.getString('datosUsuario').toString();
     //print(idUsuario);
     datosInvitado=  jsonDecode(encodeDatosInvitado);
     // print(encodeDatosUsuario);
@@ -44,6 +45,8 @@ class _EditarInvitadosScreenState extends State<EditarInvitadosScreen> {
     //print(datosInvitado);
     setState (() {
       datosInvitado= jsonDecode(encodeDatosInvitado);
+      datosPropietario = jsonDecode(encodeDatosUsuario);
+      //print(datosInvitado);
       //horariosInvitado= (jsonDecode(encodeDatosInvitados) as List<dynamic>).cast<Map>();
     });
     // print(datosInvitado);
@@ -163,15 +166,120 @@ class _EditarInvitadosScreenState extends State<EditarInvitadosScreen> {
                         slivers: [
                           SliverList(
                             delegate: SliverChildBuilderDelegate((context, index) {
-                              return Invitacion(
-                                fecha_entrada:horariosController.horarios[index]['fecha_entrada'], 
-                                fecha_salida:horariosController.horarios[index]['fecha_salida'],
-                                hora_entrada:DateFormat.jm().format(DateFormat("hh:mm:ss").parse(horariosController.horarios[index]['entrada'])), 
-                                hora_salida:DateFormat.jm().format(DateFormat("hh:mm:ss").parse(horariosController.horarios[index]['salida'])),
-                                horario_id: horariosController.horarios[index]['id'],
-                                usuario_id: horariosController.horarios[index]['usuario'],
-                                acompanantes: horariosController.horarios[index]['acompanantes'],
-                                );
+                              return GestureDetector(
+                                onTap: () async {
+
+                                  AwesomeDialog(
+                                    btnCancelText: "NO",
+                                    btnOkText: "SI",
+                                    titleTextStyle: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 30,
+                                      color: Colors.black
+                                    ),
+                                    // descTextStyle: TextStyle(
+                                    //   fontWeight: FontWeight.bold,
+                                    //   fontSize: 20,
+                                    //   color: Colors.black
+                                    // ),
+                                    context: context,
+                                    animType: AnimType.bottomSlide,
+                                    headerAnimationLoop: false,
+                                    dialogType: DialogType.warning,
+                                    showCloseIcon: true,
+                                    title: "¿Desea reenviar la informacion de la invitacion por whatsapp?",
+                                    btnCancelOnPress: () {},
+                                    btnOkOnPress: () async {
+                                      showDialog(
+                                        // The user CANNOT close this dialog  by pressing outsite it
+                                        barrierDismissible: false,
+                                        context: context,
+                                        builder: (_) {
+                                          return WillPopScope(
+                                            onWillPop: () async => false,
+                                            child: LoadingWidget());
+                                        }
+                                      );
+                                      try {
+                                        String mensaje='INVITACION RES. ${datosPropietario['contrato']}\n\nNombre: ${datosInvitado['nombre']}\nCodigo: ${datosInvitado['codigo']}\nFecha: ${horariosController.horarios[index]['fecha_entrada']}\nAcompañantes: ${horariosController.horarios[index]['acompanantes']}\n\nSi desea abrir con su telefono por proximidad via Bluetooth, descargue la aplicacion.\n\nAndroid: ${Constants.linkAndroid}\n\niOs: ${Constants.linkIOS}';
+                                        // print(mensaje);
+                                        var client = BasicAuthClient('mobile_access', 'S3gur1c3l_mobile@');
+                                        var res = await client.get(Uri.parse('https://api.callmebot.com/whatsapp.php?phone=${Constants.numeroBot}&text=!sendto+${datosPropietario['numero_telefonico']}+${mensaje}&apikey=${Constants.apiKeyBot}')).timeout(Duration(seconds: 5));
+                                        // var dataMensajes = res.body;
+                                        Navigator.of(context).pop();
+                                        AwesomeDialog(
+                                          //autoHide: Duration(seconds: 3),
+                                          titleTextStyle: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 30,
+                                            color: Colors.green
+                                          ),
+                                          // descTextStyle: TextStyle(
+                                          //   fontWeight: FontWeight.bold,
+                                          //   fontSize: 20,
+                                          // ),
+                                          context: context,
+                                          animType: AnimType.topSlide,
+                                          headerAnimationLoop: false,
+                                          dialogType: DialogType.success,
+                                          showCloseIcon: true,
+                                          title: "Informacion enviada, por favor revise su whatsapp",
+                                          //desc:"Solicitud enviada",
+                                          btnOkColor: Colors.green,
+                                          btnOkOnPress: () {
+                                            
+                                            //debugPrint('OnClcik');
+                                          },
+                                          btnOkIcon: Icons.check_circle,
+                                          // onDismissCallback: (type) {
+                                          //   //debugPrint('Dialog Dissmiss from callback $type');
+                                          // },
+                                        ).show();
+                                      } catch (e) {
+                                        Navigator.of(context).pop();
+                                        AwesomeDialog(
+                                          titleTextStyle: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 30,
+                                            color: Colors.red
+                                          ),
+                                          // descTextStyle: TextStyle(
+                                          //   fontWeight: FontWeight.bold,
+                                          //   fontSize: 20,
+                                          // ),
+                                          context: context,
+                                          animType: AnimType.bottomSlide,
+                                          headerAnimationLoop: false,
+                                          dialogType: DialogType.error,
+                                          showCloseIcon: true,
+                                          title: "No hubo respuesta del servidor, vuelva a intentarlo",
+                                          //desc:"Solicitud enviada",
+                                          btnOkOnPress: () {
+                                            //debugPrint('OnClcik');
+                                          },
+                                          btnOkColor: Colors.red,
+                                          btnOkIcon: Icons.check_circle,
+                                          // onDismissCallback: (type) {
+                                          //   debugPrint('Dialog Dissmiss from callback $type');
+                                          // },
+                                        ).show();
+                                      }
+                                    },
+                                  ).show();
+
+
+                                 
+                                },
+                                child: Invitacion(
+                                  fecha_entrada:horariosController.horarios[index]['fecha_entrada'], 
+                                  fecha_salida:horariosController.horarios[index]['fecha_salida'],
+                                  hora_entrada:DateFormat.jm().format(DateFormat("hh:mm:ss").parse(horariosController.horarios[index]['entrada'])), 
+                                  hora_salida:DateFormat.jm().format(DateFormat("hh:mm:ss").parse(horariosController.horarios[index]['salida'])),
+                                  horario_id: horariosController.horarios[index]['id'],
+                                  usuario_id: horariosController.horarios[index]['usuario'],
+                                  acompanantes: horariosController.horarios[index]['acompanantes'],
+                                  ),
+                              );
                               // return Container(
                               //   child: Row(
                               //     mainAxisAlignment: MainAxisAlignment.spaceAround,
