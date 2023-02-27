@@ -23,7 +23,7 @@ class _SeleccionarInvitadoExistenteScreenState extends State<SeleccionarInvitado
   Map datosPropietario={};
   List invitados=[];
   List invitadosAgregados=[];
-
+  String imei="";
   ScreensVisitantesController controller = Get.find();
 
   void dispose() {
@@ -40,8 +40,8 @@ class _SeleccionarInvitadoExistenteScreenState extends State<SeleccionarInvitado
   obtenerInvitados() async {
     String encodeTiempoInvitado = await Constants.prefs.getString('tiempoInvitado').toString();
     String encodeDatosUsuario = await Constants.prefs.getString('datosUsuario').toString();
-   String encodeDatosInvitados = await Constants.prefs.getString('datosInvitados').toString();
-  
+    String encodeDatosInvitados = await Constants.prefs.getString('datosInvitados').toString();
+    imei = await Constants.prefs.getString('imei').toString();
     setState (() {
       invitados = (jsonDecode(encodeDatosInvitados) as List<dynamic>).cast<Map>();
       tiempoInvitado = jsonDecode(encodeTiempoInvitado);
@@ -237,13 +237,33 @@ class _SeleccionarInvitadoExistenteScreenState extends State<SeleccionarInvitado
                       }
                     );
                     try {
+                      var client = BasicAuthClient('mobile_access', 'S3gur1c3l_mobile@');
+                      var res = await client.get(Uri.parse('https://webseguricel.up.railway.app/sesionappapi/${datosPropietario['id_usuario']}/')).timeout(Duration(seconds: 5));
+                      var sesiondata = await jsonDecode(res.body);
+                      if (imei!=sesiondata['imei']){
+                        Constants.prefs.remove("datosUsuario");
+                        Constants.prefs.remove("accesos");
+                        Constants.prefs.remove("contratos");
+                        Constants.prefs.remove("isLoggedIn");
+                        Constants.prefs.remove('entradas');
+                        Constants.prefs.remove('salidas');
+                        Constants.prefs.remove('servidor');
+                        Constants.prefs.remove('id_usuario');
+                        Constants.prefs.remove('contrato');
+                        Constants.prefs.remove('beacon_uuid');
+                        Constants.prefs.remove('modoInternet');
+                        Constants.prefs.remove('modoWifi');
+                        Constants.prefs.remove('modoBluetooth');
+                        Constants.prefs.remove('imei');
+                        Navigator.of(context).pop();
+                        return Get.offNamed("/login");
+                      }
                       for (var invitado in invitadosAgregados) {
                         tiempoInvitado['usuario']=invitado['id'].toString();
                         tiempoInvitado['cedula']=invitado['cedula'].toString();
                         tiempoInvitado['contrato']=invitado['contrato'].toString();
                         tiempoInvitado['acompanantes'] = invitado['acompanantes'].toString();
                         //print(tiempoInvitado);
-                        var client = BasicAuthClient('mobile_access', 'S3gur1c3l_mobile@');
                         var res = await client.post(Uri.parse('https://webseguricel.up.railway.app/editarhorariosvisitantesapi/${tiempoInvitado['usuario'].toString()}/'), body: tiempoInvitado).timeout(Duration(seconds: 5));
                         var data = await jsonDecode(res.body);
                         //print(" horas: $data");
@@ -320,7 +340,7 @@ class _SeleccionarInvitadoExistenteScreenState extends State<SeleccionarInvitado
                       ).show();
                     }
                 },
-                child: Text("Enviar invitacion", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
+                child: Text(invitadosAgregados.length<=1?"Enviar invitacion":"Enviar invitaciones", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color.fromARGB(255, 135, 253, 106), // Background color
                 ),

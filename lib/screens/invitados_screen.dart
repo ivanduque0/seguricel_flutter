@@ -27,8 +27,7 @@ class InvitadosScreen extends StatelessWidget {
   //   });
   // }
 
-  ScreensVisitantesController controller = Get.put(ScreensVisitantesController());
-  VisitantesController visitantesController = Get.put(VisitantesController());
+  // ScreensVisitantesController controller = Get.put(ScreensVisitantesController());
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +64,7 @@ class InvitadosScreen extends StatelessWidget {
                     side: BorderSide(color: Colors.orange, width: 3),
                   ),
                     onPressed: (() {
-                      controller.cambiarScreen(1);
+                      ScreensVisitantesController.cambiarScreen(1);
                       // setState(() {
                       //   screen=1;
                       //   // print("state 3");
@@ -114,7 +113,7 @@ class InvitadosScreen extends StatelessWidget {
                     side: BorderSide(color: Colors.green, width: 3),
                   ),
                     onPressed: (() {
-                      controller.cambiarScreen(2);
+                      ScreensVisitantesController.cambiarScreen(2);
                     // setState(() {
                     //     screen=2;
                     //     // print("state 3");

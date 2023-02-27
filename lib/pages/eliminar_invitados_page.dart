@@ -24,7 +24,7 @@ class _EliminarInvitadosPageState extends State<EliminarInvitadosPage> {
   // List invitados=[];
   List invitadosAgregados=[];
 
-  VisitantesController visitantesController = Get.find();
+  // VisitantesController visitantesController = Get.find();
 
   void dispose() {
     super.dispose();

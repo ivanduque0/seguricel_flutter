@@ -29,6 +29,7 @@ class _CrearNuevoInvitadoScreenState extends State<CrearNuevoInvitadoScreen> {
   int acompanantes=0;
   Map datosPropietario={};
   Map tiempoInvitado={};
+  String imei="";
 
   ScreensVisitantesController controller = Get.find();
   
@@ -48,6 +49,7 @@ class _CrearNuevoInvitadoScreenState extends State<CrearNuevoInvitadoScreen> {
   obtenerTiempoEstadia() async {
     String encodeTiempoInvitado = await Constants.prefs.getString('tiempoInvitado').toString();
     String encodeDatosUsuario = await Constants.prefs.getString('datosUsuario').toString();
+    imei = await Constants.prefs.getString('imei').toString();
     //print(idUsuario);
 
     // print(encodeDatosUsuario);
@@ -236,11 +238,31 @@ class _CrearNuevoInvitadoScreenState extends State<CrearNuevoInvitadoScreen> {
                                 }
                               );
                               try {
+                                var client = BasicAuthClient('mobile_access', 'S3gur1c3l_mobile@');
+                                var res = await client.get(Uri.parse('https://webseguricel.up.railway.app/sesionappapi/${datosPropietario['id_usuario']}/')).timeout(Duration(seconds: 5));
+                                var sesiondata = await jsonDecode(res.body);
+                                if (imei!=sesiondata['imei']){
+                                  Constants.prefs.remove("datosUsuario");
+                                  Constants.prefs.remove("accesos");
+                                  Constants.prefs.remove("contratos");
+                                  Constants.prefs.remove("isLoggedIn");
+                                  Constants.prefs.remove('entradas');
+                                  Constants.prefs.remove('salidas');
+                                  Constants.prefs.remove('servidor');
+                                  Constants.prefs.remove('id_usuario');
+                                  Constants.prefs.remove('contrato');
+                                  Constants.prefs.remove('beacon_uuid');
+                                  Constants.prefs.remove('modoInternet');
+                                  Constants.prefs.remove('modoWifi');
+                                  Constants.prefs.remove('modoBluetooth');
+                                  Constants.prefs.remove('imei');
+                                  Navigator.of(context).pop();
+                                  return Get.offNamed("/login");
+                                }
                                 Map jsonUsuario={"cedula":cedula, "nombre":nombre, "contrato":datosPropietario['contrato_id'].toString(), "rol":"Visitante","unidad":datosPropietario['unidad'].toString(),"cedula_propietario":datosPropietario['cedula'].toString()};
                                 String contratoId = datosPropietario['contrato_id'].toString();
                                 String cedulaId = datosPropietario['cedula'].toString();
-                                var client = BasicAuthClient('mobile_access', 'S3gur1c3l_mobile@');
-                                var res = await client.post(Uri.parse('https://webseguricel.up.railway.app/agregarinvitadosmobileapi/$contratoId/$cedulaId/Visitante/'), body: jsonUsuario).timeout(Duration(seconds: 5));
+                                res = await client.post(Uri.parse('https://webseguricel.up.railway.app/agregarinvitadosmobileapi/$contratoId/$cedulaId/Visitante/'), body: jsonUsuario).timeout(Duration(seconds: 5));
                                 var dataUsuario = await jsonDecode(res.body);
                                 // print(dataUsuario);
                                 if (dataUsuario['id']==null){

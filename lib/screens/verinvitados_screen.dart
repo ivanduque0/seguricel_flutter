@@ -27,8 +27,7 @@ class _VerInvitadosScreenState extends State<VerInvitadosScreen> {
 
   Map datosUsuario={};
   List invitados=[];
-  String linkAndroid='https://webseguricel.up.railway.app/inicio';
-  String linkIOS='https://webseguricel.up.railway.app/inicio';
+  String imei="";
   @override
   void initState() {
     // TODO: implement initState
@@ -40,8 +39,9 @@ class _VerInvitadosScreenState extends State<VerInvitadosScreen> {
 
     String encodeDatosUsuario = await Constants.prefs.getString('datosUsuario').toString();
     String encodeDatosInvitados = await Constants.prefs.getString('datosInvitados').toString();
+    imei = await Constants.prefs.getString('imei').toString();
     //print(idUsuario);
-
+    // datosUsuario= await jsonDecode(encodeDatosUsuario);
     // print(encodeDatosUsuario);
     // print(encodeContratos);
     // print(encodeAccesos);
@@ -53,9 +53,28 @@ class _VerInvitadosScreenState extends State<VerInvitadosScreen> {
     });
     //print(invitados);
     try {
-
+      //print(datosUsuario['id_usuario']);
       var client = BasicAuthClient('mobile_access', 'S3gur1c3l_mobile@');
-      var res = await client.get(Uri.parse('https://webseguricel.up.railway.app/agregarinvitadosmobileapi/${datosUsuario['contrato_id']}/${datosUsuario['cedula']}/Visitante/')).timeout(Duration(seconds: 5));
+      var res = await client.get(Uri.parse('https://webseguricel.up.railway.app/sesionappapi/${datosUsuario['id_usuario']}/')).timeout(Duration(seconds: 5));
+      var sesiondata = await jsonDecode(res.body);
+      if (imei!=sesiondata['imei']){
+        Constants.prefs.remove("datosUsuario");
+        Constants.prefs.remove("accesos");
+        Constants.prefs.remove("contratos");
+        Constants.prefs.remove("isLoggedIn");
+        Constants.prefs.remove('entradas');
+        Constants.prefs.remove('salidas');
+        Constants.prefs.remove('servidor');
+        Constants.prefs.remove('id_usuario');
+        Constants.prefs.remove('contrato');
+        Constants.prefs.remove('beacon_uuid');
+        Constants.prefs.remove('modoInternet');
+        Constants.prefs.remove('modoWifi');
+        Constants.prefs.remove('modoBluetooth');
+        Constants.prefs.remove('imei');
+        return Get.offNamed("/login");
+      }
+      res = await client.get(Uri.parse('https://webseguricel.up.railway.app/agregarinvitadosmobileapi/${datosUsuario['contrato_id']}/${datosUsuario['cedula']}/Visitante/')).timeout(Duration(seconds: 5));
       var actualizarInvitados = (jsonDecode(res.body) as List<dynamic>).cast<Map>();
       if (res.body!=encodeDatosInvitados){
         await Constants.prefs.setString('datosInvitados', res.body);
@@ -206,7 +225,7 @@ class _VerInvitadosScreenState extends State<VerInvitadosScreen> {
                               IconButton(
                                 icon: Icon(Icons.content_copy_outlined), color: Color.fromARGB(255, 255, 153, 58),
                                 onPressed: () async {
-                                  String textoCopiar="Informacion de invitado\n\nNombre: ${VisitantesController.visitantes[index]['nombre']}\nCodigo: ${VisitantesController.visitantes[index]['telegram_id']}\n\nSi desea abrir con su telefono por proximidad via Bluetooth, descargue la aplicacion.\n\nAndroid: ${linkAndroid}\n\niOs: ${linkIOS}";
+                                  String textoCopiar="Informacion de invitado\n\nNombre: ${VisitantesController.visitantes[index]['nombre']}\nCodigo: ${VisitantesController.visitantes[index]['telegram_id']}\n\nSi desea abrir con su telefono por proximidad via Bluetooth, descargue la aplicacion.\n\nAndroid: ${Constants.linkAndroid}\n\niOs: ${Constants.linkIOS}";
                                   Clipboard.setData(new ClipboardData(text: textoCopiar)).then((_){
                                     ScaffoldMessenger.of(context)
                                   .showSnackBar(SnackBar(content: Text('Informacion de invitado copiada')));

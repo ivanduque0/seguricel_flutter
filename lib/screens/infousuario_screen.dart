@@ -170,6 +170,7 @@ class _infoUsuarioScreenState extends State<infoUsuarioScreen> {
                         Constants.prefs.remove('modoInternet');
                         Constants.prefs.remove('modoWifi');
                         Constants.prefs.remove('modoBluetooth');
+                        Constants.prefs.remove('imei');
                         Get.offNamed("/login");
                         // Navigator.pushReplacementNamed(context, LoginPage.routeName);
                         },

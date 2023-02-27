@@ -24,6 +24,7 @@ class EditarInvitadosScreen extends StatefulWidget {
 class _EditarInvitadosScreenState extends State<EditarInvitadosScreen> {
   Map datosPropietario={};
   Map datosInvitado={};
+  String imei="";
   ScreensVisitantesController controller = Get.find();
   HorariosController horariosController = Get.put(HorariosController());
   @override
@@ -37,6 +38,7 @@ class _EditarInvitadosScreenState extends State<EditarInvitadosScreen> {
     horariosController.cambiarhorarios([]);
     String encodeDatosInvitado = await Constants.prefs.getString('datosInvitadoEditar').toString();
     String encodeDatosUsuario = await Constants.prefs.getString('datosUsuario').toString();
+    imei = await Constants.prefs.getString('imei').toString();
     //print(idUsuario);
     datosInvitado=  jsonDecode(encodeDatosInvitado);
     // print(encodeDatosUsuario);
@@ -51,9 +53,28 @@ class _EditarInvitadosScreenState extends State<EditarInvitadosScreen> {
     });
     // print(datosInvitado);
     try {
-      List horariosInvitado=[];
       var client = BasicAuthClient('mobile_access', 'S3gur1c3l_mobile@');
-      var res = await client.get(Uri.parse('https://webseguricel.up.railway.app/editarhorariosvisitantesapi/${datosInvitado['id']}/')).timeout(Duration(seconds: 5));
+      var res = await client.get(Uri.parse('https://webseguricel.up.railway.app/sesionappapi/${datosPropietario['id_usuario']}/')).timeout(Duration(seconds: 5));
+      var sesiondata = await jsonDecode(res.body);
+      if (imei!=sesiondata['imei']){
+        Constants.prefs.remove("datosUsuario");
+        Constants.prefs.remove("accesos");
+        Constants.prefs.remove("contratos");
+        Constants.prefs.remove("isLoggedIn");
+        Constants.prefs.remove('entradas');
+        Constants.prefs.remove('salidas');
+        Constants.prefs.remove('servidor');
+        Constants.prefs.remove('id_usuario');
+        Constants.prefs.remove('contrato');
+        Constants.prefs.remove('beacon_uuid');
+        Constants.prefs.remove('modoInternet');
+        Constants.prefs.remove('modoWifi');
+        Constants.prefs.remove('modoBluetooth');
+        Constants.prefs.remove('imei');
+        return Get.offNamed("/login");
+      }
+      List horariosInvitado=[];
+      res = await client.get(Uri.parse('https://webseguricel.up.railway.app/editarhorariosvisitantesapi/${datosInvitado['id']}/')).timeout(Duration(seconds: 5));
       //print(res.body);
       //horariosInvitado = (jsonDecode(res.body) as List<dynamic>).cast<Map>();
       setState(() {
@@ -149,6 +170,9 @@ class _EditarInvitadosScreenState extends State<EditarInvitadosScreen> {
                       //     Text("Salida", style: TextStyle(fontWeight: FontWeight.normal, fontSize: 17),)
                       //   ],
                       // ),
+                      horariosController.horarios.length!=0
+                      ?Text("Invitaciones", style: TextStyle(fontSize: 25),)
+                      :SizedBox(),
                       horariosController.horarios.length!=0?Container(
                       width: MediaQuery.of(context).size.width,
                       height: MediaQuery.of(context).size.height/3.5,

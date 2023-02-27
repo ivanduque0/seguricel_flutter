@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:seguricel_flutter/controllers/screens_visitantes_controller.dart';
+import 'package:seguricel_flutter/controllers/visitantes_controller.dart';
 // import 'package:seguricel_flutter/utils/drawer.dart';
 // import 'package:seguricel_flutter/name_card_widget.dart';
 // import 'package:http_auth/http_auth.dart';
@@ -44,6 +45,7 @@ class _MainPageState extends State<MainPage> {
   BluetoothState _bluetoothState = BluetoothState.UNKNOWN;
 
   ScreensVisitantesController controller = Get.put(ScreensVisitantesController());
+  VisitantesController visitantesController = Get.put(VisitantesController());
 
 
   List<BottomNavigationBarItem> itemsPropietario=const [
@@ -76,7 +78,7 @@ class _MainPageState extends State<MainPage> {
   ShakeDetector detector = ShakeDetector.autoStart(
       onPhoneShake: () async {
         bool bluetoothSP= await Constants.prefs.getBool('modoBluetooth') ?? false;
-        print(bluetoothSP);
+        // print(bluetoothSP);
         if (bluetoothSP){
           BluetoothState _bluetoothState = BluetoothState.UNKNOWN;
           bool bluetoothEnable = _bluetoothState.isEnabled;

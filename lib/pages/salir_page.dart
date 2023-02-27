@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:http_auth/http_auth.dart';
 import 'package:seguricel_flutter/utils/constants.dart';
 import 'package:seguricel_flutter/utils/loading.dart';
@@ -22,6 +23,7 @@ class _SalirPageState extends State<SalirPage> {
   String servidor="";
   String contrato="";
   bool modoInternet=false;
+  String imei="";
   @override
   void initState() {
     // TODO: implement initState
@@ -36,6 +38,7 @@ class _SalirPageState extends State<SalirPage> {
     idUsuario = await Constants.prefs.getString('id_usuario').toString();
     contrato = await Constants.prefs.getString('contrato').toString();
     modoInternet = await Constants.prefs.getBool('modoInternet') ?? false;
+    imei = await Constants.prefs.getString('imei').toString();
     setState(() {
       salidas = jsonDecode(encodeSalidas);
       servidor;
@@ -163,9 +166,29 @@ class _SalirPageState extends State<SalirPage> {
                   }
                 );
                 try {
-                  Map jsonBody={"contrato":contrato, "acceso":acceso,"codigo_usuario":idUsuario, "razon":"salida"};
                   var client = BasicAuthClient('mobile_access', 'S3gur1c3l_mobile@');
-                  var res = await client.post(Uri.parse('https://webseguricel.up.railway.app/apertura/'), body: jsonBody).timeout(Duration(seconds: 5));
+                  var res = await client.get(Uri.parse('https://webseguricel.up.railway.app/sesionappapi/${idUsuario}/')).timeout(Duration(seconds: 5));
+                  var sesiondata = await jsonDecode(res.body);
+                  if (imei!=sesiondata['imei']){
+                    Constants.prefs.remove("datosUsuario");
+                    Constants.prefs.remove("accesos");
+                    Constants.prefs.remove("contratos");
+                    Constants.prefs.remove("isLoggedIn");
+                    Constants.prefs.remove('entradas');
+                    Constants.prefs.remove('salidas');
+                    Constants.prefs.remove('servidor');
+                    Constants.prefs.remove('id_usuario');
+                    Constants.prefs.remove('contrato');
+                    Constants.prefs.remove('beacon_uuid');
+                    Constants.prefs.remove('modoInternet');
+                    Constants.prefs.remove('modoWifi');
+                    Constants.prefs.remove('modoBluetooth');
+                    Constants.prefs.remove('imei');
+                    Navigator.of(context).pop();
+                    return Get.offNamed("/login");
+                  }
+                  Map jsonBody={"contrato":contrato, "acceso":acceso,"codigo_usuario":idUsuario, "razon":"salida"};
+                  res = await client.post(Uri.parse('https://webseguricel.up.railway.app/apertura/'), body: jsonBody).timeout(Duration(seconds: 5));
         
                   if (res.statusCode==201){
                     int cantidadAperturas=0;
@@ -327,9 +350,29 @@ class _SalirPageState extends State<SalirPage> {
       }
     } else {
       try {
+        var client = BasicAuthClient('mobile_access', 'S3gur1c3l_mobile@');
+        var res = await client.get(Uri.parse('https://webseguricel.up.railway.app/sesionappapi/${idUsuario}/')).timeout(Duration(seconds: 5));
+        var sesiondata = await jsonDecode(res.body);
+        if (imei!=sesiondata['imei']){
+          Constants.prefs.remove("datosUsuario");
+          Constants.prefs.remove("accesos");
+          Constants.prefs.remove("contratos");
+          Constants.prefs.remove("isLoggedIn");
+          Constants.prefs.remove('entradas');
+          Constants.prefs.remove('salidas');
+          Constants.prefs.remove('servidor');
+          Constants.prefs.remove('id_usuario');
+          Constants.prefs.remove('contrato');
+          Constants.prefs.remove('beacon_uuid');
+          Constants.prefs.remove('modoInternet');
+          Constants.prefs.remove('modoWifi');
+          Constants.prefs.remove('modoBluetooth');
+          Constants.prefs.remove('imei');
+          Navigator.of(context).pop();
+          return Get.offNamed("/login");
+        }
       Map jsonBody={"contrato":contrato, "acceso":acceso,"codigo_usuario":idUsuario, "razon":"salida"};
-      var client = BasicAuthClient('mobile_access', 'S3gur1c3l_mobile@');
-      var res = await client.post(Uri.parse('https://webseguricel.up.railway.app/apertura/'), body: jsonBody).timeout(Duration(seconds: 5));
+      res = await client.post(Uri.parse('https://webseguricel.up.railway.app/apertura/'), body: jsonBody).timeout(Duration(seconds: 5));
       //print(res.body);
       //await Future.delayed(const Duration(seconds: 1));
       // Navigator.of(context).pop();
