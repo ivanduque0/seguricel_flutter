@@ -107,7 +107,7 @@ class _MainPageState extends State<MainPage> {
               
               // print(isAdvertising);
               // print("activar bluetooth");
-              String uuid = await Constants.prefs.getString('beacon_uuid').toString();
+              String uuid = await Constants.prefs.getString('entrada_beacon_uuid').toString();
               Constants.beaconBroadcast
                 .setUUID(uuid)
                 .setMajorId(8462)

@@ -7,6 +7,9 @@ import 'package:http_auth/http_auth.dart';
 import 'package:seguricel_flutter/utils/constants.dart';
 import 'package:seguricel_flutter/utils/loading.dart';
 import 'package:http/http.dart' as http;
+import 'package:beacon_broadcast/beacon_broadcast.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 
 class EntrarPage extends StatefulWidget {
   const EntrarPage({super.key});
@@ -24,12 +27,41 @@ class _EntrarPageState extends State<EntrarPage> {
   String contrato="";
   bool modoInternet=false;
   String imei="";
+  String uuid='';
+  bool bluetooth=false;
+  BluetoothState _bluetoothState = BluetoothState.UNKNOWN;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    obtenerAccesos();
 
+    // Get current state
+    FlutterBluetoothSerial.instance.state.then((state) {
+      setState(() {
+        _bluetoothState = state;
+      });
+    });
+
+    // Listen for futher state changes
+    FlutterBluetoothSerial.instance
+        .onStateChanged()
+        .listen((BluetoothState state) {
+      setState(() {
+        _bluetoothState = state;
+      });
+    });
+
+    obtenerAccesos();
+    obtenerUUID();
+
+  }
+  obtenerUUID( )async{
+    bool bluetoothSP= await Constants.prefs.getBool('modoBluetooth') ?? false;
+    String encodeUUID = await Constants.prefs.getString('entrada_beacon_uuid').toString();
+    setState(() {
+      uuid = encodeUUID;
+      bluetooth= bluetoothSP;
+    });
   }
 
   obtenerAccesos() async{
@@ -645,6 +677,7 @@ class _EntrarPageState extends State<EntrarPage> {
   Widget build(BuildContext context) {
     return Center(
       child: Scaffold(
+        floatingActionButton: _hideShowBluetooth(),
         backgroundColor: Colors.grey[200],
         body: Container(
           child: entradas!=[] || entradas!=null?ListView.builder(
@@ -701,4 +734,127 @@ class _EntrarPageState extends State<EntrarPage> {
           )
     );
   }
+
+  Widget _hideShowBluetooth() {
+    if (!bluetooth) {
+      return Container();
+    } else {
+      return FloatingActionButton.large(
+        backgroundColor: Color.fromARGB(255, 2, 49, 255),
+        onPressed: () async {
+          bool bluetoothEnable = _bluetoothState.isEnabled;
+          // bool isAdvertising = await Constants.beaconBroadcast.isAdvertising() ?? false;
+          // if (!bluetoothEnable){
+          //   await FlutterBluetoothSerial.instance.requestEnable();
+          // }
+          // else{
+          //   await FlutterBluetoothSerial.instance.requestDisable();
+          // }
+          Map<Permission, PermissionStatus> statuses = await [
+          Permission.location,
+          Permission.bluetooth,
+          Permission.bluetoothConnect,
+          Permission.bluetoothAdvertise,
+          // Permission.locationWhenInUse,
+          // Permission.locationAlways
+          ].request();
+          //print(statuses);
+          //print(bluetoothEnable);
+          if (!bluetoothEnable){
+            await FlutterBluetoothSerial.instance.requestEnable();
+            // setState(() {
+            //   isAdvertising;
+            // });
+            
+            // print(isAdvertising);
+            // print("activar bluetooth");
+            Constants.beaconBroadcast
+              .setUUID(uuid)
+              .setMajorId(8462)
+              .setMinorId(37542)
+              .setTransmissionPower(10)
+              .setLayout('m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24')
+              .setManufacturerId(0x004c)
+              .setAdvertiseMode(AdvertiseMode.lowLatency)
+              .start();
+
+            // print(isAdvertising);
+            AwesomeDialog(
+              titleTextStyle: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 30,
+                color: Colors.green
+              ),
+              // descTextStyle: TextStyle(
+              //   fontWeight: FontWeight.bold,
+              //   fontSize: 20,
+              // ),
+              context: context,
+              animType: AnimType.topSlide,
+              headerAnimationLoop: false,
+              dialogType: DialogType.info,
+              showCloseIcon: true,
+              title: "¡Transmitiendo por bluetooth!",
+              //desc:"Solicitud enviada",
+              btnOkColor: Colors.blue,
+              btnOkOnPress: () {
+                //debugPrint('OnClcik');
+              },
+              btnOkIcon: Icons.check_circle,
+              // onDismissCallback: (type) {
+              //   debugPrint('Dialog Dissmiss from callback $type');
+              // },
+            ).show();
+          await Future.delayed(const Duration(seconds: 30), () async {
+            bool isAdvertising = await Constants.beaconBroadcast.isAdvertising() ?? false;
+            if (_bluetoothState.isEnabled || isAdvertising){
+              await Constants.beaconBroadcast.stop();
+              await FlutterBluetoothSerial.instance.requestDisable();
+            }
+            
+          });
+
+          
+
+        } else {
+          await Constants.beaconBroadcast.stop();
+
+          FlutterBluetoothSerial.instance.requestDisable();
+
+          AwesomeDialog(
+              titleTextStyle: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 30,
+                color: Colors.red
+              ),
+              // descTextStyle: TextStyle(
+              //   fontWeight: FontWeight.bold,
+              //   fontSize: 20,
+              // ),
+              context: context,
+              animType: AnimType.topSlide,
+              headerAnimationLoop: false,
+              dialogType: DialogType.info,
+              showCloseIcon: true,
+              title: "¡Apagando transmision por bluetooth!",
+              //desc:"Solicitud enviada",
+              btnOkColor: Colors.blue,
+              btnOkOnPress: () {
+                //debugPrint('OnClcik');
+              },
+              btnOkIcon: Icons.check_circle,
+              // onDismissCallback: (type) {
+              //   debugPrint('Dialog Dissmiss from callback $type');
+              // },
+            ).show();
+        }
+        },
+        child: new IconTheme(
+            data: new IconThemeData(color: Colors.white), 
+            child: new Icon(Icons.bluetooth_rounded, size: 80),
+        )
+      );
+    }
+  }
+
 }

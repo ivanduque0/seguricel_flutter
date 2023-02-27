@@ -116,7 +116,8 @@ class _LoginPageState extends State<LoginPage> {
       String nombre="";
       String rol="";
       String numeroTelefonico="";
-      String beacon_uuid="";
+      String entrada_beacon_uuid="";
+      String salida_beacon_uuid="";
       String servidor="";
       String entradas="";
       String salidas="";
@@ -145,9 +146,10 @@ class _LoginPageState extends State<LoginPage> {
           for (var item in data) {
             //print(item);
             // contratos.add(item['contrato']);
-            if (cedula=="" && beacon_uuid=="" && nombre==""){
+            if (cedula=="" && entrada_beacon_uuid=="" && salida_beacon_uuid=="" && nombre==""){
               cedula=item['cedula'];
-              beacon_uuid=item['beacon_uuid'];
+              entrada_beacon_uuid=item['entrada_beacon_uuid'];
+              salida_beacon_uuid=item['salida_beacon_uuid'];
               nombre=item['nombre'];
               rol=item['rol'];
               numeroTelefonico=item['numero_telefonico'].substring(1);
@@ -199,7 +201,7 @@ class _LoginPageState extends State<LoginPage> {
             // print(accesosSalidas);
             // print(AccesosPeatonales);
             // print(AccesosVehiculares);
-            datosUsuario=jsonEncode({'contrato':contrato, 'contrato_id':contratos[0]['id'], 'unidad':contratos[0]['unidad'], 'id_usuario':_codeController.text, 'cedula':cedula, 'nombre':nombre, 'rol': rol, 'beacon_uuid':beacon_uuid, 'numero_telefonico':numeroTelefonico});
+            datosUsuario=jsonEncode({'contrato':contrato, 'contrato_id':contratos[0]['id'], 'unidad':contratos[0]['unidad'], 'id_usuario':_codeController.text, 'cedula':cedula, 'nombre':nombre, 'rol': rol, 'entrada_beacon_uuid':entrada_beacon_uuid, 'salida_beacon_uuid':salida_beacon_uuid, 'numero_telefonico':numeroTelefonico});
             // accesos=jsonEncode([AccesosPeatonales,AccesosVehiculares]);
             entradas=jsonEncode(accesosEntradas);
             salidas=jsonEncode(accesosSalidas);
@@ -215,7 +217,8 @@ class _LoginPageState extends State<LoginPage> {
             await Constants.prefs.setString('servidor', servidor);
             await Constants.prefs.setString('id_usuario', _codeController.text);
             await Constants.prefs.setString('contrato', contrato);
-            await Constants.prefs.setString('beacon_uuid', invertirUUID(beacon_uuid));
+            await Constants.prefs.setString('entrada_beacon_uuid', invertirUUID(entrada_beacon_uuid));
+            await Constants.prefs.setString('salida_beacon_uuid', invertirUUID(salida_beacon_uuid));
             await Constants.prefs.setBool('isLoggedIn', true);
             await Constants.prefs.setBool('modoInternet', true);
             await Constants.prefs.setBool('modoWifi', false);
