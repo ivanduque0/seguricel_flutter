@@ -16,7 +16,7 @@ class RolController extends GetxController{
   void cambiarrol(String roll){
     _rol=roll;
     update();
-    print(_rol);
+    //print(_rol);
   }
   
 }
