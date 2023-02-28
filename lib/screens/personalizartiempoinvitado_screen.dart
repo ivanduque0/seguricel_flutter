@@ -87,7 +87,7 @@ class _PersonalizarTiempoInvitadoScreenState extends State<PersonalizarTiempoInv
               ),
               Text("Entrada", textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 20,
+                  fontSize: 25,
                   fontWeight: FontWeight.bold
                 ),
               ),
@@ -261,7 +261,7 @@ class _PersonalizarTiempoInvitadoScreenState extends State<PersonalizarTiempoInv
               ),
               Text("Salida", textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 20,
+                  fontSize: 25,
                   fontWeight: FontWeight.bold
                 ),
               ),
