@@ -66,486 +66,378 @@ class _PersonalizarTiempoInvitadoScreenState extends State<PersonalizarTiempoInv
       return false;
     },
     child: Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          // mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            SizedBox(
-              height: 10,
-            ),
-            Text("Personalizar tiempo de estadia del invitado", textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 30,
-                fontWeight: FontWeight.bold
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            // mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              SizedBox(
+                height: 10,
               ),
-            ),
-            SizedBox(
-              height: 30,
-            ),
-            Text("Entrada", textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold
+              Text("INVITACION", textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 40,
+                  fontWeight: FontWeight.bold
+                ),
               ),
-            ),
-             SizedBox(
-              height: 10,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                InkWell(
-                  borderRadius: BorderRadius.circular(20),
-                  onTap: () {
-                    //Navigator.pushNamed(context, EntrarPage.routeName);
-                  }, // Handle your callback.
-                  splashColor: !cambiofechaDesde
-                            ?Color.fromARGB(255, 247, 200, 147).withOpacity(0.5)
-                            :Color.fromARGB(255, 195, 247, 147).withOpacity(0.5),
-                  child: OutlinedButton(
-                    style: OutlinedButton.styleFrom(
-                    fixedSize: Size(150, 70),
-                    foregroundColor: !cambiofechaDesde
-                                    ?Colors.orange
+              SizedBox(
+                height: 30,
+              ),
+              Text("Entrada", textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold
+                ),
+              ),
+      
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 30),
+                child: Container(
+                  decoration: const BoxDecoration(
+                    color: Color.fromARGB(255, 255, 187, 110),
+                    borderRadius: BorderRadius.all(Radius.circular(21))
+                  ),
+                  padding: EdgeInsets.fromLTRB(16, 0, 16, 10),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        GestureDetector(
+                          child: Column(
+                            children: [
+                              Text("Dia", 
+                                style: TextStyle(
+                                  color: !cambiofechaDesde
+                                    ?Colors.black
                                     :Colors.green,
-                    //disabledForegroundColor: Colors.red,
-                    side: BorderSide(color: !cambiofechaDesde
-                                          ?Colors.orange
-                                          :Colors.green, width: 3),
-                  ),
-                    onPressed: (() async {
-                      DateTime? nuevaFechaEntrada = await showDatePicker(
-                      context: context, 
-                      initialDate: fechaEntrada, 
-                      firstDate: fechaEntradaMinima, 
-                      lastDate: fechaEntradaMinima.add(Duration(days: 5)));
-                      if (nuevaFechaEntrada==null) return;
-                      DateTime comprobarfechaentrada = DateTime.utc(nuevaFechaEntrada.year,nuevaFechaEntrada.month,nuevaFechaEntrada.day);
-                      DateTime comprobarfechasalida = DateTime.utc(fechaSalida.year,fechaSalida.month,fechaSalida.day);
-                      if (comprobarfechaentrada.isAfter(comprobarfechasalida) && !comprobarfechasalida.isAtSameMomentAs(comprobarfechaentrada)){
-                        AwesomeDialog(
-                          autoHide: Duration(seconds: 5) ,
-                          titleTextStyle: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
-                            color: Colors.red
+                                  fontSize: 25,
+                                  fontWeight: FontWeight.bold
+                                ),
+                              ),
+                              Text(DateFormat('dd/MM/yyyy').format(fechaEntrada), textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: !cambiofechaDesde
+                                    ?Colors.black
+                                    :Colors.green,
+                                  fontWeight: FontWeight.bold
+                                ),
+                              ),
+                            ],
                           ),
-                          // descTextStyle: TextStyle(
-                          //   fontWeight: FontWeight.bold,
-                          //   fontSize: 20,
-                          // ),
-                          context: context,
-                          animType: AnimType.topSlide,
-                          headerAnimationLoop: false,
-                          dialogType: DialogType.warning,
-                          showCloseIcon: true,
-                          title: "La fecha de entrada no puede ser mayor a la fecha de salida",
-                          //desc:"Solicitud enviada",
-                          btnOkColor: Color.fromARGB(255, 245, 195, 58),
-                          btnOkOnPress: () {
-                            //debugPrint('OnClcik');
+                          onTap: () async{
+                            DateTime? nuevaFechaEntrada = await showDatePicker(
+                            context: context, 
+                            initialDate: fechaEntrada, 
+                            firstDate: fechaEntradaMinima, 
+                            lastDate: fechaEntradaMinima.add(Duration(days: 5)));
+                            if (nuevaFechaEntrada==null) return;
+                            DateTime comprobarfechaentrada = DateTime.utc(nuevaFechaEntrada.year,nuevaFechaEntrada.month,nuevaFechaEntrada.day);
+                            DateTime comprobarfechasalida = DateTime.utc(fechaSalida.year,fechaSalida.month,fechaSalida.day);
+                            if (comprobarfechaentrada.isAfter(comprobarfechasalida) && !comprobarfechasalida.isAtSameMomentAs(comprobarfechaentrada)){
+                              AwesomeDialog(
+                                autoHide: Duration(seconds: 5) ,
+                                titleTextStyle: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20,
+                                  color: Colors.red
+                                ),
+                                // descTextStyle: TextStyle(
+                                //   fontWeight: FontWeight.bold,
+                                //   fontSize: 20,
+                                // ),
+                                context: context,
+                                animType: AnimType.topSlide,
+                                headerAnimationLoop: false,
+                                dialogType: DialogType.warning,
+                                showCloseIcon: true,
+                                title: "La fecha de entrada no puede ser mayor a la fecha de salida",
+                                //desc:"Solicitud enviada",
+                                btnOkColor: Color.fromARGB(255, 245, 195, 58),
+                                btnOkOnPress: () {
+                                  //debugPrint('OnClcik');
+                                },
+                                btnOkIcon: Icons.check_circle,
+                                // onDismissCallback: (type) {
+                                //   debugPrint('Dialog Dissmiss from callback $type');
+                                // },
+                              ).show();
+                              return;
+                            }
+                            if (fechaDesde == "" || fechaHasta == "" || horaDesde == "" || horaHasta == ""){
+                              setState(() {
+                                fechaEntrada = nuevaFechaEntrada;
+                                fechaDesde = DateFormat('yyyy-MM-dd').format(nuevaFechaEntrada);
+                                fechaHasta = DateFormat('yyyy-MM-dd').format(fechaSalida);
+                                horaDesde = entrada.to24hours();
+                                horaHasta = salida.to24hours();
+                                cambiofechaDesde=true;
+                                // print(fechaDesde);
+                                // print(fechaHasta);
+                                // print(horaDesde);
+                                // print(horaHasta);
+                            });
+                            }else{
+                              setState(() {
+                                cambiofechaDesde=true;
+                                fechaEntrada = nuevaFechaEntrada;
+                                fechaDesde = DateFormat('yyyy-MM-dd').format(nuevaFechaEntrada);
+                              });
+                            }
                           },
-                          btnOkIcon: Icons.check_circle,
-                          // onDismissCallback: (type) {
-                          //   debugPrint('Dialog Dissmiss from callback $type');
-                          // },
-                        ).show();
-                        return;
-                      }
-                      if (fechaDesde == "" || fechaHasta == "" || horaDesde == "" || horaHasta == ""){
-                        setState(() {
-                          fechaEntrada = nuevaFechaEntrada;
-                          fechaDesde = DateFormat('yyyy-MM-dd').format(nuevaFechaEntrada);
-                          fechaHasta = DateFormat('yyyy-MM-dd').format(fechaSalida);
-                          horaDesde = entrada.to24hours();
-                          horaHasta = salida.to24hours();
-                          cambiofechaDesde=true;
-                          // print(fechaDesde);
-                          // print(fechaHasta);
-                          // print(horaDesde);
-                          // print(horaHasta);
-                      });
-                      }else{
-                        setState(() {
-                          cambiofechaDesde=true;
-                          fechaEntrada = nuevaFechaEntrada;
-                          fechaDesde = DateFormat('yyyy-MM-dd').format(nuevaFechaEntrada);
-                        });
-                      }
-                    }), 
-                    child: Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height/3,
-                      child: Center(
-                        child: Text(DateFormat('yyyy/MM/dd').format(fechaEntrada), textAlign: TextAlign.center,
-                                style: TextStyle(fontSize: 20),)
-                      ),
-                      // child: Image.network("https://http2.mlstatic.com/D_NQ_NP_909774-MLV52690599466_122022-W.jpg"),
-                      // decoration: BoxDecoration(
-                      //   borderRadius: BorderRadius.circular(20)
-                        
-                      // ),
+                        ),
+                        GestureDetector(
+                          child: Column(
+                            children: [
+                              Text("Hora", 
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: !cambiohoraDesde
+                                    ?Colors.black
+                                    :Colors.green,
+                                  fontSize: 25
+                                ),
+                              ),
+                              Text(entrada.format(context).toString(), 
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: !cambiohoraDesde
+                                    ?Colors.black
+                                    :Colors.green,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold
+                                ),
+                              ),
+                            ],
+                          ),
+                          onTap: () async{
+                            TimeOfDay? nuevaHoraEntrada = await showTimePicker(
+                              context: context, 
+                              initialTime: entrada);
+                            if (nuevaHoraEntrada==null) return;
+                            if (fechaDesde == "" || fechaHasta == "" || horaDesde == "" || horaHasta == ""){
+                              setState(() {
+                                entrada=nuevaHoraEntrada;
+                                fechaDesde = DateFormat('yyyy-MM-dd').format(fechaEntrada);
+                                fechaHasta = DateFormat('yyyy-MM-dd').format(fechaSalida);
+                                horaDesde = nuevaHoraEntrada.to24hours();
+                                horaHasta = salida.to24hours();
+                                cambiohoraDesde=true;
+                                // print(fechaDesde);
+                                // print(fechaHasta);
+                                // print(horaDesde);
+                                // print(horaHasta);
+                            });
+                            }else{
+                              setState(() {
+                                entrada=nuevaHoraEntrada;
+                                horaDesde = nuevaHoraEntrada.to24hours();
+                              });
+                            }
+                          },
+                        ),
+                        // Text("Dia", 
+                        //   style: TextStyle(
+                        //     color: Colors.orange.shade200,
+                        //     fontSize: 20
+                        //   ),
+                        // ),
+                        // Text("Hora", 
+                        //   style: TextStyle(
+                        //     color: Colors.orange.shade200,
+                        //     fontSize: 20
+                        //   ),
+                        // ),
+                      ],
                     ),
                   ),
-                  // Ink(
-                  //   width: MediaQuery.of(context).size.width,
-                  //   height: MediaQuery.of(context).size.height/3,
-                  //   decoration: BoxDecoration(
-                  //     borderRadius: BorderRadius.circular(20),
-                  //     image: DecorationImage(
-                  //       image: NetworkImage('https://http2.mlstatic.com/D_NQ_NP_909774-MLV52690599466_122022-W.jpg'),
-                  //       fit: BoxFit.cover,
-                  //     ),
-                  //   ),
-                  // ),
                 ),
-                InkWell(
-                  borderRadius: BorderRadius.circular(20),
-                  onTap: () {
-                    //Navigator.pushNamed(context, EntrarPage.routeName);
-                  }, // Handle your callback.
-                  splashColor: !cambiohoraDesde
-                              ?Color.fromARGB(255, 247, 200, 147).withOpacity(0.5)
-                              :Color.fromARGB(255, 195, 247, 147).withOpacity(0.5),
-                  child: OutlinedButton(
-                    style: OutlinedButton.styleFrom(
-                    fixedSize: Size(150, 70),
-                    foregroundColor: !cambiohoraDesde
-                                  ?Colors.orange
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Text("Salida", textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold
+                ),
+              ),
+
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 30),
+                child: Container(
+                  decoration: const BoxDecoration(
+                    color: Color.fromARGB(255, 255, 187, 110),
+                    borderRadius: BorderRadius.all(Radius.circular(21))
+                  ),
+                  padding: EdgeInsets.fromLTRB(16, 0, 16, 10),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        GestureDetector(
+                          child: Column(
+                            children: [
+                              Text("Dia", 
+                                style: TextStyle(
+                                  color: !cambiofechaHasta
+                                  ?Colors.black
                                   :Colors.green,
-                    //disabledForegroundColor: Colors.red,
-                    side: BorderSide(color: !cambiohoraDesde
-                                          ?Colors.orange
-                                          :Colors.green, width: 3),
-                  ),
-                    onPressed: (() async {
-                      TimeOfDay? nuevaHoraEntrada = await showTimePicker(
-                        context: context, 
-                        initialTime: entrada);
-                      if (nuevaHoraEntrada==null) return;
-                      if (fechaDesde == "" || fechaHasta == "" || horaDesde == "" || horaHasta == ""){
-                        setState(() {
-                          entrada=nuevaHoraEntrada;
-                          fechaDesde = DateFormat('yyyy-MM-dd').format(fechaEntrada);
-                          fechaHasta = DateFormat('yyyy-MM-dd').format(fechaSalida);
-                          horaDesde = nuevaHoraEntrada.to24hours();
-                          horaHasta = salida.to24hours();
-                          cambiohoraDesde=true;
-                          // print(fechaDesde);
-                          // print(fechaHasta);
-                          // print(horaDesde);
-                          // print(horaHasta);
-                      });
-                      }else{
-                        setState(() {
-                          entrada=nuevaHoraEntrada;
-                          horaDesde = nuevaHoraEntrada.to24hours();
-                        });
-                      }
-                    }), 
-                    child: Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height/3,
-                      child: Center(
-                        child: Text(entrada.format(context).toString(), textAlign: TextAlign.center,
-                                style: TextStyle(fontSize: 25),),
-                      ),
-                      // child: Image.network("https://http2.mlstatic.com/D_NQ_NP_909774-MLV52690599466_122022-W.jpg"),
-                      // decoration: BoxDecoration(
-                      //   borderRadius: BorderRadius.circular(20)
-                        
-                      // ),
+                                  fontSize: 25,
+                                  fontWeight: FontWeight.bold
+                                ),
+                              ),
+                              Text(DateFormat('dd/MM/yyyy').format(fechaSalida), textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: !cambiofechaHasta
+                                  ?Colors.black
+                                  :Colors.green,
+                                  fontWeight: FontWeight.bold
+                                ),
+                              ),
+                            ],
+                          ),
+                          onTap: () async{
+                            DateTime? nuevaFechaSalida = await showDatePicker(
+                            context: context, 
+                            initialDate: fechaSalida, 
+                            firstDate: fechaEntradaMinima, 
+                            lastDate: fechaEntradaMinima.add(Duration(days: 5)));
+                            if (nuevaFechaSalida==null) return;
+                            DateTime comprobarfechaentrada = DateTime.utc(fechaEntrada.year,fechaEntrada.month,fechaEntrada.day);
+                            DateTime comprobarfechasalida = DateTime.utc(nuevaFechaSalida.year,nuevaFechaSalida.month,nuevaFechaSalida.day);
+                            if (comprobarfechasalida.isBefore(comprobarfechaentrada) && !comprobarfechasalida.isAtSameMomentAs(comprobarfechaentrada)){
+                              AwesomeDialog(
+                                autoHide: Duration(seconds: 5) ,
+                                titleTextStyle: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20,
+                                  color: Colors.red
+                                ),
+                                // descTextStyle: TextStyle(
+                                //   fontWeight: FontWeight.bold,
+                                //   fontSize: 20,
+                                // ),
+                                context: context,
+                                animType: AnimType.topSlide,
+                                headerAnimationLoop: false,
+                                dialogType: DialogType.warning,
+                                showCloseIcon: true,
+                                title: "La fecha de salida no puede ser menor a la fecha de entrada",
+                                //desc:"Solicitud enviada",
+                                btnOkColor: Color.fromARGB(255, 245, 195, 58),
+                                btnOkOnPress: () {
+                                  //debugPrint('OnClcik');
+                                },
+                                btnOkIcon: Icons.check_circle,
+                                // onDismissCallback: (type) {
+                                //   debugPrint('Dialog Dissmiss from callback $type');
+                                // },
+                              ).show();
+                              return;
+                            }
+                            if (fechaDesde == "" || fechaHasta == "" || horaDesde == "" || horaHasta == ""){
+                              setState(() {
+                                fechaSalida = nuevaFechaSalida;
+                                fechaDesde = DateFormat('yyyy-MM-dd').format(fechaEntrada);
+                                fechaHasta = DateFormat('yyyy-MM-dd').format(nuevaFechaSalida);
+                                horaDesde = entrada.to24hours();
+                                horaHasta = salida.to24hours();
+                                cambiofechaHasta=true;
+                                // print(fechaDesde);
+                                // print(fechaHasta);
+                                // print(horaDesde);
+                                // print(horaHasta);
+                            });
+                            }else{
+                              setState(() {
+                                cambiofechaHasta=true;
+                                fechaSalida = nuevaFechaSalida;
+                                fechaHasta = DateFormat('yyyy-MM-dd').format(nuevaFechaSalida);
+                              });
+                            }
+                          },
+                        ),
+                        GestureDetector(
+                          child: Column(
+                            children: [
+                              Text("Hora", 
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: !cambiohoraHasta
+                                    ?Colors.black
+                                    :Colors.green,
+                                  fontSize: 25
+                                ),
+                              ),
+                              Text(salida.format(context).toString(), 
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: !cambiohoraHasta
+                                    ?Colors.black
+                                    :Colors.green,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold
+                                ),
+                              ),
+                            ],
+                          ),
+                          onTap: () async{
+                            TimeOfDay? nuevaHoraSalida = await showTimePicker(
+                            context: context, 
+                            initialTime: salida);
+                          if (nuevaHoraSalida==null) return;
+                          if (fechaDesde == "" || fechaHasta == "" || horaDesde == "" || horaHasta == ""){
+                            setState(() {
+                              salida=nuevaHoraSalida;
+                              fechaDesde = DateFormat('yyyy-MM-dd').format(fechaEntrada);
+                              fechaHasta = DateFormat('yyyy-MM-dd').format(fechaSalida);
+                              horaDesde = entrada.to24hours();
+                              horaHasta = nuevaHoraSalida.to24hours();
+                              cambiohoraHasta=true;
+                              // print(fechaDesde);
+                              // print(fechaHasta);
+                              // print(horaDesde);
+                              // print(horaHasta);
+                          });
+                          }else{
+                            setState(() {
+                              cambiohoraHasta=true;
+                              salida=nuevaHoraSalida;
+                              horaHasta = nuevaHoraSalida.to24hours();
+                            });
+                          }
+                          },
+                        ),
+                        // Text("Dia", 
+                        //   style: TextStyle(
+                        //     color: Colors.orange.shade200,
+                        //     fontSize: 20
+                        //   ),
+                        // ),
+                        // Text("Hora", 
+                        //   style: TextStyle(
+                        //     color: Colors.orange.shade200,
+                        //     fontSize: 20
+                        //   ),
+                        // ),
+                      ],
                     ),
                   ),
-                  // Ink(
-                  //   width: MediaQuery.of(context).size.width,
-                  //   height: MediaQuery.of(context).size.height/3,
-                  //   decoration: BoxDecoration(
-                  //     borderRadius: BorderRadius.circular(20),
-                  //     image: DecorationImage(
-                  //       image: NetworkImage('https://http2.mlstatic.com/D_NQ_NP_909774-MLV52690599466_122022-W.jpg'),
-                  //       fit: BoxFit.cover,
-                  //     ),
-                  //   ),
-                  // ),
-                ),
-
-              ],
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Text("Salida", textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold
-              ),
-            ),
-             SizedBox(
-              height: 10,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                InkWell(
-              borderRadius: BorderRadius.circular(20),
-              onTap: () {
-                //Navigator.pushNamed(context, EntrarPage.routeName);
-              }, // Handle your callback.
-              splashColor: !cambiofechaHasta
-                         ?Color.fromARGB(255, 247, 200, 147).withOpacity(0.5)
-                         :Color.fromARGB(255, 195, 247, 147).withOpacity(0.5),
-              child: OutlinedButton(
-                style: OutlinedButton.styleFrom(
-                fixedSize: Size(150, 70),
-                foregroundColor: !cambiofechaHasta
-                                 ?Colors.orange
-                                 :Colors.green,
-                //disabledForegroundColor: Colors.red,
-                side: BorderSide(color: !cambiofechaHasta
-                                      ?Colors.orange
-                                      :Colors.green, width: 3),
-              ),
-                onPressed: (() async {
-                  DateTime? nuevaFechaSalida = await showDatePicker(
-                  context: context, 
-                  initialDate: fechaSalida, 
-                  firstDate: fechaEntradaMinima, 
-                  lastDate: fechaEntradaMinima.add(Duration(days: 5)));
-                  if (nuevaFechaSalida==null) return;
-                  DateTime comprobarfechaentrada = DateTime.utc(fechaEntrada.year,fechaEntrada.month,fechaEntrada.day);
-                  DateTime comprobarfechasalida = DateTime.utc(nuevaFechaSalida.year,nuevaFechaSalida.month,nuevaFechaSalida.day);
-                  if (comprobarfechasalida.isBefore(comprobarfechaentrada) && !comprobarfechasalida.isAtSameMomentAs(comprobarfechaentrada)){
-                    AwesomeDialog(
-                      autoHide: Duration(seconds: 5) ,
-                      titleTextStyle: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
-                        color: Colors.red
-                      ),
-                      // descTextStyle: TextStyle(
-                      //   fontWeight: FontWeight.bold,
-                      //   fontSize: 20,
-                      // ),
-                      context: context,
-                      animType: AnimType.topSlide,
-                      headerAnimationLoop: false,
-                      dialogType: DialogType.warning,
-                      showCloseIcon: true,
-                      title: "La fecha de salida no puede ser menor a la fecha de entrada",
-                      //desc:"Solicitud enviada",
-                      btnOkColor: Color.fromARGB(255, 245, 195, 58),
-                      btnOkOnPress: () {
-                        //debugPrint('OnClcik');
-                      },
-                      btnOkIcon: Icons.check_circle,
-                      // onDismissCallback: (type) {
-                      //   debugPrint('Dialog Dissmiss from callback $type');
-                      // },
-                    ).show();
-                    return;
-                  }
-                  if (fechaDesde == "" || fechaHasta == "" || horaDesde == "" || horaHasta == ""){
-                    setState(() {
-                      fechaSalida = nuevaFechaSalida;
-                      fechaDesde = DateFormat('yyyy-MM-dd').format(fechaEntrada);
-                      fechaHasta = DateFormat('yyyy-MM-dd').format(nuevaFechaSalida);
-                      horaDesde = entrada.to24hours();
-                      horaHasta = salida.to24hours();
-                      cambiofechaHasta=true;
-                      // print(fechaDesde);
-                      // print(fechaHasta);
-                      // print(horaDesde);
-                      // print(horaHasta);
-                  });
-                  }else{
-                    setState(() {
-                      cambiofechaHasta=true;
-                      fechaSalida = nuevaFechaSalida;
-                      fechaHasta = DateFormat('yyyy-MM-dd').format(nuevaFechaSalida);
-                    });
-                  }
-                }), 
-                child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height/3,
-                  child: Center(
-                    child: Text(DateFormat('yyyy/MM/dd').format(fechaSalida), textAlign: TextAlign.center,
-                            style: TextStyle(fontSize: 20),)
-                  ),
-                  // child: Image.network("https://http2.mlstatic.com/D_NQ_NP_909774-MLV52690599466_122022-W.jpg"),
-                  // decoration: BoxDecoration(
-                  //   borderRadius: BorderRadius.circular(20)
-                    
-                  // ),
                 ),
               ),
-              // Ink(
-              //   width: MediaQuery.of(context).size.width,
-              //   height: MediaQuery.of(context).size.height/3,
-              //   decoration: BoxDecoration(
-              //     borderRadius: BorderRadius.circular(20),
-              //     image: DecorationImage(
-              //       image: NetworkImage('https://http2.mlstatic.com/D_NQ_NP_909774-MLV52690599466_122022-W.jpg'),
-              //       fit: BoxFit.cover,
-              //     ),
-              //   ),
-              // ),
-            ),
-            InkWell(
-              borderRadius: BorderRadius.circular(20),
-              onTap: () {
-                //Navigator.pushNamed(context, EntrarPage.routeName);
-              }, // Handle your callback.
-              splashColor: !cambiohoraHasta
-                           ?Color.fromARGB(255, 247, 200, 147).withOpacity(0.5)
-                           :Color.fromARGB(255, 195, 247, 147).withOpacity(0.5),
-              child: OutlinedButton(
-                style: OutlinedButton.styleFrom(
-                fixedSize: Size(150, 70),
-                foregroundColor: !cambiohoraHasta
-                               ?Colors.orange
-                               :Colors.green,
-                //disabledForegroundColor: Colors.red,
-                side: BorderSide(color: !cambiohoraHasta
-                                      ?Colors.orange
-                                      :Colors.green, width: 3),
-              ),
-                onPressed: (() async {
-                  TimeOfDay? nuevaHoraSalida = await showTimePicker(
-                    context: context, 
-                    initialTime: salida);
-                  if (nuevaHoraSalida==null) return;
-                  if (fechaDesde == "" || fechaHasta == "" || horaDesde == "" || horaHasta == ""){
-                    setState(() {
-                      salida=nuevaHoraSalida;
-                      fechaDesde = DateFormat('yyyy-MM-dd').format(fechaEntrada);
-                      fechaHasta = DateFormat('yyyy-MM-dd').format(fechaSalida);
-                      horaDesde = entrada.to24hours();
-                      horaHasta = nuevaHoraSalida.to24hours();
-                      cambiohoraHasta=true;
-                      // print(fechaDesde);
-                      // print(fechaHasta);
-                      // print(horaDesde);
-                      // print(horaHasta);
-                  });
-                  }else{
-                    setState(() {
-                      cambiohoraHasta=true;
-                      salida=nuevaHoraSalida;
-                      horaHasta = nuevaHoraSalida.to24hours();
-                    });
-                  }
-                }), 
-                child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height/3,
-                  child: Center(
-                    child: Text(salida.format(context).toString(), textAlign: TextAlign.center,
-                            style: TextStyle(fontSize: 25),),
-                  ),
-                  // child: Image.network("https://http2.mlstatic.com/D_NQ_NP_909774-MLV52690599466_122022-W.jpg"),
-                  // decoration: BoxDecoration(
-                  //   borderRadius: BorderRadius.circular(20)
-                    
-                  // ),
-                ),
-              ),
-              // Ink(
-              //   width: MediaQuery.of(context).size.width,
-              //   height: MediaQuery.of(context).size.height/3,
-              //   decoration: BoxDecoration(
-              //     borderRadius: BorderRadius.circular(20),
-              //     image: DecorationImage(
-              //       image: NetworkImage('https://http2.mlstatic.com/D_NQ_NP_909774-MLV52690599466_122022-W.jpg'),
-              //       fit: BoxFit.cover,
-              //     ),
-              //   ),
-              // ),
-            ),
-
-              ],
-            ),        
-            // InkWell(
-            //   borderRadius: BorderRadius.circular(20),
-            //   onTap: () {
-            //     //Navigator.pushNamed(context, EntrarPage.routeName);
-            //   }, // Handle your callback.
-            //   splashColor: (fechaDesde=="" && fechaHasta=="")
-            //                 ?Color.fromARGB(255, 247, 200, 147).withOpacity(0.5)
-            //                 :Color.fromARGB(255, 195, 247, 147).withOpacity(0.5),
-            //   child: OutlinedButton(
-            //     style: OutlinedButton.styleFrom(
-            //     fixedSize: Size(150, 70),
-            //     foregroundColor: (fechaDesde=="" && fechaHasta=="")
-            //                       ?Colors.orange:
-            //                       Colors.green,
-            //     //disabledForegroundColor: Colors.red,
-            //     side: BorderSide(color: (fechaDesde=="" && fechaHasta=="")
-            //                              ?Colors.orange
-            //                              :Colors.green, width: 3),
-            //   ),
-            //     onPressed: (() {
-            //       pickDateRange();
-            //       // showDialog(
-            //       //   context: context,
-            //       //   builder: (BuildContext context) {
-            //       //     return AlertDialog(
-            //       //         title: Text(''),
-            //       //         content: Container(
-            //       //           height: 350,
-            //       //           child: Column(
-            //       //             children: <Widget>[
-            //       //               getDateRangePicker(),
-            //       //               MaterialButton(
-            //       //                 child: Text("OK"),
-            //       //                 onPressed: () {
-            //       //                   print(fechaDesde);
-            //       //                   print(fechaHasta);
-            //       //                   Navigator.pop(context);
-            //       //                 },
-            //       //               )
-            //       //             ],
-            //       //           ),
-            //       //         ));
-            //       //   }
-            //       // );              
-            //     }), 
-            //     child: Container(
-            //       width: MediaQuery.of(context).size.width,
-            //       height: MediaQuery.of(context).size.height/3,
-            //       child: Center(
-            //         child: Text("rango de fechas", textAlign: TextAlign.center,
-            //                 style: TextStyle(fontSize: 25),),
-            //       ),
-            //       // child: Image.network("https://http2.mlstatic.com/D_NQ_NP_909774-MLV52690599466_122022-W.jpg"),
-            //       // decoration: BoxDecoration(
-            //       //   borderRadius: BorderRadius.circular(20)                   
-            //       // ),
-            //     ),
-            //   ),
-            //   // Ink(
-            //   //   width: MediaQuery.of(context).size.width,
-            //   //   height: MediaQuery.of(context).size.height/3,
-            //   //   decoration: BoxDecoration(
-            //   //     borderRadius: BorderRadius.circular(20),
-            //   //     image: DecorationImage(
-            //   //       image: NetworkImage('https://http2.mlstatic.com/D_NQ_NP_909774-MLV52690599466_122022-W.jpg'),
-            //   //       fit: BoxFit.cover,
-            //   //     ),
-            //   //   ),
-            //   // ),
-            // ),
-            // SizedBox(
-            //   height: 10,
-            // ),
-           ],
+            ],
+          ),
         ),
       ),
       floatingActionButton: Padding(
-        padding: const EdgeInsets.all(8.0),
+        // padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.only(top: 20),
         child: Row(
           children: [
             FloatingActionButton( 

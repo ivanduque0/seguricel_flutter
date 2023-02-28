@@ -9,7 +9,7 @@ import 'package:seguricel_flutter/utils/loading.dart';
 
 class Invitacion extends StatelessWidget {
   
-  Invitacion({super.key, required this.fecha_entrada, required this.fecha_salida, required this.hora_entrada, required this.hora_salida, required this.horario_id, required this.usuario_id, required this.acompanantes});
+  Invitacion({super.key, required this.fecha_entrada, required this.fecha_salida, required this.hora_entrada, required this.hora_salida, required this.horario_id, required this.usuario_id, required this.acompanantes, required this.nombre, required this.codigo});
 
   final fecha_entrada;
   final fecha_salida;
@@ -18,6 +18,8 @@ class Invitacion extends StatelessWidget {
   final horario_id;
   final usuario_id;
   final acompanantes;
+  final nombre;
+  final codigo;
   
   HorariosController horariosController = Get.put(HorariosController());
 
@@ -31,6 +33,7 @@ class Invitacion extends StatelessWidget {
         width: MediaQuery.of(context).size.width/1.3,
         child: Container(
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
                 decoration: const BoxDecoration(
@@ -40,10 +43,43 @@ class Invitacion extends StatelessWidget {
                     topRight: Radius.circular(21)
                   )
                 ),
-                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 5),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 15),
+                      child: Text(nombre,
+                      textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 23,
+                          fontWeight: FontWeight.bold,
+                          decoration: TextDecoration.underline,
+                          decorationStyle: TextDecorationStyle.double,
+                          decorationColor: Colors.blue
+                        ),
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text("Codigo: ",
+                        textAlign: TextAlign.left,
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(codigo,
+                        textAlign: TextAlign.left,
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.blue,
+                          ),
+                        ),
+                      ],
+                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -54,6 +90,8 @@ class Invitacion extends StatelessWidget {
                           ),
                         ),
                         IconButton(
+                          padding: EdgeInsets.zero,
+                          constraints: BoxConstraints(),
                           icon: Icon(Icons.delete),
                           color: Colors.red,
                           iconSize: 30,
@@ -164,7 +202,7 @@ class Invitacion extends StatelessWidget {
                               },
                             ).show();
                           },
-                          // padding: EdgeInsets.all(0),
+                          //padding: EdgeInsets.all(0),
                         )
                       ],
                     ),

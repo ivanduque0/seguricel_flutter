@@ -97,17 +97,11 @@ class _MainPageState extends State<MainPage> {
             // Permission.locationWhenInUse,
             // Permission.locationAlways
             ].request();
+            String uuid = await Constants.prefs.getString('entrada_beacon_uuid').toString();
             //print(statuses);
             //print(bluetoothEnable);
             if (!bluetoothEnable){
               await FlutterBluetoothSerial.instance.requestEnable();
-              // setState(() {
-              //   isAdvertising;
-              // });
-              
-              // print(isAdvertising);
-              // print("activar bluetooth");
-              String uuid = await Constants.prefs.getString('entrada_beacon_uuid').toString();
               Constants.beaconBroadcast
                 .setUUID(uuid)
                 .setMajorId(8462)
@@ -121,7 +115,27 @@ class _MainPageState extends State<MainPage> {
                 bool isAdvertising = await Constants.beaconBroadcast.isAdvertising() ?? false;
                 if (_bluetoothState.isEnabled || isAdvertising){
                   await Constants.beaconBroadcast.stop();
-                  await FlutterBluetoothSerial.instance.requestDisable();
+                  // await FlutterBluetoothSerial.instance.requestDisable();
+                }
+                
+              });
+            } else {
+              Constants.beaconBroadcast
+                .setUUID(uuid)
+                .setMajorId(8462)
+                .setMinorId(37542)
+                .setTransmissionPower(10)
+                .setLayout('m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24')
+                .setManufacturerId(0x004c)
+                .setAdvertiseMode(AdvertiseMode.lowLatency)
+                .start();
+
+              await Future.delayed(const Duration(seconds: 30), () async {
+                bool isAdvertising = await Constants.beaconBroadcast.isAdvertising() ?? false;
+                if (_bluetoothState.isEnabled || isAdvertising){
+                  await Constants.beaconBroadcast.stop();
+                  print("stop del main");
+                  // await FlutterBluetoothSerial.instance.requestDisable();
                 }
                 
               });

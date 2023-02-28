@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:seguricel_flutter/pages/agregar_invitados_page.dart';
 import 'package:seguricel_flutter/pages/eliminar_invitados_page.dart';
 import 'package:seguricel_flutter/pages/entrar_page.dart';
 import 'package:seguricel_flutter/pages/main_page.dart';
@@ -45,6 +46,7 @@ class MyApp extends StatelessWidget {
         GetPage(name: "/entrar", page: ()=>EntrarPage()),
         GetPage(name: "/salir", page: ()=>SalirPage()),
         GetPage(name: "/eliminarinvitados", page: ()=>EliminarInvitadosPage()),
+        GetPage(name: "/agregarinvitados", page: ()=>AgregarInvitadosPage()),
       ],
     //   routes: {
     //     LoginPage.routeName : (context) => LoginPage(),

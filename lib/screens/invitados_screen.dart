@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:seguricel_flutter/controllers/screens_visitantes_controller.dart';
-import 'package:seguricel_flutter/controllers/visitantes_controller.dart';
 import 'package:seguricel_flutter/screens/crearnuevoinvitado_screen.dart';
 import 'package:seguricel_flutter/screens/editarinvitado_screen.dart';
 import 'package:seguricel_flutter/screens/personalizartiempoinvitado_screen.dart';
@@ -41,9 +40,9 @@ class InvitadosScreen extends StatelessWidget {
                 SizedBox(
                   height: 30,
                 ),
-                Text("Configuracion de visitantes", textAlign: TextAlign.center,
+                Text("Invitaciones", textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontSize: 40,
+                    fontSize: 50,
                     fontWeight: FontWeight.bold
                   ),
                 ),
@@ -58,7 +57,7 @@ class InvitadosScreen extends StatelessWidget {
                   splashColor: Color.fromARGB(255, 255, 175, 110).withOpacity(0.5),
                   child: OutlinedButton(
                     style: OutlinedButton.styleFrom(
-                    fixedSize: Size(220, 100),
+                    // fixedSize: Size(220, 100),
                     foregroundColor: Colors.orange[300],
                     //disabledForegroundColor: Colors.red,
                     side: BorderSide(color: Colors.orange, width: 3),
@@ -71,11 +70,11 @@ class InvitadosScreen extends StatelessWidget {
                       // });
                     }), 
                     child: Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height/3,
+                      width: MediaQuery.of(context).size.width/1.2,
+                      height: MediaQuery.of(context).size.height/11,
                       child: Center(
-                        child: Text("Mis\ninvitados", textAlign: TextAlign.center,
-                                style: TextStyle(fontSize: 40),),
+                        child: Text("Mis invitados", textAlign: TextAlign.center,
+                                style: TextStyle(fontSize: 30),),
                       ),
                       // child: Image.network("https://http2.mlstatic.com/D_NQ_NP_909774-MLV52690599466_122022-W.jpg"),
                       // decoration: BoxDecoration(
@@ -97,7 +96,7 @@ class InvitadosScreen extends StatelessWidget {
                   // ),
                 ),
                 SizedBox(
-                  height: 20,
+                  height: 10,
                 ),
                 InkWell(
                   borderRadius: BorderRadius.circular(20),
@@ -107,7 +106,7 @@ class InvitadosScreen extends StatelessWidget {
                   splashColor: Color.fromARGB(255, 175, 255, 110).withOpacity(0.5),
                   child: OutlinedButton(
                     style: OutlinedButton.styleFrom(
-                    fixedSize: Size(220, 100),
+                    // fixedSize: Size(220, 100),
                     foregroundColor: Colors.green[300],
                     //disabledForegroundColor: Colors.red,
                     side: BorderSide(color: Colors.green, width: 3),
@@ -120,11 +119,11 @@ class InvitadosScreen extends StatelessWidget {
                     //   });
                     }), 
                     child: Container(
-                      width: MediaQuery.of(context).size.width,
+                      width: MediaQuery.of(context).size.width/1.2,
                       height: MediaQuery.of(context).size.height/3,
                       child: Center(
                         child: Text("Crear\ninvitacion", textAlign: TextAlign.center,
-                                style: TextStyle(fontSize: 40),),
+                                style: TextStyle(fontSize: 60),),
                       ),
                       // child: Image.network("https://http2.mlstatic.com/D_NQ_NP_909774-MLV52690599466_122022-W.jpg"),
                       // decoration: BoxDecoration(

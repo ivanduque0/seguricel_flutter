@@ -43,9 +43,9 @@ class _TiempoInvitadoScreenState extends State<TiempoInvitadoScreen> {
             SizedBox(
               height: 30,
             ),
-            Text("Tiempo de estadia del invitado", textAlign: TextAlign.center,
+            Text("Invitacion", textAlign: TextAlign.center,
               style: TextStyle(
-                fontSize: 30,
+                fontSize: 50,
                 fontWeight: FontWeight.bold
               ),
             ),
@@ -60,7 +60,7 @@ class _TiempoInvitadoScreenState extends State<TiempoInvitadoScreen> {
               splashColor: Color.fromARGB(255, 252, 190, 75).withOpacity(0.5),
               child: OutlinedButton(
                 style: OutlinedButton.styleFrom(
-                fixedSize: Size(150, 70),
+                // fixedSize: Size(150, 70),
                 foregroundColor: Color.fromARGB(255, 252, 190, 75),
                 //disabledForegroundColor: Colors.red,
                 side: BorderSide(color: Colors.orange, width: 3),
@@ -90,20 +90,21 @@ class _TiempoInvitadoScreenState extends State<TiempoInvitadoScreen> {
                   // print(horaHasta);
                   String tiempoEstadiaInvitado= await jsonEncode({'fecha_entrada':fechaDesde, 'fecha_salida':fechaHasta, 'entrada':horaDesde, 'salida':horaHasta});
                   await Constants.prefs.setString('tiempoInvitado', tiempoEstadiaInvitado);
-                // setState(() {
-                    
-                //     // print("state 3");
-                //   });
-                Navigator.of(context).pop();
-                // widget.volver(4);
-                controller.cambiarScreen(4);
-                }), 
+                  // setState(() {
+                      
+                  //     // print("state 3");
+                  //   });
+                  Navigator.of(context).pop();
+                  // widget.volver(4);
+                  controller.cambiarScreen(4);
+                }
+              ), 
                 child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height/3,
+                  // width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height/9,
                   child: Center(
-                    child: Text("24 Horas", textAlign: TextAlign.center,
-                            style: TextStyle(fontSize: 30),),
+                    child: Text("Desde ahora por 24 Horas", textAlign: TextAlign.center,
+                            style: TextStyle(fontSize: 25),),
                   ),
                   // child: Image.network("https://http2.mlstatic.com/D_NQ_NP_909774-MLV52690599466_122022-W.jpg"),
                   // decoration: BoxDecoration(
@@ -135,7 +136,7 @@ class _TiempoInvitadoScreenState extends State<TiempoInvitadoScreen> {
               splashColor: Color.fromARGB(255, 116, 168, 245).withOpacity(0.5),
               child: OutlinedButton(
                 style: OutlinedButton.styleFrom(
-                fixedSize: Size(150, 70),
+                // fixedSize: Size(150, 70),
                 foregroundColor: Color.fromARGB(255, 116, 168, 245),
                 //disabledForegroundColor: Colors.red,
                 side: BorderSide(color: Colors.blue, width: 3),
@@ -150,10 +151,10 @@ class _TiempoInvitadoScreenState extends State<TiempoInvitadoScreen> {
                 }), 
                 child: Container(
                   width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height/3,
+                  height: MediaQuery.of(context).size.height/4,
                   child: Center(
-                    child: Text("Personalizar estadia", textAlign: TextAlign.center,
-                            style: TextStyle(fontSize: 25),),
+                    child: Text("Personalizada", textAlign: TextAlign.center,
+                            style: TextStyle(fontSize: 45),),
                   ),
                   // child: Image.network("https://http2.mlstatic.com/D_NQ_NP_909774-MLV52690599466_122022-W.jpg"),
                   // decoration: BoxDecoration(

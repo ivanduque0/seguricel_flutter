@@ -110,72 +110,51 @@ class _EditarInvitadosScreenState extends State<EditarInvitadosScreen> {
                       SizedBox(
                         height: 10,
                       ),
-                      Text('Informacion del invitado', 
+                      Text('Invitado', 
                       textAlign: TextAlign.center, 
                       style: TextStyle(
                         fontSize: 30,
                         fontWeight: FontWeight.bold
                       ),
                       ),
-                      SizedBox(
-                        height: 30,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Expanded(
-                            child: ListTile(
-                              title: Text("Nombre", style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),textAlign: TextAlign.center,),
-                              subtitle: Text(datosInvitado['nombre'], style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),textAlign: TextAlign.center,),
-                              //trailing: Icon(Icons.edit),
-                              onTap: () {
-                                // print(datosUsuario);
-                                // print("a");
-                              },
-                            ),
-                          ),
-                          Expanded(
-                            child: ListTile(
-                              title: Text("Codigo", style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),textAlign: TextAlign.center,),
-                              subtitle: Text(datosInvitado['codigo'], style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),textAlign: TextAlign.center,),
-                              //trailing: Icon(Icons.edit),
-                              onTap: () {
-                                // print(datosUsuario);
-                                // print("a");
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                      // (datosUsuario=={})
-                      // ?LoadingWidget()
-                      // :(datosUsuario!={} && invitados==[])
-                      // ?Text('Actualmente no tiene invitados', 
-                      //   textAlign: TextAlign.center, 
-                      //   style: TextStyle(
-                      //     fontSize: 30,
-                      //     fontWeight: FontWeight.bold
-                      //   ),
-                      // )
-                      SizedBox(
-                        height: 30,
-                      ),
+
                       // Row(
-                      //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      //   mainAxisAlignment: MainAxisAlignment.center,
                       //   children: [
-                      //     Text("Entrada", style: TextStyle(fontWeight: FontWeight.normal, fontSize: 17),),
-                      //     SizedBox(
-                      //       width: MediaQuery.of(context).size.width/5,
+                      //     Expanded(
+                      //       child: ListTile(
+                      //         title: Text("Nombre", style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),textAlign: TextAlign.center,),
+                      //         subtitle: Text(datosInvitado['nombre'], style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),textAlign: TextAlign.center,),
+                      //         //trailing: Icon(Icons.edit),
+                      //         onTap: () {
+                      //           // print(datosUsuario);
+                      //           // print("a");
+                      //         },
+                      //       ),
                       //     ),
-                      //     Text("Salida", style: TextStyle(fontWeight: FontWeight.normal, fontSize: 17),)
+                      //     Expanded(
+                      //       child: ListTile(
+                      //         title: Text("Codigo", style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),textAlign: TextAlign.center,),
+                      //         subtitle: Text(datosInvitado['codigo'], style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),textAlign: TextAlign.center,),
+                      //         //trailing: Icon(Icons.edit),
+                      //         onTap: () {
+                      //           // print(datosUsuario);
+                      //           // print("a");
+                      //         },
+                      //       ),
+                      //     ),
                       //   ],
                       // ),
-                      horariosController.horarios.length!=0
-                      ?Text("Invitaciones", style: TextStyle(fontSize: 25),)
-                      :SizedBox(),
+                      SizedBox(
+                        height: 30,
+                      ),
+                      // horariosController.horarios.length!=0
+                      // ?Text("Invitaciones", style: TextStyle(fontSize: 25),)
+                      // :SizedBox(),
                       horariosController.horarios.length!=0?Container(
                       width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height/3.5,
+                      height: MediaQuery.of(context).size.height/2.3,
+                      //color: Colors.black,
                       // decoration: BoxDecoration(
                       //     borderRadius: BorderRadius.circular(10),
                       //     border: Border.all(
@@ -302,6 +281,8 @@ class _EditarInvitadosScreenState extends State<EditarInvitadosScreen> {
                                   horario_id: horariosController.horarios[index]['id'],
                                   usuario_id: horariosController.horarios[index]['usuario'],
                                   acompanantes: horariosController.horarios[index]['acompanantes'],
+                                  nombre:datosInvitado['nombre'],
+                                  codigo:datosInvitado['codigo'],
                                   ),
                               );
                               // return Container(
