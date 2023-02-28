@@ -2,9 +2,11 @@ import 'dart:convert';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:http_auth/http_auth.dart';
 import 'package:seguricel_flutter/utils/constants.dart';
 import 'package:seguricel_flutter/utils/loading.dart';
+import 'package:seguricel_flutter/controllers/rol_controller.dart';
 
 typedef void ScreenCallback(int id);
 
@@ -21,6 +23,8 @@ class _infoContratoScreenState extends State<infoContratoScreen> {
   Map datosUsuario={};
   String seleccionContrato ="";
   List <String>ContratosActualizar=[];
+
+  RolController rolController= Get.find();
   
   @override
   void initState() {
@@ -164,10 +168,13 @@ class _infoContratoScreenState extends State<infoContratoScreen> {
                             String servidor="";
                             List accesosEntradas=[];
                             List accesosSalidas=[];
+                            // print(contratos[index]['rol']);
+                            rolController.cambiarrol(contratos[index]['rol']);
                             // This is called when the user selects an item.
                             datosUsuario['contrato']=contratos[index]['nombre'];
                             datosUsuario['contrato_id']=contratos[index]['id'];
                             datosUsuario['unidad']=contratos[index]['unidad'];
+                            datosUsuario['rol']=contratos[index]['rol'];
                             try {
                               var client = BasicAuthClient('mobile_access', 'S3gur1c3l_mobile@');
                               var res = await client.post(Uri.parse('https://webseguricel.up.railway.app/dispositivosapimobile/${contratos[index]['nombre']}/')).timeout(Duration(seconds: 5));//.timeout(Duration(seconds: 15));;

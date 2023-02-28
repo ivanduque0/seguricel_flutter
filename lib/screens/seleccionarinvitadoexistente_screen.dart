@@ -292,7 +292,7 @@ class _SeleccionarInvitadoExistenteScreenState extends State<SeleccionarInvitado
                         headerAnimationLoop: false,
                         dialogType: DialogType.success,
                         showCloseIcon: true,
-                        title: invitadosAgregados.length==1?"Invitacion registrada y enviada, por favor revise su whatsapp":"Invitaciones registradas y enviadas, por favor revise su whatsapp",
+                        title: invitadosAgregados.length==1?"Invitacion enviada\n\nREVISE SU WHATSAPP":"Invitaciones enviadas\n\nREVISE SU WHATSAPP",
                         //desc:"Solicitud enviada",
                         btnOkColor: Colors.green,
                         btnOkOnPress: () {

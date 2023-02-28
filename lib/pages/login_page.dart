@@ -139,10 +139,10 @@ class _LoginPageState extends State<LoginPage> {
         if (sesiondata['imei']==0 || sesiondata['imei']==imeiNo){
           res = await client.get(Uri.parse('https://webseguricel.up.railway.app/dispositivosapimobile/${_codeController.text}/')).timeout(Duration(seconds: 5));
           data = jsonDecode(res.body);
-          //print(data);
+          // print(data);
           res = await client.get(Uri.parse('https://webseguricel.up.railway.app/contratosmobiledeviceapi/${_codeController.text}/')).timeout(Duration(seconds: 5));
           contratos = jsonDecode(res.body);
-          //print(contratos);
+          // print(contratos);
           for (var item in data) {
             //print(item);
             // contratos.add(item['contrato']);
@@ -152,7 +152,10 @@ class _LoginPageState extends State<LoginPage> {
               salida_beacon_uuid=item['salida_beacon_uuid'];
               nombre=item['nombre'];
               rol=item['rol'];
-              numeroTelefonico=item['numero_telefonico'].substring(1);
+              if (item['numero_telefonico']!=null){
+                numeroTelefonico=item['numero_telefonico'].substring(1);
+              }
+              
               //print(numeroTelefonico);
             }
           }
@@ -161,7 +164,7 @@ class _LoginPageState extends State<LoginPage> {
               Map sesionjson= {'imei':imeiNo, 'codigo':_codeController.text};
               res = await client.post(Uri.parse('https://webseguricel.up.railway.app/sesionappapi/${_codeController.text}/'), body: sesionjson).timeout(Duration(seconds: 5));//.timeout(Duration(seconds: 15));;
               data = jsonDecode(res.body);
-              print(data);
+              // print(data);
             }
             //print(contratos[0]);
             contrato= contratos[0]['nombre'];

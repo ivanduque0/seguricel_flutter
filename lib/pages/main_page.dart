@@ -4,6 +4,7 @@ import 'package:beacon_broadcast/beacon_broadcast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:seguricel_flutter/controllers/rol_controller.dart';
 import 'package:seguricel_flutter/controllers/screens_visitantes_controller.dart';
 import 'package:seguricel_flutter/controllers/visitantes_controller.dart';
 // import 'package:seguricel_flutter/utils/drawer.dart';
@@ -40,12 +41,12 @@ class _MainPageState extends State<MainPage> {
   //Map datosUsuario={};
   // List contratos=[];
   List accesos=[];
-  String rol="";
   bool bluetooth=false;
   BluetoothState _bluetoothState = BluetoothState.UNKNOWN;
 
   ScreensVisitantesController controller = Get.put(ScreensVisitantesController());
   VisitantesController visitantesController = Get.put(VisitantesController());
+  RolController rolController= Get.put(RolController());
 
 
   List<BottomNavigationBarItem> itemsPropietario=const [
@@ -134,7 +135,6 @@ class _MainPageState extends State<MainPage> {
                 bool isAdvertising = await Constants.beaconBroadcast.isAdvertising() ?? false;
                 if (_bluetoothState.isEnabled || isAdvertising){
                   await Constants.beaconBroadcast.stop();
-                  print("stop del main");
                   // await FlutterBluetoothSerial.instance.requestDisable();
                 }
                 
@@ -174,12 +174,13 @@ class _MainPageState extends State<MainPage> {
   obtenerRol() async {
 
     String encodeDatosUsuario = await Constants.prefs.getString('datosUsuario').toString();
-
+    String rol= jsonDecode(encodeDatosUsuario)['rol'];
+    rolController.cambiarrol(rol);
     // print(encodeDatosUsuario);
-    setState (() {
-      rol= jsonDecode(encodeDatosUsuario)['rol'];
-      // print(rol);
-    });
+    // setState (() {
+    //   rol= jsonDecode(encodeDatosUsuario)['rol'];
+    //   // print(rol);
+    // });
   }
 
 
@@ -246,6 +247,7 @@ class _MainPageState extends State<MainPage> {
   
   @override
   Widget build(BuildContext context) {
+    return GetBuilder<RolController>(builder: (RolController){
     return Scaffold(
       backgroundColor: Colors.grey[200],
       appBar: AppBar(
@@ -259,13 +261,13 @@ class _MainPageState extends State<MainPage> {
         //   IconButton(
         //     onPressed: (() async {
         //       //SharedPreferences prefs = await SharedPreferences.getInstance();
-        //       Constants.prefs.remove("datosUsuario");
-        //       Constants.prefs.remove("accesos");
-        //       Constants.prefs.remove("contratos");
-        //       Constants.prefs.remove("isLoggedIn");
-        //       Navigator.pushReplacementNamed(context, LoginPage.routeName);
+        //       // Constants.prefs.remove("datosUsuario");
+        //       // Constants.prefs.remove("accesos");
+        //       // Constants.prefs.remove("contratos");
+        //       // Constants.prefs.remove("isLoggedIn");
+        //       Constants.prefs.clear();
+        //       Get.offNamed("/login");
         //       //Navigator.pop(context);
-
         //     }), 
         //     icon: Icon(Icons.exit_to_app_rounded)
         //   ),
@@ -274,7 +276,7 @@ class _MainPageState extends State<MainPage> {
       // body: this.datosUsuario!={}
       //   ?Center(
         body: Center(
-          child: rol=="Propietario"
+          child: RolController.rol=="Propietario"
           ?_widgetOptionsPropietario[_selectedIndex]
           :_widgetOptionsSecVis[_selectedIndex]
         ),
@@ -288,7 +290,7 @@ class _MainPageState extends State<MainPage> {
         showUnselectedLabels: true,
         //selectedItemColor: Colors.blue,
         unselectedItemColor: Color.fromARGB(255, 109, 101, 94),
-        items: rol=="Propietario"
+        items: RolController.rol=="Propietario"
         ?itemsPropietario
         :itemsSecVis
       ),
@@ -305,5 +307,6 @@ class _MainPageState extends State<MainPage> {
       // ),
       //floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
+  });
   }
 }

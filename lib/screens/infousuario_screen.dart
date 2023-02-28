@@ -47,7 +47,7 @@ class _infoUsuarioScreenState extends State<infoUsuarioScreen> {
     },
     child: Scaffold(
             body: 
-            (datosUsuario['nombre']!=null || datosUsuario['id_usuario']!=null || datosUsuario['contrato']!=null)
+            (datosUsuario['nombre']!=null || datosUsuario['id_usuario']!=null || datosUsuario['contrato']!=null || datosUsuario['rol']!=null)
             ?Column(
               children: [
                 SizedBox(

@@ -324,7 +324,7 @@ class _CrearNuevoInvitadoScreenState extends State<CrearNuevoInvitadoScreen> {
                                     headerAnimationLoop: false,
                                     dialogType: DialogType.success,
                                     showCloseIcon: true,
-                                    title: "Invitacion registrada y enviada, por favor revise su whatsapp",
+                                    title: "Invitacion enviada\n\nREVISE SU WHATSAPP",
                                     //desc:"Solicitud enviada",
                                     btnOkColor: Colors.green,
                                     btnOkOnPress: () {

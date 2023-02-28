@@ -3,6 +3,7 @@ import 'package:beacon_broadcast/beacon_broadcast.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:seguricel_flutter/controllers/rol_controller.dart';
 import 'package:seguricel_flutter/pages/entrar_page.dart';
 import 'package:seguricel_flutter/pages/salir_page.dart';
 import 'package:seguricel_flutter/utils/constants.dart';
@@ -20,14 +21,12 @@ class AperturasScreen extends StatefulWidget {
 
 class _AperturasScreenState extends State<AperturasScreen> {
 
-  String uuid="";
   bool bluetooth=false;
   BluetoothState _bluetoothState = BluetoothState.UNKNOWN;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    // obtenerUUID();
 
     // // Get current state
     // FlutterBluetoothSerial.instance.state.then((state) {
@@ -47,21 +46,14 @@ class _AperturasScreenState extends State<AperturasScreen> {
 
   }
   
-  // obtenerUUID( )async{
-  //   bool bluetoothSP= await Constants.prefs.getBool('modoBluetooth') ?? false;
-  //   String encodeUUID = await Constants.prefs.getString('beacon_uuid').toString();
-  //   setState(() {
-  //     uuid = encodeUUID;
-  //     bluetooth= bluetoothSP;
-  //   });
-  // }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       // floatingActionButton: _hideShowBluetooth(),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal:15.0),
-        child: Container(
+        child: GetBuilder<RolController>(builder: (RolController){
+        return Container(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -77,8 +69,63 @@ class _AperturasScreenState extends State<AperturasScreen> {
                     backgroundColor: Color.fromARGB(255, 30, 255, 41),
                     primary: Colors.black,
                   ),
-                  onPressed: (() {
-                    Get.toNamed("/entrar");
+                  onPressed: (() async {
+                    if (RolController.rol=='Propietario' || RolController.rol=='Secundario'){
+                      Get.toNamed("/entrar");
+                    } else {
+                      BluetoothState _bluetoothState = BluetoothState.UNKNOWN;
+                      bool bluetoothEnable = _bluetoothState.isEnabled;
+                      Map<Permission, PermissionStatus> statuses = await [
+                      Permission.location,
+                      Permission.bluetooth,
+                      Permission.bluetoothConnect,
+                      Permission.bluetoothAdvertise,
+                      // Permission.locationWhenInUse,
+                      // Permission.locationAlways
+                      ].request();
+                      String uuid = await Constants.prefs.getString('entrada_beacon_uuid').toString();
+                      //print(statuses);
+                      //print(bluetoothEnable);
+                      if (!bluetoothEnable){
+                        await FlutterBluetoothSerial.instance.requestEnable();
+                        Constants.beaconBroadcast
+                          .setUUID(uuid)
+                          .setMajorId(8462)
+                          .setMinorId(37542)
+                          .setTransmissionPower(10)
+                          .setLayout('m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24')
+                          .setManufacturerId(0x004c)
+                          .setAdvertiseMode(AdvertiseMode.lowLatency)
+                          .start();
+                        await Future.delayed(const Duration(seconds: 30), () async {
+                          bool isAdvertising = await Constants.beaconBroadcast.isAdvertising() ?? false;
+                          if (_bluetoothState.isEnabled || isAdvertising){
+                            await Constants.beaconBroadcast.stop();
+                            // await FlutterBluetoothSerial.instance.requestDisable();
+                          }
+                          
+                        });
+                      } else {
+                        Constants.beaconBroadcast
+                          .setUUID(uuid)
+                          .setMajorId(8462)
+                          .setMinorId(37542)
+                          .setTransmissionPower(10)
+                          .setLayout('m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24')
+                          .setManufacturerId(0x004c)
+                          .setAdvertiseMode(AdvertiseMode.lowLatency)
+                          .start();
+
+                        await Future.delayed(const Duration(seconds: 30), () async {
+                          bool isAdvertising = await Constants.beaconBroadcast.isAdvertising() ?? false;
+                          if (_bluetoothState.isEnabled || isAdvertising){
+                            await Constants.beaconBroadcast.stop();
+                            // await FlutterBluetoothSerial.instance.requestDisable();
+                          }
+                          
+                        });
+                      }
+                    }
                     // Navigator.pushNamed(context, EntrarPage.routeName);
                   //print("SALIDAS SCREEN");
                   }), 
@@ -119,8 +166,63 @@ class _AperturasScreenState extends State<AperturasScreen> {
                     backgroundColor: Colors.red,
                     primary: Colors.black,
                   ),
-                  onPressed: (() {
-                    Get.toNamed("/salir");
+                  onPressed: (() async {
+                    if (RolController.rol=='Propietario' || RolController.rol=='Secundario'){
+                      Get.toNamed("/salir");
+                    } else {
+                      BluetoothState _bluetoothState = BluetoothState.UNKNOWN;
+                      bool bluetoothEnable = _bluetoothState.isEnabled;
+                      Map<Permission, PermissionStatus> statuses = await [
+                      Permission.location,
+                      Permission.bluetooth,
+                      Permission.bluetoothConnect,
+                      Permission.bluetoothAdvertise,
+                      // Permission.locationWhenInUse,
+                      // Permission.locationAlways
+                      ].request();
+                      String uuid = await Constants.prefs.getString('salida_beacon_uuid').toString();
+                      //print(statuses);
+                      //print(bluetoothEnable);
+                      if (!bluetoothEnable){
+                        await FlutterBluetoothSerial.instance.requestEnable();
+                        Constants.beaconBroadcast
+                          .setUUID(uuid)
+                          .setMajorId(8462)
+                          .setMinorId(37542)
+                          .setTransmissionPower(10)
+                          .setLayout('m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24')
+                          .setManufacturerId(0x004c)
+                          .setAdvertiseMode(AdvertiseMode.lowLatency)
+                          .start();
+                        await Future.delayed(const Duration(seconds: 30), () async {
+                          bool isAdvertising = await Constants.beaconBroadcast.isAdvertising() ?? false;
+                          if (_bluetoothState.isEnabled || isAdvertising){
+                            await Constants.beaconBroadcast.stop();
+                            // await FlutterBluetoothSerial.instance.requestDisable();
+                          }
+                          
+                        });
+                      } else {
+                        Constants.beaconBroadcast
+                          .setUUID(uuid)
+                          .setMajorId(8462)
+                          .setMinorId(37542)
+                          .setTransmissionPower(10)
+                          .setLayout('m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24')
+                          .setManufacturerId(0x004c)
+                          .setAdvertiseMode(AdvertiseMode.lowLatency)
+                          .start();
+
+                        await Future.delayed(const Duration(seconds: 30), () async {
+                          bool isAdvertising = await Constants.beaconBroadcast.isAdvertising() ?? false;
+                          if (_bluetoothState.isEnabled || isAdvertising){
+                            await Constants.beaconBroadcast.stop();
+                            // await FlutterBluetoothSerial.instance.requestDisable();
+                          }
+                          
+                        });
+                      }
+                    }
                     // Navigator.pushNamed(context, SalirPage.routeName);
                   //print("SALIDAS SCREEN");
                   }), 
@@ -184,7 +286,7 @@ class _AperturasScreenState extends State<AperturasScreen> {
               // )
             ],
           ),
-        ),
+        );})
       ),
     );
   }
