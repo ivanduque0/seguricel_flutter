@@ -227,6 +227,7 @@ class _SalirPageState extends State<SalirPage> {
                     int cantidadAperturas=0;
                     int feedbacksProcesados=0;
                     int timeoutInternet=0;
+                    bool cerrarloading=true;
                     Timer.periodic(const Duration(seconds: 1), (timer) async {
                       timeoutInternet++;
                       try {
@@ -253,62 +254,68 @@ class _SalirPageState extends State<SalirPage> {
                       }
                         if (cantidadAperturas==feedbacksProcesados) {
                           timer.cancel();
-                          Navigator.of(context).pop();
-                          AwesomeDialog(
-                            titleTextStyle: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 30,
-                              color: Colors.green
-                            ),
-                            // descTextStyle: TextStyle(
-                            //   fontWeight: FontWeight.bold,
-                            //   fontSize: 20,
-                            // ),
-                            context: context,
-                            animType: AnimType.bottomSlide,
-                            headerAnimationLoop: false,
-                            dialogType: DialogType.success,
-                            showCloseIcon: true,
-                            title: "¡Solicitud recibida!",
-                            //desc:"Solicitud enviada",
-                            btnOkOnPress: () {
-                              //debugPrint('OnClcik');
-                            },
-                            btnOkIcon: Icons.check_circle,
-                            // onDismissCallback: (type) {
-                            //   debugPrint('Dialog Dissmiss from callback $type');
-                            // },
-                          ).show();
+                          if (cerrarloading==true){
+                            Navigator.of(context).pop();
+                            cerrarloading=false;
+                            AwesomeDialog(
+                              titleTextStyle: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 30,
+                                color: Colors.green
+                              ),
+                              // descTextStyle: TextStyle(
+                              //   fontWeight: FontWeight.bold,
+                              //   fontSize: 20,
+                              // ),
+                              context: context,
+                              animType: AnimType.bottomSlide,
+                              headerAnimationLoop: false,
+                              dialogType: DialogType.success,
+                              showCloseIcon: true,
+                              title: "¡Solicitud recibida!",
+                              //desc:"Solicitud enviada",
+                              btnOkOnPress: () {
+                                //debugPrint('OnClcik');
+                              },
+                              btnOkIcon: Icons.check_circle,
+                              // onDismissCallback: (type) {
+                              //   debugPrint('Dialog Dissmiss from callback $type');
+                              // },
+                            ).show();
+                          }
                           
-                        } else if(timeoutInternet == 15 && cantidadAperturas!=feedbacksProcesados) {
+                        } else if(timeoutInternet >= 15 && cantidadAperturas!=feedbacksProcesados) {
                           timer.cancel();
-                          Navigator.of(context).pop();
-                          AwesomeDialog(
-                            titleTextStyle: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 30,
-                              color: Colors.red
-                            ),
-                            // descTextStyle: TextStyle(
-                            //   fontWeight: FontWeight.bold,
-                            //   fontSize: 20,
-                            // ),
-                            context: context,
-                            animType: AnimType.bottomSlide,
-                            headerAnimationLoop: false,
-                            dialogType: DialogType.error,
-                            showCloseIcon: true,
-                            title: "No hubo respuesta del servidor",
-                            //desc:"Solicitud enviada",
-                            btnOkOnPress: () {
-                              //debugPrint('OnClcik');
-                            },
-                            btnOkColor: Colors.red,
-                            btnOkIcon: Icons.check_circle,
-                            // onDismissCallback: (type) {
-                            //   debugPrint('Dialog Dissmiss from callback $type');
-                            // },
-                          ).show();
+                          if (cerrarloading==true){
+                            Navigator.of(context).pop();
+                            cerrarloading=false;
+                            AwesomeDialog(
+                              titleTextStyle: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 30,
+                                color: Colors.red
+                              ),
+                              // descTextStyle: TextStyle(
+                              //   fontWeight: FontWeight.bold,
+                              //   fontSize: 20,
+                              // ),
+                              context: context,
+                              animType: AnimType.bottomSlide,
+                              headerAnimationLoop: false,
+                              dialogType: DialogType.error,
+                              showCloseIcon: true,
+                              title: "No hubo respuesta del servidor",
+                              //desc:"Solicitud enviada",
+                              btnOkOnPress: () {
+                                //debugPrint('OnClcik');
+                              },
+                              btnOkColor: Colors.red,
+                              btnOkIcon: Icons.check_circle,
+                              // onDismissCallback: (type) {
+                              //   debugPrint('Dialog Dissmiss from callback $type');
+                              // },
+                            ).show();
+                          }
                         }
                     });
                   } else {
@@ -437,8 +444,12 @@ class _SalirPageState extends State<SalirPage> {
         int cantidadAperturas=0;
         int feedbacksProcesados=0;
         int timeoutInternet=0;
+        bool cerrarloading=true;
         Timer.periodic(const Duration(seconds: 1), (timer) async {
           timeoutInternet++;
+          // print(timeoutInternet);
+          // print(feedbacksProcesados);
+          // print(cantidadAperturas);
           try {
             res = await client.get(Uri.parse('https://webseguricel.up.railway.app/aperturasusuarioapi/${idUsuario}/${contrato}/')).timeout(Duration(seconds: 5));
             var aperturasjson = await jsonDecode(res.body);
@@ -463,62 +474,67 @@ class _SalirPageState extends State<SalirPage> {
           }
             if (cantidadAperturas==feedbacksProcesados) {
               timer.cancel();
-              Navigator.of(context).pop();
-              AwesomeDialog(
-                titleTextStyle: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 30,
-                  color: Colors.green
-                ),
-                // descTextStyle: TextStyle(
-                //   fontWeight: FontWeight.bold,
-                //   fontSize: 20,
-                // ),
-                context: context,
-                animType: AnimType.bottomSlide,
-                headerAnimationLoop: false,
-                dialogType: DialogType.success,
-                showCloseIcon: true,
-                title: "¡Solicitud recibida!",
-                //desc:"Solicitud enviada",
-                btnOkOnPress: () {
-                  //debugPrint('OnClcik');
-                },
-                btnOkIcon: Icons.check_circle,
-                // onDismissCallback: (type) {
-                //   debugPrint('Dialog Dissmiss from callback $type');
-                // },
-              ).show();
-              
-            } else if(timeoutInternet == 15 && cantidadAperturas!=feedbacksProcesados) {
+              if (cerrarloading==true){
+                Navigator.of(context).pop();
+                cerrarloading=false;
+                AwesomeDialog(
+                  titleTextStyle: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 30,
+                    color: Colors.green
+                  ),
+                  // descTextStyle: TextStyle(
+                  //   fontWeight: FontWeight.bold,
+                  //   fontSize: 20,
+                  // ),
+                  context: context,
+                  animType: AnimType.bottomSlide,
+                  headerAnimationLoop: false,
+                  dialogType: DialogType.success,
+                  showCloseIcon: true,
+                  title: "¡Solicitud recibida!",
+                  //desc:"Solicitud enviada",
+                  btnOkOnPress: () {
+                    //debugPrint('OnClcik');
+                  },
+                  btnOkIcon: Icons.check_circle,
+                  // onDismissCallback: (type) {
+                  //   debugPrint('Dialog Dissmiss from callback $type');
+                  // },
+                ).show();
+              }
+            } else if(timeoutInternet >= 15 && cantidadAperturas!=feedbacksProcesados) {
               timer.cancel();
-              Navigator.of(context).pop();
-              AwesomeDialog(
-                titleTextStyle: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 30,
-                  color: Colors.red
-                ),
-                // descTextStyle: TextStyle(
-                //   fontWeight: FontWeight.bold,
-                //   fontSize: 20,
-                // ),
-                context: context,
-                animType: AnimType.bottomSlide,
-                headerAnimationLoop: false,
-                dialogType: DialogType.error,
-                showCloseIcon: true,
-                title: "No hubo respuesta del servidor",
-                //desc:"Solicitud enviada",
-                btnOkOnPress: () {
-                  //debugPrint('OnClcik');
-                },
-                btnOkColor: Colors.red,
-                btnOkIcon: Icons.check_circle,
-                // onDismissCallback: (type) {
-                //   debugPrint('Dialog Dissmiss from callback $type');
-                // },
-              ).show();
+              if (cerrarloading==true){
+                Navigator.of(context).pop();
+                cerrarloading=false;
+                AwesomeDialog(
+                  titleTextStyle: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 30,
+                    color: Colors.red
+                  ),
+                  // descTextStyle: TextStyle(
+                  //   fontWeight: FontWeight.bold,
+                  //   fontSize: 20,
+                  // ),
+                  context: context,
+                  animType: AnimType.bottomSlide,
+                  headerAnimationLoop: false,
+                  dialogType: DialogType.error,
+                  showCloseIcon: true,
+                  title: "No hubo respuesta del servidor",
+                  //desc:"Solicitud enviada",
+                  btnOkOnPress: () {
+                    //debugPrint('OnClcik');
+                  },
+                  btnOkColor: Colors.red,
+                  btnOkIcon: Icons.check_circle,
+                  // onDismissCallback: (type) {
+                  //   debugPrint('Dialog Dissmiss from callback $type');
+                  // },
+                ).show();
+              }
             }
           });
       } else {
