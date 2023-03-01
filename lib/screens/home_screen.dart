@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:get/get.dart';
+import 'package:seguricel_flutter/controllers/contrato_controller.dart';
 import 'package:seguricel_flutter/controllers/rol_controller.dart';
 import 'package:seguricel_flutter/screens/infocontrato_screen.dart';
 import 'package:seguricel_flutter/screens/infousuario_screen.dart';
@@ -58,7 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   }, // Handle your callback.
                   splashColor: Color.fromARGB(255, 255, 255, 255).withOpacity(0.5),
                   child: Ink(
-                    child: Center(child: Text("Informacion\nde usuario", textAlign:TextAlign.center, style: TextStyle(fontSize: 40, ),)),
+                    child: Center(child: Text("Informacion\nde usuario", textAlign:TextAlign.center, style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),)),
                     width: MediaQuery.of(context).size.width,
                     height: MediaQuery.of(context).size.height/3,
                     decoration: BoxDecoration(
@@ -72,7 +73,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
           ),
-          Container(
+          GetBuilder<ContratoController>(builder: (ContratoController){
+          return Container(
             width: MediaQuery.of(context).size.width/1.2,
             height: MediaQuery.of(context).size.height/4.5,
             child: InkWell(
@@ -86,7 +88,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   }, // Handle your callback.
                   splashColor: Color.fromARGB(255, 255, 255, 255).withOpacity(0.5),
                   child: Ink(
-                    child: Center(child: Text("Informacion\nresidencias", textAlign:TextAlign.center, style: TextStyle(fontSize: 40, ),)),
+                    child: Center(child: Text("Residencia\n${ContratoController.contrato}", textAlign:TextAlign.center, style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),)),
                     // width: MediaQuery.of(context).size.width,
                     // height: MediaQuery.of(context).size.height/3,
                     decoration: BoxDecoration(
@@ -99,7 +101,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                 ),
-          ),
+          );}),
           RolController.rol=='Propietario' || RolController.rol=='Secundario'
           ?Container(
             width: MediaQuery.of(context).size.width/1.2,
@@ -116,7 +118,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   splashColor: Color.fromARGB(255, 255, 255, 255).withOpacity(0.5),
                   child: Ink(
                     // color: Colors.grey,
-                    child: Center(child: Text("Mis tipos\nde apertura", textAlign:TextAlign.center, style: TextStyle(fontSize: 40, ),)),
+                    child: Center(child: Text("Mis tipos\nde apertura", textAlign:TextAlign.center, style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),)),
                     // width: MediaQuery.of(context).size.width,
                     // height: MediaQuery.of(context).size.height/3,
                     decoration: BoxDecoration(

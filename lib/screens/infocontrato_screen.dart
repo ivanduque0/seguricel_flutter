@@ -7,6 +7,7 @@ import 'package:http_auth/http_auth.dart';
 import 'package:seguricel_flutter/utils/constants.dart';
 import 'package:seguricel_flutter/utils/loading.dart';
 import 'package:seguricel_flutter/controllers/rol_controller.dart';
+import 'package:seguricel_flutter/controllers/contrato_controller.dart';
 
 typedef void ScreenCallback(int id);
 
@@ -23,8 +24,11 @@ class _infoContratoScreenState extends State<infoContratoScreen> {
   Map datosUsuario={};
   String seleccionContrato ="";
   List <String>ContratosActualizar=[];
+  List contratos_invitado=[];
+  List contratos_propsec=[];
 
   RolController rolController= Get.find();
+  ContratoController contratoController= Get.find();
   
   @override
   void initState() {
@@ -49,6 +53,15 @@ class _infoContratoScreenState extends State<infoContratoScreen> {
       seleccionContrato = datosUsuario['contrato'];
       // accesos = jsonDecode(encodeAccesos);
     });
+    for (var contratoo in contratos){
+      if (contratoo['rol']=="Visitante"){
+        contratos_invitado.add(contratoo);
+      } else {
+        contratos_propsec.add(contratoo);
+      }
+    }
+    
+
 
     try{
     var client = BasicAuthClient('mobile_access', 'S3gur1c3l_mobile@');
@@ -62,8 +75,18 @@ class _infoContratoScreenState extends State<infoContratoScreen> {
       setState(() {
         contratos=ContratosActualizar;
       });
+      contratos_propsec=[];
+      contratos_invitado=[];
+      for (var contratoo in contratos){
+        if (contratoo['rol']=="Visitante"){
+          contratos_invitado.add(contratoo);
+        } else {
+          contratos_propsec.add(contratoo);
+        }
+      }
       String contratosEncode=jsonEncode(contratos);
       await Constants.prefs.setString('contratos', contratosEncode);
+      
     }
     }catch(e){
       AwesomeDialog(
@@ -112,21 +135,21 @@ class _infoContratoScreenState extends State<infoContratoScreen> {
                 // mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SizedBox(
-                    height:20
+                    height:10
                   ),
-                  Text("Informacion de contratos", textAlign: TextAlign.center, style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),),
-                  SizedBox(
-                    height:MediaQuery.of(context).size.height/15
-                  ),
-                  Text("Seleccione el contrato\nal que desea cambiar",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 25,
-                    fontWeight: FontWeight.bold
-                  ),),
-                  SizedBox(
-                    height: 10,
-                  ),
+                  Text("Mis residencias", textAlign: TextAlign.center, style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),),
+                  // SizedBox(
+                  //   height:MediaQuery.of(context).size.height/25
+                  // ),
+                  // Text("Seleccione el contrato\nal que desea cambiar",
+                  // textAlign: TextAlign.center,
+                  // style: TextStyle(
+                  //   fontSize: 25,
+                  //   fontWeight: FontWeight.bold
+                  // ),),
+                  // SizedBox(
+                  //   height: 10,
+                  // ),
                   // CustomScrollView(
                   //   slivers: [
                   //     SliverList(delegate: SliverChildBuilderDelegate((context, index) {
@@ -137,7 +160,7 @@ class _infoContratoScreenState extends State<infoContratoScreen> {
 
                   Container(
                     width: MediaQuery.of(context).size.width/1.2,
-                    height: MediaQuery.of(context).size.height/3,
+                    height: MediaQuery.of(context).size.height/3.5,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(
@@ -146,13 +169,13 @@ class _infoContratoScreenState extends State<infoContratoScreen> {
                         )
                       ),
                     child: ListView.builder(
-                      itemCount: contratos.length,
+                      itemCount: contratos_propsec.length,
                       shrinkWrap: true,
                       itemBuilder:(context, index) => Container(
                         child: ListTile(
-                          title: (contratos[index]['nombre']==seleccionContrato)
-                          ?Text(contratos[index]['nombre'], textAlign: TextAlign.center, style: TextStyle(fontSize: 20, color: Colors.orange, fontWeight: FontWeight.bold),)
-                          :Text(contratos[index]['nombre'], textAlign: TextAlign.center, style: TextStyle(fontSize: 20),),
+                          title: (contratos_propsec[index]['nombre']==seleccionContrato)
+                          ?Text(contratos_propsec[index]['nombre'], textAlign: TextAlign.center, style: TextStyle(fontSize: 20, color: Colors.orange, fontWeight: FontWeight.bold),)
+                          :Text(contratos_propsec[index]['nombre'], textAlign: TextAlign.center, style: TextStyle(fontSize: 20),),
                           onTap: () async {
                   
                             showDialog(
@@ -168,16 +191,10 @@ class _infoContratoScreenState extends State<infoContratoScreen> {
                             String servidor="";
                             List accesosEntradas=[];
                             List accesosSalidas=[];
-                            // print(contratos[index]['rol']);
-                            rolController.cambiarrol(contratos[index]['rol']);
-                            // This is called when the user selects an item.
-                            datosUsuario['contrato']=contratos[index]['nombre'];
-                            datosUsuario['contrato_id']=contratos[index]['id'];
-                            datosUsuario['unidad']=contratos[index]['unidad'];
-                            datosUsuario['rol']=contratos[index]['rol'];
+                            // print(contratos_propsec[index]['rol']);
                             try {
                               var client = BasicAuthClient('mobile_access', 'S3gur1c3l_mobile@');
-                              var res = await client.post(Uri.parse('https://webseguricel.up.railway.app/dispositivosapimobile/${contratos[index]['nombre']}/')).timeout(Duration(seconds: 5));//.timeout(Duration(seconds: 15));;
+                              var res = await client.post(Uri.parse('https://webseguricel.up.railway.app/dispositivosapimobile/${contratos_propsec[index]['nombre']}/')).timeout(Duration(seconds: 5));//.timeout(Duration(seconds: 15));;
                               var data = jsonDecode(res.body);
                               var descripcionIteracion="";
                               for (var item in data) {
@@ -194,6 +211,14 @@ class _infoContratoScreenState extends State<infoContratoScreen> {
                                   }
                                 }
                               }
+                              
+                              // This is called when the user selects an item.
+                              datosUsuario['contrato']=contratos_propsec[index]['nombre'];
+                              datosUsuario['contrato_id']=contratos_propsec[index]['id'];
+                              datosUsuario['unidad']=contratos_propsec[index]['unidad'];
+                              datosUsuario['rol']=contratos_propsec[index]['rol'];
+                              rolController.cambiarrol(contratos_propsec[index]['rol']);
+                              contratoController.cambiarContrato(contratos_propsec[index]['nombre']);
                               String datosUsuarioEnconde=jsonEncode(datosUsuario);
                               // accesos=jsonEncode([AccesosPeatonales,AccesosVehiculares]);
                               String entradas=jsonEncode(accesosEntradas);
@@ -202,9 +227,9 @@ class _infoContratoScreenState extends State<infoContratoScreen> {
                               await Constants.prefs.setString('entradas', entradas);
                               await Constants.prefs.setString('salidas', salidas);
                               await Constants.prefs.setString('servidor', servidor);
-                              await Constants.prefs.setString('contrato', contratos[index]['nombre']);
+                              await Constants.prefs.setString('contrato', contratos_propsec[index]['nombre']);
                               setState(() {
-                                seleccionContrato = contratos[index]['nombre'];
+                                seleccionContrato = contratos_propsec[index]['nombre'];
                         
                               });
                               Navigator.of(context).pop();
@@ -270,8 +295,147 @@ class _infoContratoScreenState extends State<infoContratoScreen> {
                       , 
                     ),
                   ),
-
-
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Text("Ud. es visitante en", textAlign: TextAlign.center, style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),),
+                  Container(
+                    width: MediaQuery.of(context).size.width/1.2,
+                    height: MediaQuery.of(context).size.height/3.5,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(
+                          color: Color.fromARGB(255, 240, 162, 73),
+                          width: 3,
+                        )
+                      ),
+                    child: ListView.builder(
+                      itemCount: contratos_invitado.length,
+                      shrinkWrap: true,
+                      itemBuilder:(context, index) => Container(
+                        child: ListTile(
+                          title: (contratos_invitado[index]['nombre']==seleccionContrato)
+                          ?Text(contratos_invitado[index]['nombre'], textAlign: TextAlign.center, style: TextStyle(fontSize: 20, color: Colors.orange, fontWeight: FontWeight.bold),)
+                          :Text(contratos_invitado[index]['nombre'], textAlign: TextAlign.center, style: TextStyle(fontSize: 20),),
+                          onTap: () async {
+                  
+                            showDialog(
+                              // The user CANNOT close this dialog  by pressing outsite it
+                              barrierDismissible: false,
+                              context: context,
+                              builder: (_) {
+                                return WillPopScope(
+                                  onWillPop: () async => false,
+                                  child: LoadingWidget());
+                              }
+                            );
+                            String servidor="";
+                            List accesosEntradas=[];
+                            List accesosSalidas=[];
+                            // print(contratos_invitado[index]['rol']);
+                            try {
+                              var client = BasicAuthClient('mobile_access', 'S3gur1c3l_mobile@');
+                              var res = await client.post(Uri.parse('https://webseguricel.up.railway.app/dispositivosapimobile/${contratos_invitado[index]['nombre']}/')).timeout(Duration(seconds: 5));//.timeout(Duration(seconds: 15));;
+                              var data = jsonDecode(res.body);
+                              var descripcionIteracion="";
+                              for (var item in data) {
+                                if (servidor=="" && item['descripcion']=="SERVIDOR LOCAL"){
+                                  servidor="${item['dispositivo']}:43157/";
+                                } else {
+                                  descripcionIteracion=item['descripcion'];
+                                  
+                                  if ((descripcionIteracion.toLowerCase().contains('peatonal') || descripcionIteracion.toLowerCase().contains('vehicular')) && !descripcionIteracion.toLowerCase().contains('salida') && !(descripcionIteracion.toLowerCase().contains('rfid') || descripcionIteracion.toLowerCase().contains('huella'))){
+                                    accesosEntradas.add({'acceso':item['acceso'].toString(), 'descripcion':item['descripcion'].substring(0, item['descripcion'].indexOf('('))});
+                                  }
+                                  if ((descripcionIteracion.toLowerCase().contains('peatonal') || descripcionIteracion.toLowerCase().contains('vehicular')) && !descripcionIteracion.toLowerCase().contains('entrada') && !(descripcionIteracion.toLowerCase().contains('rfid') || descripcionIteracion.toLowerCase().contains('huella'))){
+                                    accesosSalidas.add({'acceso':item['acceso'].toString(), 'descripcion':item['descripcion'].substring(0, item['descripcion'].indexOf('('))});
+                                  }
+                                }
+                              }
+                              
+                              // This is called when the user selects an item.
+                              datosUsuario['contrato']=contratos_invitado[index]['nombre'];
+                              datosUsuario['contrato_id']=contratos_invitado[index]['id'];
+                              datosUsuario['unidad']=contratos_invitado[index]['unidad'];
+                              datosUsuario['rol']=contratos_invitado[index]['rol'];
+                              rolController.cambiarrol(contratos_invitado[index]['rol']);
+                              contratoController.cambiarContrato(contratos_invitado[index]['nombre']);
+                              String datosUsuarioEnconde=jsonEncode(datosUsuario);
+                              // accesos=jsonEncode([AccesosPeatonales,AccesosVehiculares]);
+                              String entradas=jsonEncode(accesosEntradas);
+                              String salidas=jsonEncode(accesosSalidas);
+                              await Constants.prefs.setString('datosUsuario', datosUsuarioEnconde);
+                              await Constants.prefs.setString('entradas', entradas);
+                              await Constants.prefs.setString('salidas', salidas);
+                              await Constants.prefs.setString('servidor', servidor);
+                              await Constants.prefs.setString('contrato', contratos_invitado[index]['nombre']);
+                              setState(() {
+                                seleccionContrato = contratos_invitado[index]['nombre'];
+                        
+                              });
+                              Navigator.of(context).pop();
+                              AwesomeDialog(
+                                titleTextStyle: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 30,
+                                  color: Colors.green
+                                ),
+                                // descTextStyle: TextStyle(
+                                //   fontWeight: FontWeight.bold,
+                                //   fontSize: 20,
+                                // ),
+                                context: context,
+                                animType: AnimType.topSlide,
+                                headerAnimationLoop: false,
+                                dialogType: DialogType.success,
+                                showCloseIcon: true,
+                                title: "Contrato cambiado con exito",
+                                //desc:"Solicitud enviada",
+                                btnOkColor: Colors.green,
+                                btnOkOnPress: () {
+                                  //debugPrint('OnClcik');
+                                },
+                                btnOkIcon: Icons.check_circle,
+                                // onDismissCallback: (type) {
+                                //   debugPrint('Dialog Dissmiss from callback $type');
+                                // },
+                              ).show();
+                            } catch (e) {
+                              Navigator.of(context).pop();
+                              AwesomeDialog(
+                                titleTextStyle: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 30,
+                                  color: Colors.red
+                                ),
+                                // descTextStyle: TextStyle(
+                                //   fontWeight: FontWeight.bold,
+                                //   fontSize: 20,
+                                // ),
+                                context: context,
+                                animType: AnimType.bottomSlide,
+                                headerAnimationLoop: false,
+                                dialogType: DialogType.error,
+                                showCloseIcon: true,
+                                title: "Sin conexion a internet",
+                                //desc:"Solicitud enviada",
+                                btnOkOnPress: () {
+                                  //debugPrint('OnClcik');
+                                },
+                                btnOkColor: Colors.red,
+                                btnOkIcon: Icons.check_circle,
+                                // onDismissCallback: (type) {
+                                //   debugPrint('Dialog Dissmiss from callback $type');
+                                // },
+                              ).show();
+                            }
+                           },
+                        ),
+                      )
+                        
+                      , 
+                    ),
+                  ),
                   // Container(
                   //   width: MediaQuery.of(context).size.width/1.5,
                   //   height: 70,
@@ -408,9 +572,9 @@ class _infoContratoScreenState extends State<infoContratoScreen> {
                 // mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SizedBox(
-                    height:40
+                    height:10
                   ),
-                  Text("Informacion de contrato", textAlign: TextAlign.center, style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),),
+                  Text("Mis residencias", textAlign: TextAlign.center, style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),),
                   SizedBox(
                     height:MediaQuery.of(context).size.height/15
                   ),

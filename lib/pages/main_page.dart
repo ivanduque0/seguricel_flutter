@@ -7,6 +7,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:seguricel_flutter/controllers/rol_controller.dart';
 import 'package:seguricel_flutter/controllers/screens_visitantes_controller.dart';
 import 'package:seguricel_flutter/controllers/visitantes_controller.dart';
+import 'package:seguricel_flutter/controllers/contrato_controller.dart';
 // import 'package:seguricel_flutter/utils/drawer.dart';
 // import 'package:seguricel_flutter/name_card_widget.dart';
 // import 'package:http_auth/http_auth.dart';
@@ -47,6 +48,7 @@ class _MainPageState extends State<MainPage> {
   ScreensVisitantesController controller = Get.put(ScreensVisitantesController());
   VisitantesController visitantesController = Get.put(VisitantesController());
   RolController rolController= Get.put(RolController());
+  ContratoController contratoController= Get.put(ContratoController());
 
 
   List<BottomNavigationBarItem> itemsPropietario=const [
@@ -174,8 +176,10 @@ class _MainPageState extends State<MainPage> {
   obtenerRol() async {
 
     String encodeDatosUsuario = await Constants.prefs.getString('datosUsuario').toString();
+    String encodeContrato = await Constants.prefs.getString('contrato').toString();
     String rol= jsonDecode(encodeDatosUsuario)['rol'];
     rolController.cambiarrol(rol);
+    contratoController.cambiarContrato(encodeContrato);
     // print(encodeDatosUsuario);
     // setState (() {
     //   rol= jsonDecode(encodeDatosUsuario)['rol'];
