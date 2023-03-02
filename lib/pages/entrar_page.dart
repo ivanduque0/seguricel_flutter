@@ -821,7 +821,7 @@ class _EntrarPageState extends State<EntrarPage> {
               //   debugPrint('Dialog Dissmiss from callback $type');
               // },
             ).show();
-          await Future.delayed(const Duration(seconds: 30), () async {
+          await Future.delayed(const Duration(seconds: 15), () async {
             bool isAdvertising = await Constants.beaconBroadcast.isAdvertising() ?? false;
             if (_bluetoothState.isEnabled || isAdvertising){
               await Constants.beaconBroadcast.stop();
@@ -870,7 +870,7 @@ class _EntrarPageState extends State<EntrarPage> {
             //   debugPrint('Dialog Dissmiss from callback $type');
             // },
           ).show();
-        await Future.delayed(const Duration(seconds: 30), () async {
+        await Future.delayed(const Duration(seconds: 15), () async {
           bool isAdvertising = await Constants.beaconBroadcast.isAdvertising() ?? false;
           if (_bluetoothState.isEnabled || isAdvertising){
             await Constants.beaconBroadcast.stop();
