@@ -6,6 +6,7 @@ import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:seguricel_flutter/controllers/rol_controller.dart';
 import 'package:seguricel_flutter/controllers/screens_visitantes_controller.dart';
+import 'package:seguricel_flutter/controllers/screens_unidad_controller.dart';
 import 'package:seguricel_flutter/controllers/visitantes_controller.dart';
 import 'package:seguricel_flutter/controllers/contrato_controller.dart';
 // import 'package:seguricel_flutter/utils/drawer.dart';
@@ -13,12 +14,18 @@ import 'package:seguricel_flutter/controllers/contrato_controller.dart';
 // import 'package:http_auth/http_auth.dart';
 import 'package:seguricel_flutter/pages/login_page.dart';
 import 'package:get/get.dart';
-import 'package:seguricel_flutter/screens/aperturas_screen.dart';
+import 'package:seguricel_flutter/screens/codigo_unidad_screen.dart';
+import 'package:seguricel_flutter/screens/infousuario_screen.dart';
+import 'package:seguricel_flutter/screens/infovigilante_screen.dart';
+import 'package:seguricel_flutter/screens/motivo_apertura_screen.dart';
 import 'dart:convert';
 import 'package:seguricel_flutter/screens/home_screen.dart';
-import 'package:seguricel_flutter/screens/invitados_screen.dart';
+import 'package:seguricel_flutter/screens/codigo_invitado_screen.dart';
 import 'package:seguricel_flutter/utils/constants.dart';
-import 'package:shake/shake.dart';
+
+import '../controllers/codigo_unidad_controller.dart';
+import '../controllers/codigo_visitante_controller.dart';
+import '../controllers/personas_unidad_controller.dart';
 // import 'package:seguricel_flutter/utils/loading.dart';
 // import 'package:shared_preferences/shared_preferences.dart';
 
@@ -42,16 +49,18 @@ class _MainPageState extends State<MainPage> {
   //Map datosUsuario={};
   // List contratos=[];
   List accesos=[];
-  bool bluetooth=false;
-  BluetoothState _bluetoothState = BluetoothState.UNKNOWN;
 
   ScreensVisitantesController controller = Get.put(ScreensVisitantesController());
+  ScreensUnidadController controllerUnidad = Get.put(ScreensUnidadController());
   VisitantesController visitantesController = Get.put(VisitantesController());
   RolController rolController= Get.put(RolController());
   ContratoController contratoController= Get.put(ContratoController());
+  CodigoVisitanteController codigoVisitanteController = Get.put(CodigoVisitanteController());
+  CodigoUnidadController codigoUnidadController = Get.put(CodigoUnidadController());
+  PersonasUnidadController personasUnidadController = Get.put(PersonasUnidadController());
 
 
-  List<BottomNavigationBarItem> itemsPropietario=const [
+  List<BottomNavigationBarItem> itemsVigilante=const [
     // BottomNavigationBarItem(icon: Icon(Icons.home),label: "home"),
     // BottomNavigationBarItem(icon: Icon(Icons.door_sliding_rounded),label: "aperturas"),
     // BottomNavigationBarItem(icon: Icon(Icons.groups),label: "invitados"),
@@ -59,126 +68,29 @@ class _MainPageState extends State<MainPage> {
       icon: Icon(FluentSystemIcons.ic_fluent_home_regular),
       activeIcon: Icon(FluentSystemIcons.ic_fluent_home_filled),
       label: "Home"),
-    BottomNavigationBarItem(icon: Icon(Icons.door_sliding_rounded),label: "Aperturas"),
     BottomNavigationBarItem(
-      icon: Icon(FluentSystemIcons.ic_fluent_people_community_add_regular),
-      activeIcon: Icon(FluentSystemIcons.ic_fluent_people_community_add_filled),
+      icon: Icon(Icons.door_sliding_rounded),
+      label: "Aperturas"),
+    BottomNavigationBarItem(
+      icon: Icon(FluentSystemIcons.ic_fluent_people_regular),
+      activeIcon: Icon(FluentSystemIcons.ic_fluent_people_filled),
       label: "Visitantes"
       ),
   ];
 
-  List<BottomNavigationBarItem> itemsSecVis=const [
-    // BottomNavigationBarItem(icon: Icon(Icons.home),label: "home"),
-    // BottomNavigationBarItem(icon: Icon(Icons.door_sliding_rounded),label: "aperturas"),
-    // BottomNavigationBarItem(icon: Icon(Icons.groups),label: "invitados"),
-    BottomNavigationBarItem(
-      icon: Icon(FluentSystemIcons.ic_fluent_home_regular),
-      activeIcon: Icon(FluentSystemIcons.ic_fluent_home_filled),
-      label: "Home"),
-    BottomNavigationBarItem(icon: Icon(Icons.door_sliding_rounded),label: "Aperturas")
-  ];
-
-  ShakeDetector detector = ShakeDetector.autoStart(
-      onPhoneShake: () async {
-        bool bluetoothSP= await Constants.prefs.getBool('modoBluetooth') ?? false;
-        // print(bluetoothSP);
-        if (bluetoothSP){
-          BluetoothState _bluetoothState = BluetoothState.UNKNOWN;
-          bool bluetoothEnable = _bluetoothState.isEnabled;
-            // bool isAdvertising = await Constants.beaconBroadcast.isAdvertising() ?? false;
-            // if (!bluetoothEnable){
-            //   await FlutterBluetoothSerial.instance.requestEnable();
-            // }
-            // else{
-            //   await FlutterBluetoothSerial.instance.requestDisable();
-            // }
-            Map<Permission, PermissionStatus> statuses = await [
-            Permission.location,
-            Permission.bluetooth,
-            Permission.bluetoothConnect,
-            Permission.bluetoothAdvertise,
-            // Permission.locationWhenInUse,
-            // Permission.locationAlways
-            ].request();
-            String uuid = await Constants.prefs.getString('entrada_beacon_uuid').toString();
-            //print(statuses);
-            //print(bluetoothEnable);
-            if (!bluetoothEnable){
-              await FlutterBluetoothSerial.instance.requestEnable();
-              Constants.beaconBroadcast
-                .setUUID(uuid)
-                .setMajorId(8462)
-                .setMinorId(37542)
-                .setTransmissionPower(10)
-                .setLayout('m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24')
-                .setManufacturerId(0x004c)
-                .setAdvertiseMode(AdvertiseMode.lowLatency)
-                .start();
-              await Future.delayed(const Duration(seconds: 15), () async {
-                bool isAdvertising = await Constants.beaconBroadcast.isAdvertising() ?? false;
-                if (_bluetoothState.isEnabled || isAdvertising){
-                  await Constants.beaconBroadcast.stop();
-                  // await FlutterBluetoothSerial.instance.requestDisable();
-                }
-                
-              });
-            } else {
-              Constants.beaconBroadcast
-                .setUUID(uuid)
-                .setMajorId(8462)
-                .setMinorId(37542)
-                .setTransmissionPower(10)
-                .setLayout('m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24')
-                .setManufacturerId(0x004c)
-                .setAdvertiseMode(AdvertiseMode.lowLatency)
-                .start();
-
-              await Future.delayed(const Duration(seconds: 15), () async {
-                bool isAdvertising = await Constants.beaconBroadcast.isAdvertising() ?? false;
-                if (_bluetoothState.isEnabled || isAdvertising){
-                  await Constants.beaconBroadcast.stop();
-                  // await FlutterBluetoothSerial.instance.requestDisable();
-                }
-                
-              });
-            }
-        }
-        // print("xdxed");
-        // Do stuff on phone shake
-      },
-      minimumShakeCount: 1,
-      shakeSlopTimeMS: 500,
-      shakeCountResetTime: 3000,
-      shakeThresholdGravity: 2.4,
-  );
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
   obtenerRol();
-  // Get current state
-    // FlutterBluetoothSerial.instance.state.then((state) {
-    //   setState(() {
-    //     _bluetoothState = state;
-    //   });
-    // });
-
-    // // Listen for futher state changes
-    // FlutterBluetoothSerial.instance
-    //     .onStateChanged()
-    //     .listen((BluetoothState state) {
-    //   setState(() {
-    //     _bluetoothState = state;
-    //   });
-    // });
   }       
 
   obtenerRol() async {
 
-    String encodeDatosUsuario = await Constants.prefs.getString('datosUsuario').toString();
+    // String encodeDatosUsuario = await Constants.prefs.getString('datosUsuario').toString();
     String encodeContrato = await Constants.prefs.getString('contrato').toString();
-    String rol= jsonDecode(encodeDatosUsuario)['rol'];
-    rolController.cambiarrol(rol);
+    // String rol= jsonDecode(encodeDatosUsuario)['rol'];
+    // rolController.cambiarrol(rol);
     contratoController.cambiarContrato(encodeContrato);
     // print(encodeDatosUsuario);
     // setState (() {
@@ -190,20 +102,20 @@ class _MainPageState extends State<MainPage> {
 
 
   int _selectedIndex=1;
-  static final List<Widget>_widgetOptionsPropietario = <Widget>[
-    HomeScreen(),
-    AperturasScreen(),
+  static final List<Widget>_widgetOptionsVigilante = <Widget>[
+    infoVigilanteScreen(),
+    //HomeScreen(),
+    CodigoUnidadScreen(),
+    //AperturasScreen(),
     InvitadosScreen(),
-  ];
-
-  static final List<Widget>_widgetOptionsSecVis = <Widget>[
-    HomeScreen(),
-    AperturasScreen(),
   ];
 
   void _onItemTapped(int index){
     if (index==2){
       controller.cambiarScreen(0);
+    }
+    if (index==1){
+      controllerUnidad.cambiarScreen(0);
     }
     setState(() {
       _selectedIndex=index;
@@ -280,9 +192,7 @@ class _MainPageState extends State<MainPage> {
       // body: this.datosUsuario!={}
       //   ?Center(
         body: Center(
-          child: RolController.rol=="Propietario"
-          ?_widgetOptionsPropietario[_selectedIndex]
-          :_widgetOptionsSecVis[_selectedIndex]
+          child: _widgetOptionsVigilante[_selectedIndex]
         ),
         //:LoadingWidget(),
       //drawer: MyDrawer(datosUsuario: datosUsuario),//datosUsuario!={}?MyDrawer(datosUsuario: datosUsuario):MyDrawer(datosUsuario: {'nombre':"null", "contrato":"null","cedula":"null", "id_usuario":"null"}),
@@ -294,9 +204,7 @@ class _MainPageState extends State<MainPage> {
         showUnselectedLabels: true,
         //selectedItemColor: Colors.blue,
         unselectedItemColor: Color.fromARGB(255, 109, 101, 94),
-        items: RolController.rol=="Propietario"
-        ?itemsPropietario
-        :itemsSecVis
+        items: itemsVigilante
       ),
       
       // floatingActionButton: FloatingActionButton(

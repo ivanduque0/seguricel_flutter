@@ -10,16 +10,13 @@ import 'package:seguricel_flutter/utils/loading.dart';
 typedef void ScreenCallback(int id);
 
 
-class infoUsuarioScreen extends StatefulWidget {
-  static const String routeName = "/main";
-  final ScreenCallback volver;
-  infoUsuarioScreen({required this.volver});
+class infoVigilanteScreen extends StatefulWidget {
 
   @override
-  State<infoUsuarioScreen> createState() => _infoUsuarioScreenState();
+  State<infoVigilanteScreen> createState() => _infoVigilanteScreenState();
 }
 
-class _infoUsuarioScreenState extends State<infoUsuarioScreen> {
+class _infoVigilanteScreenState extends State<infoVigilanteScreen> {
   
   Map datosUsuario = {};
 
@@ -42,7 +39,6 @@ class _infoUsuarioScreenState extends State<infoUsuarioScreen> {
   Widget build(BuildContext context) => WillPopScope(
 
     onWillPop: () async {
-      widget.volver(0);
       return false;
     },
     child: Scaffold(
@@ -115,74 +111,65 @@ class _infoUsuarioScreenState extends State<infoUsuarioScreen> {
             // )
               ],
             ):LoadingWidget(),
-            floatingActionButton: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                children: [
-                  FloatingActionButton( 
-                    child: Icon(Icons.arrow_back_rounded, size: 40,),  
-                    onPressed: (() {
-                      widget.volver(0);
-                    }),
+            floatingActionButton: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                OutlinedButton(
+                  style: OutlinedButton.styleFrom(
+                    fixedSize: Size(190, 50),
+                    foregroundColor: Colors.red,
+                    //disabledForegroundColor: Colors.red,
+                    side: BorderSide(color: Colors.red, width: 3),
                   ),
-                  SizedBox(
-                    width:MediaQuery.of(context).size.width/5,
-                  ),
-                  OutlinedButton(
-                    style: OutlinedButton.styleFrom(
-                      fixedSize: Size(190, 50),
-                      foregroundColor: Colors.red,
-                      //disabledForegroundColor: Colors.red,
-                      side: BorderSide(color: Colors.red, width: 3),
-                    ),
-                    onPressed:() {
-                      AwesomeDialog(
-                        btnCancelText: "NO",
-                        btnOkText: "SI",
-                        titleTextStyle: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 30,
-                          color: Colors.black
-                        ),
-                        // descTextStyle: TextStyle(
-                        //   fontWeight: FontWeight.bold,
-                        //   fontSize: 20,
-                        //   color: Colors.black
-                        // ),
-                        context: context,
-                        animType: AnimType.bottomSlide,
-                        headerAnimationLoop: false,
-                        dialogType: DialogType.warning,
-                        showCloseIcon: true,
-                        title: "Seguro que desea cerrar su sesión?",
-                        btnCancelOnPress: () {},
-                        btnOkOnPress: () async {
-                        Constants.prefs.remove("datosUsuario");
-                        Constants.prefs.remove("accesos");
-                        Constants.prefs.remove("contratos");
-                        Constants.prefs.remove("isLoggedIn");
-                        Constants.prefs.remove('entradas');
-                        Constants.prefs.remove('salidas');
-                        Constants.prefs.remove('servidor');
-                        Constants.prefs.remove('id_usuario');
-                        Constants.prefs.remove('contrato');
-                        Constants.prefs.remove('beacon_uuid');
-                        Constants.prefs.remove('modoInternet');
-                        Constants.prefs.remove('modoWifi');
-                        Constants.prefs.remove('modoBluetooth');
-                        Constants.prefs.remove('imei');
-                        Get.offNamed("/login");
-                        // Navigator.pushReplacementNamed(context, LoginPage.routeName);
-                        },
-                      ).show();
-                      }, 
-                    child: Text("Cerrar sesión", style: TextStyle(fontSize: 18))
-                  )
-                  
-                ],
-              ),
+                  onPressed:() {
+                    AwesomeDialog(
+                      btnCancelText: "NO",
+                      btnOkText: "SI",
+                      titleTextStyle: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 30,
+                        color: Colors.black
+                      ),
+                      // descTextStyle: TextStyle(
+                      //   fontWeight: FontWeight.bold,
+                      //   fontSize: 20,
+                      //   color: Colors.black
+                      // ),
+                      context: context,
+                      animType: AnimType.bottomSlide,
+                      headerAnimationLoop: false,
+                      dialogType: DialogType.warning,
+                      showCloseIcon: true,
+                      title: "Seguro que desea cerrar su sesión?",
+                      btnCancelOnPress: () {},
+                      btnOkOnPress: () async {
+                      Constants.prefs.remove("datosUsuario");
+                      Constants.prefs.remove("accesos");
+                      Constants.prefs.remove("contratos");
+                      Constants.prefs.remove("isLoggedIn");
+                      Constants.prefs.remove('entradas');
+                      Constants.prefs.remove('salidas');
+                      Constants.prefs.remove('servidor');
+                      Constants.prefs.remove('id_usuario');
+                      Constants.prefs.remove('contrato');
+                      Constants.prefs.remove('beacon_uuid');
+                      Constants.prefs.remove('modoInternet');
+                      Constants.prefs.remove('modoWifi');
+                      Constants.prefs.remove('modoBluetooth');
+                      Constants.prefs.remove('imei');
+                      Get.offNamed("/login");
+                      // Navigator.pushReplacementNamed(context, LoginPage.routeName);
+                      },
+                    ).show();
+                    }, 
+                  child: Text("Cerrar sesión", style: TextStyle(fontSize: 18))
+                ),
+                SizedBox(
+                  height: 30,
+                )
+              ],
             ),
-            floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
+            floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
           ),
   );
 }
