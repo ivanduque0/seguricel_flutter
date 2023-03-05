@@ -15,11 +15,9 @@ import 'package:seguricel_flutter/controllers/contrato_controller.dart';
 import 'package:seguricel_flutter/pages/login_page.dart';
 import 'package:get/get.dart';
 import 'package:seguricel_flutter/screens/codigo_unidad_screen.dart';
-import 'package:seguricel_flutter/screens/infousuario_screen.dart';
 import 'package:seguricel_flutter/screens/infovigilante_screen.dart';
 import 'package:seguricel_flutter/screens/motivo_apertura_screen.dart';
 import 'dart:convert';
-import 'package:seguricel_flutter/screens/home_screen.dart';
 import 'package:seguricel_flutter/screens/codigo_invitado_screen.dart';
 import 'package:seguricel_flutter/utils/constants.dart';
 
@@ -115,6 +113,11 @@ class _MainPageState extends State<MainPage> {
       controller.cambiarScreen(0);
     }
     if (index==1){
+      
+      if (controllerUnidad.unidadScreen!=0){
+        codigoUnidadController.cambiarCodigo("");
+      }
+      personasUnidadController.cambiarpersonas("");
       controllerUnidad.cambiarScreen(0);
     }
     setState(() {

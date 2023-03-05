@@ -5,12 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:http_auth/http_auth.dart';
 import 'package:seguricel_flutter/controllers/screens_visitantes_controller.dart';
 import 'package:seguricel_flutter/controllers/codigo_visitante_controller.dart';
-import 'package:seguricel_flutter/screens/crearnuevoinvitado_screen.dart';
 import 'package:seguricel_flutter/screens/editarinvitado_screen.dart';
-import 'package:seguricel_flutter/screens/personalizartiempoinvitado_screen.dart';
 import 'package:seguricel_flutter/screens/seleccionarinvitado_screen.dart';
-import 'package:seguricel_flutter/screens/seleccionarinvitadoexistente_screen.dart';
-import 'package:seguricel_flutter/screens/tiempoinvitado_screen.dart';
 import 'package:seguricel_flutter/screens/verinvitados_screen.dart';
 
 import 'package:get/get.dart';
@@ -27,8 +23,6 @@ import 'package:seguricel_flutter/utils/loading.dart';
 class InvitadosScreen extends StatelessWidget {
   int screen=0;
   final _formKey = GlobalKey<FormState>();
-  TextEditingController _codeController = TextEditingController();
-  CodigoVisitanteController codigoVisitanteController = Get.find();
 
   // void updateScreen(int newScreen) {
   //   setState(() {
@@ -46,7 +40,9 @@ class InvitadosScreen extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Center(
-              child: ScreensVisitantesController.visitanteScreen==0?Column(
+              child: ScreensVisitantesController.visitanteScreen==0
+              ?GetBuilder<CodigoVisitanteController>(builder: (CodigoVisitanteController){
+                return Column(
                 children: [
                   Text("Ingrese el codigo del invitado", textAlign: TextAlign.center,
                     style: TextStyle(
@@ -62,14 +58,13 @@ class InvitadosScreen extends StatelessWidget {
                     child: Form(
                       key: _formKey,
                       child: TextFormField(
-                        controller: _codeController,
                         keyboardType: TextInputType.text,
                         decoration: InputDecoration(
                           hintText: "Ingrese un codigo",
                           labelText: "Codigo"
                         ),
                         onChanged: (value) {
-                          codigoVisitanteController.cambiarCodigo(value);
+                          CodigoVisitanteController.cambiarCodigo(value);
                         },
                       ),
                     ),
@@ -80,8 +75,7 @@ class InvitadosScreen extends StatelessWidget {
                   SizedBox(
                     height: 50,
                     width: 120,
-                    child: GetBuilder<CodigoVisitanteController>(builder: (CodigoVisitanteController){
-                      return ElevatedButton(
+                    child: ElevatedButton(
                       onPressed:(CodigoVisitanteController.codigo=="")? null : () async {
                         if (_formKey.currentState!.validate()) {
                           
@@ -135,16 +129,12 @@ class InvitadosScreen extends StatelessWidget {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Color.fromARGB(255, 135, 253, 106), // Background color
                       ),
-                    );})
+                    )
                   ),
                   ],
-              ):ScreensVisitantesController.visitanteScreen==1?VerInvitadosScreen()
-              :ScreensVisitantesController.visitanteScreen==2?TiempoInvitadoScreen()
-              :ScreensVisitantesController.visitanteScreen==3?PersonalizarTiempoInvitadoScreen()
+              );}):ScreensVisitantesController.visitanteScreen==1?VerInvitadosScreen()
               :ScreensVisitantesController.visitanteScreen==4?SeleccionarInvitadoScreen()
-              :ScreensVisitantesController.visitanteScreen==5?CrearNuevoInvitadoScreen()
-              :ScreensVisitantesController.visitanteScreen==6?EditarInvitadosScreen()
-              :SeleccionarInvitadoExistenteScreen()
+              :EditarInvitadosScreen()
       
             ),
           ),

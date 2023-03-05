@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:seguricel_flutter/controllers/screens_unidad_controller.dart';
 import 'package:seguricel_flutter/controllers/personas_unidad_controller.dart';
+import 'package:seguricel_flutter/controllers/codigo_unidad_controller.dart';
 import 'package:get/get.dart';
 
 // class CodigoUnidadScreen extends StatefulWidget {
@@ -55,7 +56,7 @@ class PersonasUnidadScreen extends StatelessWidget {
                     child: Form(
                       key: _formKey,
                       child: TextFormField(
-                        controller: _codeController,
+                        initialValue: personasUnidadController.personas==""?null:personasUnidadController.personas,
                         keyboardType: TextInputType.number,
                         inputFormatters: [
                           FilteringTextInputFormatter.digitsOnly
