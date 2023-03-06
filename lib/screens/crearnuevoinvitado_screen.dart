@@ -302,7 +302,7 @@ class _CrearNuevoInvitadoScreenState extends State<CrearNuevoInvitadoScreen> {
                                   tiempoInvitado['acompanantes'] = acompanantes.toString();
                                   res = await client.post(Uri.parse('https://webseguricel.up.railway.app/editarhorariosvisitantesapi/${tiempoInvitado['usuario'].toString()}/'), body: tiempoInvitado).timeout(Duration(seconds: 5));
                                   var dataHorarios = await jsonDecode(res.body);
-                                  String mensaje='INVITACION RES. ${datosPropietario['contrato']}\n\nNombre: ${dataUsuario['nombre']}\nCodigo: ${dataUsuario['codigo']}\nFecha: ${tiempoInvitado['fecha_entrada']}\nAcompañantes: $acompanantes\n\nSi desea abrir con su telefono por proximidad via Bluetooth, descargue la aplicacion.\n\nAndroid: ${Constants.linkAndroid}\n\niOs: ${Constants.linkIOS}';
+                                  String mensaje='INVITACION RES. ${datosPropietario['contrato']}\n\nNombre: ${dataUsuario['nombre']}\nCodigo de invitacion: ${dataHorarios['id']}\nFecha: ${tiempoInvitado['fecha_entrada']}\nAcompañantes: $acompanantes\n\nSi desea abrir con su telefono por proximidad via Bluetooth, descargue la aplicacion e ingrese su codigo de usuario.\n\nCodigo de usuario: ${dataUsuario['codigo']}\n\nAndroid: ${Constants.linkAndroid}\n\niOs: ${Constants.linkIOS}';
                                   res = await client.get(Uri.parse('https://api.callmebot.com/whatsapp.php?phone=${Constants.numeroBot}&text=!sendto+${datosPropietario['numero_telefonico']}+${mensaje}&apikey=${Constants.apiKeyBot}')).timeout(Duration(seconds: 5));
                                   var dataMensajes = res.body;
                                   //print(dataMensajes);

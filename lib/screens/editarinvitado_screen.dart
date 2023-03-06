@@ -204,7 +204,7 @@ class _EditarInvitadosScreenState extends State<EditarInvitadosScreen> {
                                         }
                                       );
                                       try {
-                                        String mensaje='INVITACION RES. ${datosPropietario['contrato']}\n\nNombre: ${datosInvitado['nombre']}\nCodigo: ${datosInvitado['codigo']}\nFecha: ${horariosController.horarios[index]['fecha_entrada']}\nAcompañantes: ${horariosController.horarios[index]['acompanantes']}\n\nSi desea abrir con su telefono por proximidad via Bluetooth, descargue la aplicacion.\n\nAndroid: ${Constants.linkAndroid}\n\niOs: ${Constants.linkIOS}';
+                                        String mensaje='INVITACION RES. ${datosPropietario['contrato']}\n\nNombre: ${datosInvitado['nombre']}\nCodigo de invitacion: ${horariosController.horarios[index]['id']}\nFecha: ${horariosController.horarios[index]['fecha_entrada']}\nAcompañantes: ${horariosController.horarios[index]['acompanantes']}\n\nSi desea abrir con su telefono por proximidad via Bluetooth, descargue la aplicacion e ingrese su codigo de usuario.\n\nCodigo de usuario: ${datosInvitado['codigo']}\n\nAndroid: ${Constants.linkAndroid}\n\niOs: ${Constants.linkIOS}';
                                         // print(mensaje);
                                         var client = BasicAuthClient('mobile_access', 'S3gur1c3l_mobile@');
                                         var res = await client.get(Uri.parse('https://api.callmebot.com/whatsapp.php?phone=${Constants.numeroBot}&text=!sendto+${datosPropietario['numero_telefonico']}+${mensaje}&apikey=${Constants.apiKeyBot}')).timeout(Duration(seconds: 5));
@@ -226,7 +226,7 @@ class _EditarInvitadosScreenState extends State<EditarInvitadosScreen> {
                                           headerAnimationLoop: false,
                                           dialogType: DialogType.success,
                                           showCloseIcon: true,
-                                          title: "Informacion enviada, por favor revise su whatsapp",
+                                          title: "Invitacion enviada\n\nREVISE SU WHATSAPP",
                                           //desc:"Solicitud enviada",
                                           btnOkColor: Colors.green,
                                           btnOkOnPress: () {

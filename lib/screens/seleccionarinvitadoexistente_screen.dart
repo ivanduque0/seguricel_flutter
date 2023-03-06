@@ -266,8 +266,8 @@ class _SeleccionarInvitadoExistenteScreenState extends State<SeleccionarInvitado
                         //print(tiempoInvitado);
                         var res = await client.post(Uri.parse('https://webseguricel.up.railway.app/editarhorariosvisitantesapi/${tiempoInvitado['usuario'].toString()}/'), body: tiempoInvitado).timeout(Duration(seconds: 5));
                         var data = await jsonDecode(res.body);
-                        //print(" horas: $data");
-                        String mensaje='INVITACION RES. ${datosPropietario['contrato']}\n\nNombre: ${invitado['nombre']}\nCodigo: ${invitado['telegram_id']}\nFecha: ${tiempoInvitado['fecha_entrada']}\nAcompañantes: ${invitado['acompanantes']}\n\nSi desea abrir con su telefono por proximidad via Bluetooth, descargue la aplicacion.\n\nAndroid: ${Constants.linkAndroid}\n\niOs: ${Constants.linkIOS}';
+                        //print(data);
+                        String mensaje='INVITACION RES. ${datosPropietario['contrato']}\n\nNombre: ${invitado['nombre']}\nCodigo de invitacion: ${data['id']}\nFecha: ${tiempoInvitado['fecha_entrada']}\nAcompañantes: ${invitado['acompanantes']}\n\nSi desea abrir con su telefono por proximidad via Bluetooth, descargue la aplicacion e ingrese su codigo de usuario.\n\nCodigo de usuario: ${invitado['telegram_id']}\n\nAndroid: ${Constants.linkAndroid}\n\niOs: ${Constants.linkIOS}';
                         // print(mensaje);
                         res = await client.get(Uri.parse('https://api.callmebot.com/whatsapp.php?phone=${Constants.numeroBot}&text=!sendto+${datosPropietario['numero_telefonico']}+${mensaje}&apikey=${Constants.apiKeyBot}')).timeout(Duration(seconds: 5));
                         var dataMensajes = res.body;
