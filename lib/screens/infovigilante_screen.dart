@@ -1,9 +1,7 @@
 import 'dart:convert';
-
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:seguricel_flutter/pages/login_page.dart';
 import 'package:seguricel_flutter/utils/constants.dart';
 import 'package:seguricel_flutter/utils/loading.dart';
 
@@ -143,20 +141,21 @@ class _infoVigilanteScreenState extends State<infoVigilanteScreen> {
                       title: "Seguro que desea cerrar su sesión?",
                       btnCancelOnPress: () {},
                       btnOkOnPress: () async {
-                      Constants.prefs.remove("datosUsuario");
-                      Constants.prefs.remove("accesos");
-                      Constants.prefs.remove("contratos");
-                      Constants.prefs.remove("isLoggedIn");
-                      Constants.prefs.remove('entradas');
-                      Constants.prefs.remove('salidas');
-                      Constants.prefs.remove('servidor');
-                      Constants.prefs.remove('id_usuario');
-                      Constants.prefs.remove('contrato');
-                      Constants.prefs.remove('beacon_uuid');
-                      Constants.prefs.remove('modoInternet');
-                      Constants.prefs.remove('modoWifi');
-                      Constants.prefs.remove('modoBluetooth');
-                      Constants.prefs.remove('imei');
+                      // Constants.prefs.remove("datosUsuario");
+                      // Constants.prefs.remove("accesos");
+                      // Constants.prefs.remove("contratos");
+                      // Constants.prefs.remove("isLoggedIn");
+                      // Constants.prefs.remove('entradas');
+                      // Constants.prefs.remove('salidas');
+                      // Constants.prefs.remove('servidor');
+                      // Constants.prefs.remove('id_usuario');
+                      // Constants.prefs.remove('contrato');
+                      // Constants.prefs.remove('beacon_uuid');
+                      // Constants.prefs.remove('modoInternet');
+                      // Constants.prefs.remove('modoWifi');
+                      // Constants.prefs.remove('modoBluetooth');
+                      // Constants.prefs.remove('imei');
+                      Constants.prefs.clear();
                       Get.offNamed("/login");
                       // Navigator.pushReplacementNamed(context, LoginPage.routeName);
                       },

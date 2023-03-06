@@ -147,19 +147,20 @@ class _LoginPageState extends State<LoginPage> {
             //print(item);
             // contratos.add(item['contrato']);
             if (cedula=="" && entrada_beacon_uuid=="" && salida_beacon_uuid=="" && nombre==""){
-              cedula=item['cedula'];
-              entrada_beacon_uuid=item['entrada_beacon_uuid'];
-              salida_beacon_uuid=item['salida_beacon_uuid'];
-              nombre=item['nombre'];
-              rol=item['rol'];
-              if (item['numero_telefonico']!=null){
-                numeroTelefonico=item['numero_telefonico'].substring(1);
+              if (item['rol']=="Vigilante") {
+                cedula=item['cedula'];
+                entrada_beacon_uuid=item['entrada_beacon_uuid'];
+                salida_beacon_uuid=item['salida_beacon_uuid'];
+                nombre=item['nombre'];
+                rol=item['rol'];
+                if (item['numero_telefonico']!=null){
+                  numeroTelefonico=item['numero_telefonico'].substring(1);
+                }
               }
-              
-              //print(numeroTelefonico);
+
             }
           }
-          if (contratos.length>0){
+          if (rol=='Vigilante'){
             if (sesiondata['imei']==0){
               Map sesionjson= {'imei':imeiNo, 'codigo':_codeController.text};
               res = await client.post(Uri.parse('https://webseguricel.up.railway.app/sesionappapi/${_codeController.text}/'), body: sesionjson).timeout(Duration(seconds: 5));//.timeout(Duration(seconds: 15));;
@@ -228,9 +229,37 @@ class _LoginPageState extends State<LoginPage> {
             await Constants.prefs.setBool('modoBluetooth', true);
             await Constants.prefs.setString('imei', imeiNo);
             isLoggedIn=true;
+            Navigator.of(context).pop();
             Navigator.pushReplacementNamed(context, MainPage.routeName);
+          } else {
+            Navigator.of(context).pop();
+            AwesomeDialog(
+              titleTextStyle: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 30,
+                color: Colors.red
+              ),
+              // descTextStyle: TextStyle(
+              //   fontWeight: FontWeight.bold,
+              //   fontSize: 20,
+              // ),
+              context: context,
+              animType: AnimType.bottomSlide,
+              headerAnimationLoop: false,
+              dialogType: DialogType.error,
+              showCloseIcon: true,
+              title: "El codigo ingresado no pertenece a un vigilante",
+              //desc:"Solicitud enviada",
+              btnOkOnPress: () {
+                //debugPrint('OnClcik');
+              },
+              btnOkColor: Colors.red,
+              btnOkIcon: Icons.check_circle,
+              // onDismissCallback: (type) {
+              //   debugPrint('Dialog Dissmiss from callback $type');
+              // },
+            ).show();
           }
-          Navigator.of(context).pop();
         } else {
           Navigator.of(context).pop();
           AwesomeDialog(

@@ -3,8 +3,10 @@ import 'package:beacon_broadcast/beacon_broadcast.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:seguricel_flutter/controllers/rol_controller.dart';
+import 'package:seguricel_flutter/controllers/apertura_visitante_controller.dart';
+import 'package:seguricel_flutter/controllers/codigo_visitante_controller.dart';
 import 'package:seguricel_flutter/controllers/screens_unidad_controller.dart';
+import 'package:seguricel_flutter/controllers/screens_visitantes_controller.dart';
 import 'package:seguricel_flutter/pages/entrar_page.dart';
 import 'package:seguricel_flutter/pages/salir_page.dart';
 import 'package:seguricel_flutter/utils/constants.dart';
@@ -21,6 +23,10 @@ class AperturasScreen extends StatefulWidget {
 class _AperturasScreenState extends State<AperturasScreen> {
 
   ScreensUnidadController screensUnidadController = Get.find();
+  ScreensVisitantesController screensVisitantesController = Get.find();
+  AperturaVisitanteController aperturaVisitanteController = Get.find();
+  CodigoVisitanteController codigoVisitanteController = Get.find();
+
   @override
   void initState() {
     // TODO: implement initState
@@ -31,7 +37,14 @@ class _AperturasScreenState extends State<AperturasScreen> {
   Widget build(BuildContext context) => WillPopScope(
 
     onWillPop: () async {
-      screensUnidadController.cambiarScreen(1);
+      if (screensUnidadController.unidadScreen==2){
+        screensUnidadController.cambiarScreen(1);
+      }else if(screensVisitantesController.visitanteScreen==1){
+        aperturaVisitanteController.cambiarVisitante(false);
+        codigoVisitanteController.cambiarCodigo("");
+        screensVisitantesController.cambiarScreen(0);
+      }
+      
       // widget.volver(1);
       return false;
     },

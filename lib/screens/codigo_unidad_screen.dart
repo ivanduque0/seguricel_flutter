@@ -5,9 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:http_auth/http_auth.dart';
 import 'package:seguricel_flutter/controllers/screens_unidad_controller.dart';
 import 'package:seguricel_flutter/controllers/codigo_unidad_controller.dart';
-import 'package:seguricel_flutter/screens/editarinvitado_screen.dart';
 import 'package:seguricel_flutter/screens/motivo_apertura_screen.dart';
-import 'package:seguricel_flutter/screens/seleccionarinvitado_screen.dart';
 import 'package:seguricel_flutter/screens/personas_unidad_screen.dart';
 
 import 'package:get/get.dart';
@@ -92,9 +90,7 @@ class CodigoUnidadScreen extends StatelessWidget {
                 ),
                 ],
             );}):ScreensUnidadController.unidadScreen==1?PersonasUnidadScreen()
-            :ScreensUnidadController.unidadScreen==2?AperturasScreen()
-            :ScreensUnidadController.unidadScreen==4?SeleccionarInvitadoScreen()
-            :EditarInvitadosScreen()
+            :AperturasScreen()
 
       
           ),

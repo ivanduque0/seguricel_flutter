@@ -5,12 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:http_auth/http_auth.dart';
 import 'package:seguricel_flutter/controllers/screens_visitantes_controller.dart';
 import 'package:seguricel_flutter/controllers/codigo_visitante_controller.dart';
-import 'package:seguricel_flutter/screens/editarinvitado_screen.dart';
-import 'package:seguricel_flutter/screens/seleccionarinvitado_screen.dart';
-import 'package:seguricel_flutter/screens/verinvitados_screen.dart';
-
+import 'package:seguricel_flutter/screens/motivo_apertura_screen.dart';
+import 'package:seguricel_flutter/controllers/apertura_visitante_controller.dart';
+import 'package:seguricel_flutter/controllers/personas_visitante_controller.dart';
 import 'package:get/get.dart';
-import 'package:seguricel_flutter/utils/constants.dart';
 import 'package:seguricel_flutter/utils/loading.dart';
 
 // class InvitadosScreen extends StatefulWidget {
@@ -23,6 +21,10 @@ import 'package:seguricel_flutter/utils/loading.dart';
 class InvitadosScreen extends StatelessWidget {
   int screen=0;
   final _formKey = GlobalKey<FormState>();
+
+  TextEditingController _codeController = TextEditingController();
+  AperturaVisitanteController aperturaVisitanteController = Get.find();
+  PersonasVisitanteController personasVisitanteController = Get.find();
 
   // void updateScreen(int newScreen) {
   //   setState(() {
@@ -44,7 +46,7 @@ class InvitadosScreen extends StatelessWidget {
               ?GetBuilder<CodigoVisitanteController>(builder: (CodigoVisitanteController){
                 return Column(
                 children: [
-                  Text("Ingrese el codigo del invitado", textAlign: TextAlign.center,
+                  Text("Ingrese el codigo de invitacion", textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 30,
                       fontWeight: FontWeight.bold
@@ -59,6 +61,7 @@ class InvitadosScreen extends StatelessWidget {
                       key: _formKey,
                       child: TextFormField(
                         keyboardType: TextInputType.text,
+                        controller: _codeController,
                         decoration: InputDecoration(
                           hintText: "Ingrese un codigo",
                           labelText: "Codigo"
@@ -91,8 +94,118 @@ class InvitadosScreen extends StatelessWidget {
                           );
                           try {
                             var client = BasicAuthClient('mobile_access', 'S3gur1c3l_mobile@');
-                            var res = await client.get(Uri.parse('https://webseguricel.up.railway.app/sesionappapi//')).timeout(Duration(seconds: 5));
-                            var sesiondata = await jsonDecode(res.body);
+                            var res = await client.get(Uri.parse('https://webseguricel.up.railway.app/obtenerinvitacionvigilanteapi/${CodigoVisitanteController.codigo}/')).timeout(Duration(seconds: 5));
+                            var horariodata = await jsonDecode(res.body);
+                            print(horariodata);
+                            res=await client.get(Uri.parse('https://webseguricel.up.railway.app/obtenerusuariovigilanteapi/${horariodata['usuario']}/')).timeout(Duration(seconds: 5));
+                            var usuariodata = await jsonDecode(res.body);
+                            print(usuariodata);
+                            Navigator.of(context).pop();
+                            showDialog(
+                            // The user CANNOT close this dialog  by pressing outsite it
+                            barrierDismissible: true,
+                            context: context,
+                            builder: (_) {
+                              return Dialog(
+                                backgroundColor: Colors.transparent,
+                                insetPadding: EdgeInsets.all(10),
+                                child: Container(
+                                  width: double.infinity,
+                                  height: 350,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(15),
+                                    color: Color.fromARGB(255, 255, 255, 255)
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(vertical: 10),
+                                          child: Text("Nombre: ${usuariodata['nombre']}", style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold)),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.only(bottom: 10),
+                                          child: Text("Cedula: ${usuariodata['cedula']}", style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold)),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.only(bottom: 20),
+                                          child: Text("Acompañantes: ${horariodata['acompanantes']}", style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold)),
+                                        ),
+                                        Center(
+                                          child: SizedBox(
+                                            height: 100,
+                                            width: 180,
+                                            child: ElevatedButton(
+                                              onPressed: (){
+                                                _codeController.clear();
+                                                personasVisitanteController.cambiarpersonas(horariodata['acompanantes'].toString());
+                                                aperturaVisitanteController.cambiarVisitante(true);
+                                                Navigator.of(context).pop();
+                                                ScreensVisitantesController.cambiarScreen(1);
+                                              }, 
+                                              child: Text("ABRIR", textAlign: TextAlign.center, style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),),
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor: Color.fromARGB(255, 135, 253, 106), // Background color
+                                              ),
+                                            ),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                // child: Stack(
+                                //   clipBehavior: Clip.none,
+                                //   alignment: Alignment.center,
+                                //   children: <Widget>[
+                                //     Container(
+                                //       width: double.infinity,
+                                //       height: 200,
+                                //       decoration: BoxDecoration(
+                                //         borderRadius: BorderRadius.circular(15),
+                                //         color: Colors.lightBlue
+                                //       ),
+                                //       padding: EdgeInsets.fromLTRB(20, 50, 20, 20),
+                                //       child: Text("You can make cool stuff!",
+                                //         style: TextStyle(fontSize: 24),
+                                //         textAlign: TextAlign.center
+                                //       ),
+                                //     ),
+                                //     // Positioned(
+                                //     //   top: -100,
+                                //     //   child: Image.network("https://i.imgur.com/2yaf2wb.png", width: 150, height: 150)
+                                //     // )
+                                //   ],
+                                // )
+                              );
+                              // return Card(
+                              //   child: Column(
+                              //     children: [
+                              //       ListTile(
+                              //         title: Text("Nombre"),
+                              //         subtitle: Text(usuariodata[0]['nombre']),
+                              //       ),
+                              //       ListTile(
+                              //         title: Text("Cedula"),
+                              //         subtitle: Text(usuariodata[0]['cedula']),
+                              //       ),
+                              //       ElevatedButton(
+                              //         onPressed: (){
+                              //           print("ABRIR");
+                              //         }, 
+                              //         child: Text("ABRIR", textAlign: TextAlign.center, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
+                              //         style: ElevatedButton.styleFrom(
+                              //           backgroundColor: Color.fromARGB(255, 135, 253, 106), // Background color
+                              //         ),
+                              //       )
+                              //     ],
+                              //   ),
+                              // );
+                            }
+                          );
                           
                           } catch (e) {
                             Navigator.of(context).pop();
@@ -132,9 +245,7 @@ class InvitadosScreen extends StatelessWidget {
                     )
                   ),
                   ],
-              );}):ScreensVisitantesController.visitanteScreen==1?VerInvitadosScreen()
-              :ScreensVisitantesController.visitanteScreen==4?SeleccionarInvitadoScreen()
-              :EditarInvitadosScreen()
+              );}):AperturasScreen()
       
             ),
           ),

@@ -1,31 +1,17 @@
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:fluentui_icons/fluentui_icons.dart';
-import 'package:beacon_broadcast/beacon_broadcast.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:seguricel_flutter/controllers/rol_controller.dart';
 import 'package:seguricel_flutter/controllers/screens_visitantes_controller.dart';
 import 'package:seguricel_flutter/controllers/screens_unidad_controller.dart';
-import 'package:seguricel_flutter/controllers/visitantes_controller.dart';
-import 'package:seguricel_flutter/controllers/contrato_controller.dart';
-// import 'package:seguricel_flutter/utils/drawer.dart';
-// import 'package:seguricel_flutter/name_card_widget.dart';
-// import 'package:http_auth/http_auth.dart';
-import 'package:seguricel_flutter/pages/login_page.dart';
+import 'package:seguricel_flutter/controllers/apertura_visitante_controller.dart';
 import 'package:get/get.dart';
 import 'package:seguricel_flutter/screens/codigo_unidad_screen.dart';
 import 'package:seguricel_flutter/screens/infovigilante_screen.dart';
-import 'package:seguricel_flutter/screens/motivo_apertura_screen.dart';
-import 'dart:convert';
 import 'package:seguricel_flutter/screens/codigo_invitado_screen.dart';
 import 'package:seguricel_flutter/utils/constants.dart';
-
 import '../controllers/codigo_unidad_controller.dart';
 import '../controllers/codigo_visitante_controller.dart';
 import '../controllers/personas_unidad_controller.dart';
-// import 'package:seguricel_flutter/utils/loading.dart';
-// import 'package:shared_preferences/shared_preferences.dart';
+import '../controllers/personas_visitante_controller.dart';
 
 class MainPage extends StatefulWidget {
   static const String routeName = "/main";
@@ -50,12 +36,11 @@ class _MainPageState extends State<MainPage> {
 
   ScreensVisitantesController controller = Get.put(ScreensVisitantesController());
   ScreensUnidadController controllerUnidad = Get.put(ScreensUnidadController());
-  VisitantesController visitantesController = Get.put(VisitantesController());
-  RolController rolController= Get.put(RolController());
-  ContratoController contratoController= Get.put(ContratoController());
+  AperturaVisitanteController aperturaVisitanteController = Get.put(AperturaVisitanteController());
   CodigoVisitanteController codigoVisitanteController = Get.put(CodigoVisitanteController());
   CodigoUnidadController codigoUnidadController = Get.put(CodigoUnidadController());
   PersonasUnidadController personasUnidadController = Get.put(PersonasUnidadController());
+  PersonasVisitanteController personasVisitanteController = Get.put(PersonasVisitanteController());
 
 
   List<BottomNavigationBarItem> itemsVigilante=const [
@@ -80,22 +65,7 @@ class _MainPageState extends State<MainPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-  obtenerRol();
   }       
-
-  obtenerRol() async {
-
-    // String encodeDatosUsuario = await Constants.prefs.getString('datosUsuario').toString();
-    String encodeContrato = await Constants.prefs.getString('contrato').toString();
-    // String rol= jsonDecode(encodeDatosUsuario)['rol'];
-    // rolController.cambiarrol(rol);
-    contratoController.cambiarContrato(encodeContrato);
-    // print(encodeDatosUsuario);
-    // setState (() {
-    //   rol= jsonDecode(encodeDatosUsuario)['rol'];
-    //   // print(rol);
-    // });
-  }
 
 
 
@@ -110,6 +80,8 @@ class _MainPageState extends State<MainPage> {
 
   void _onItemTapped(int index){
     if (index==2){
+      codigoVisitanteController.cambiarCodigo("");
+      aperturaVisitanteController.cambiarVisitante(false);
       controller.cambiarScreen(0);
     }
     if (index==1){
@@ -124,49 +96,9 @@ class _MainPageState extends State<MainPage> {
       _selectedIndex=index;
     });
   }
-
-  // @override
-  // void initState() {
-  //   // TODO: implement initState
-  //   super.initState();
-  //   //fetchData2();
-  // }
-  
-  // fetchData2()async{
-  //   //SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   //String encodeDatosUsuario = await Constants.prefs.getString('datosUsuario').toString();
-  //   // String encodeContratos = await Constants.prefs.getString('contratos').toString();
-  //   // String encodeAccesos = await Constants.prefs.getString('accesos').toString();
-
-  //   // print(encodeDatosUsuario);
-  //   // print(encodeContratos);
-  //   // print(encodeAccesos);
-  //   setState(() {
-  //     //datosUsuario = jsonDecode(encodeDatosUsuario);
-  //     // contratos = jsonDecode(encodeContratos);
-  //     // accesos = jsonDecode(encodeAccesos);
-  //   });
-  //   // datosUsuario = await jsonDecode(encodeDatosUsuario);
-  //   // contratos = await jsonDecode(encodeContratos);
-  //   // accesos = await jsonDecode(encodeAccesos);
-  
-  //   // print(datosUsuario);
-  //   // print(contratos);
-  //   // print(accesos);
-
-  //   // setState(() { });
-  //   //print(this.url);
-  //   // var client = BasicAuthClient('mobile_access', 'S3gur1c3l_mobile@');
-  //   // var res = await client.post(url);
-  //   // data = jsonDecode(res.body);
-  //   // setState(() {
-      
-  //   // });
-  // }
   
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<RolController>(builder: (RolController){
     return Scaffold(
       backgroundColor: Colors.grey[200],
       appBar: AppBar(
@@ -222,6 +154,5 @@ class _MainPageState extends State<MainPage> {
       // ),
       //floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
-  });
   }
 }

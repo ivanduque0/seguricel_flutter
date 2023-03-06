@@ -1,20 +1,20 @@
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 
-class VisitantesController extends GetxController{
+class AperturaVisitanteController extends GetxController{
   
-  List _visitantes = [];
+  bool _visitante = false;
 
   // RxInt visitanteScreen=0.obs;
 
-  List get visitantes=>_visitantes;
+  bool get visitante=>_visitante;
 
   // void cambiarScreen(int screen){
   //   // visitanteScreen.value=screen;
   // }
 
-  void cambiarVisitantes(List visitantess){
-    _visitantes=visitantess;
+  void cambiarVisitante(bool visitantee){
+    _visitante=visitantee;
     update();
     //print(_visitanteScreen);
   }
