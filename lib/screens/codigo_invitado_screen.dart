@@ -8,6 +8,7 @@ import 'package:seguricel_flutter/controllers/codigo_visitante_controller.dart';
 import 'package:seguricel_flutter/screens/motivo_apertura_screen.dart';
 import 'package:seguricel_flutter/controllers/apertura_visitante_controller.dart';
 import 'package:seguricel_flutter/controllers/personas_visitante_controller.dart';
+import 'package:seguricel_flutter/controllers/contrato_controller.dart';
 import 'package:get/get.dart';
 import 'package:seguricel_flutter/utils/loading.dart';
 
@@ -25,6 +26,7 @@ class InvitadosScreen extends StatelessWidget {
   TextEditingController _codeController = TextEditingController();
   AperturaVisitanteController aperturaVisitanteController = Get.find();
   PersonasVisitanteController personasVisitanteController = Get.find();
+  ContratoController contratoController = Get.find();
 
   // void updateScreen(int newScreen) {
   //   setState(() {
@@ -78,7 +80,8 @@ class InvitadosScreen extends StatelessWidget {
                   SizedBox(
                     height: 50,
                     width: 120,
-                    child: ElevatedButton(
+                    child: GetBuilder<ContratoController>(builder: (ContratoController){
+                      return ElevatedButton(
                       onPressed:(CodigoVisitanteController.codigo=="")? null : () async {
                         if (_formKey.currentState!.validate()) {
                           
@@ -93,13 +96,14 @@ class InvitadosScreen extends StatelessWidget {
                             }
                           );
                           try {
+                            //print('https://webseguricel.up.railway.app/obtenerinvitacionvigilanteapi/${CodigoVisitanteController.codigo}/${ContratoController.contrato}/');
                             var client = BasicAuthClient('mobile_access', 'S3gur1c3l_mobile@');
-                            var res = await client.get(Uri.parse('https://webseguricel.up.railway.app/obtenerinvitacionvigilanteapi/${CodigoVisitanteController.codigo}/')).timeout(Duration(seconds: 5));
+                            var res = await client.get(Uri.parse('https://webseguricel.up.railway.app/obtenerinvitacionvigilanteapi/${CodigoVisitanteController.codigo}/${ContratoController.contrato}/')).timeout(Duration(seconds: 5));
                             var horariodata = await jsonDecode(res.body);
-                            print(horariodata);
+                            //print(horariodata);
                             res=await client.get(Uri.parse('https://webseguricel.up.railway.app/obtenerusuariovigilanteapi/${horariodata['usuario']}/')).timeout(Duration(seconds: 5));
                             var usuariodata = await jsonDecode(res.body);
-                            print(usuariodata);
+                            //print(usuariodata);
                             Navigator.of(context).pop();
                             showDialog(
                             // The user CANNOT close this dialog  by pressing outsite it
@@ -146,7 +150,7 @@ class InvitadosScreen extends StatelessWidget {
                                                 Navigator.of(context).pop();
                                                 ScreensVisitantesController.cambiarScreen(1);
                                               }, 
-                                              child: Text("ABRIR", textAlign: TextAlign.center, style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),),
+                                              child: Text("Cotinuar", textAlign: TextAlign.center, style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),),
                                               style: ElevatedButton.styleFrom(
                                                 backgroundColor: Color.fromARGB(255, 135, 253, 106), // Background color
                                               ),
@@ -242,7 +246,7 @@ class InvitadosScreen extends StatelessWidget {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Color.fromARGB(255, 135, 253, 106), // Background color
                       ),
-                    )
+                    );})
                   ),
                   ],
               );}):AperturasScreen()

@@ -220,7 +220,7 @@ class _LoginPageState extends State<LoginPage> {
             await Constants.prefs.setString('contratos', contratosEncode);
             await Constants.prefs.setString('servidor', servidor);
             await Constants.prefs.setString('id_usuario', _codeController.text);
-            await Constants.prefs.setString('contrato', contrato);
+            await Constants.prefs.setString('contrato_id', contratos[0]['id'].toString());
             await Constants.prefs.setString('entrada_beacon_uuid', invertirUUID(entrada_beacon_uuid));
             await Constants.prefs.setString('salida_beacon_uuid', invertirUUID(salida_beacon_uuid));
             await Constants.prefs.setBool('isLoggedIn', true);

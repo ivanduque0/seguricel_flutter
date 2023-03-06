@@ -1,5 +1,6 @@
 import 'package:fluentui_icons/fluentui_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:seguricel_flutter/controllers/contrato_controller.dart';
 import 'package:seguricel_flutter/controllers/screens_visitantes_controller.dart';
 import 'package:seguricel_flutter/controllers/screens_unidad_controller.dart';
 import 'package:seguricel_flutter/controllers/apertura_visitante_controller.dart';
@@ -36,6 +37,7 @@ class _MainPageState extends State<MainPage> {
 
   ScreensVisitantesController controller = Get.put(ScreensVisitantesController());
   ScreensUnidadController controllerUnidad = Get.put(ScreensUnidadController());
+  ContratoController contratoController = Get.put(ContratoController());
   AperturaVisitanteController aperturaVisitanteController = Get.put(AperturaVisitanteController());
   CodigoVisitanteController codigoVisitanteController = Get.put(CodigoVisitanteController());
   CodigoUnidadController codigoUnidadController = Get.put(CodigoUnidadController());
@@ -64,9 +66,15 @@ class _MainPageState extends State<MainPage> {
   @override
   void initState() {
     // TODO: implement initState
+    obtenerContrato();
     super.initState();
-  }       
+  }
 
+  obtenerContrato()async{
+
+    String contrato_id = await Constants.prefs.getString('contrato_id').toString();
+    contratoController.cambiarContrato(contrato_id);
+  }
 
 
   int _selectedIndex=1;
