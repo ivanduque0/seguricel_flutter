@@ -214,32 +214,67 @@ class _EntrarPageState extends State<EntrarPage> {
       }
     } catch(e) {
       Navigator.of(context).pop();
-      AwesomeDialog(
-        titleTextStyle: TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 30,
-          color: Colors.red
-        ),
-        // descTextStyle: TextStyle(
-        //   fontWeight: FontWeight.bold,
-        //   fontSize: 20,
-        // ),
-        context: context,
-        animType: AnimType.bottomSlide,
-        headerAnimationLoop: false,
-        dialogType: DialogType.error,
-        showCloseIcon: true,
-        title: "Fallo al enviar la peticion",
-        //desc:"Solicitud enviada",
-        btnOkOnPress: () {
-          //debugPrint('OnClcik');
-        },
-        btnOkColor: Colors.red,
-        btnOkIcon: Icons.check_circle,
-        // onDismissCallback: (type) {
-        //   debugPrint('Dialog Dissmiss from callback $type');
-        // },
-      ).show();
+      if (e is TimeoutException){
+        AwesomeDialog(
+          titleTextStyle: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 30,
+            color: Color.fromARGB(255, 0, 0, 0)
+          ),
+          // descTextStyle: TextStyle(
+          //   fontWeight: FontWeight.bold,
+          //   fontSize: 20,
+          // ),
+          context: context,
+          animType: AnimType.bottomSlide,
+          headerAnimationLoop: false,
+          dialogType: DialogType.warning,
+          showCloseIcon: true,
+          title: "Tiempo de espera agotado",
+          //desc:"Solicitud enviada",
+          btnOkOnPress: () {
+            //debugPrint('OnClcik');
+          },
+          btnOkColor: Color.fromARGB(255, 245, 177, 61),
+          btnOkIcon: Icons.check_circle,
+          onDismissCallback: (type) {
+            codigoUnidadController.cambiarCodigo("");
+            codigoVisitanteController.cambiarCodigo("");
+            personasUnidadController.cambiarpersonas("");
+            screensUnidadController.cambiarScreen(0);
+            screensVisitantesController.cambiarScreen(0);
+            aperturaVisitanteController.cambiarVisitante(false);
+            Get.back();
+          },
+        ).show();
+      } else {
+        AwesomeDialog(
+          titleTextStyle: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 30,
+            color: Colors.red
+          ),
+          // descTextStyle: TextStyle(
+          //   fontWeight: FontWeight.bold,
+          //   fontSize: 20,
+          // ),
+          context: context,
+          animType: AnimType.bottomSlide,
+          headerAnimationLoop: false,
+          dialogType: DialogType.error,
+          showCloseIcon: true,
+          title: "Fallo al enviar la peticion",
+          //desc:"Solicitud enviada",
+          btnOkOnPress: () {
+            //debugPrint('OnClcik');
+          },
+          btnOkColor: Colors.red,
+          btnOkIcon: Icons.check_circle,
+          // onDismissCallback: (type) {
+          //   debugPrint('Dialog Dissmiss from callback $type');
+          // },
+        ).show();
+      }
     }
 
     if (!mounted) return;
