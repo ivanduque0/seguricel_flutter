@@ -62,7 +62,7 @@ class InvitadosScreen extends StatelessWidget {
                     child: Form(
                       key: _formKey,
                       child: TextFormField(
-                        keyboardType: TextInputType.text,
+                        keyboardType: TextInputType.number,
                         controller: _codeController,
                         decoration: InputDecoration(
                           hintText: "Ingrese un codigo",
@@ -150,7 +150,7 @@ class InvitadosScreen extends StatelessWidget {
                                                 Navigator.of(context).pop();
                                                 ScreensVisitantesController.cambiarScreen(1);
                                               }, 
-                                              child: Text("Cotinuar", textAlign: TextAlign.center, style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),),
+                                              child: Text("Continuar", textAlign: TextAlign.center, style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),),
                                               style: ElevatedButton.styleFrom(
                                                 backgroundColor: Color.fromARGB(255, 135, 253, 106), // Background color
                                               ),

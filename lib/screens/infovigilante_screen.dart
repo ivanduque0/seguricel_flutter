@@ -161,7 +161,7 @@ class _infoVigilanteScreenState extends State<infoVigilanteScreen> {
                       },
                     ).show();
                     }, 
-                  child: Text("Cerrar sesión", style: TextStyle(fontSize: 18))
+                  child: Text("Cambiar vigilante", style: TextStyle(fontSize: 18))
                 ),
                 SizedBox(
                   height: 30,
