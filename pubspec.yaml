@@ -50,6 +50,7 @@ dependencies:
   flutter_speed_dial: ^6.2.0
   shake: ^2.2.0
   device_information: ^0.0.4
+  mobile_scanner: ^3.0.0
 
 dev_dependencies:
   flutter_test:

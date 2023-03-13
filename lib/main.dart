@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:seguricel_flutter/pages/entrar_page.dart';
 import 'package:seguricel_flutter/pages/main_page.dart';
 import 'package:seguricel_flutter/pages/login_page.dart';
+import 'package:seguricel_flutter/pages/qrscanner_page.dart';
 import 'package:seguricel_flutter/pages/salir_page.dart';
 import 'package:seguricel_flutter/utils/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -43,6 +44,7 @@ class MyApp extends StatelessWidget {
         GetPage(name: "/login", page: ()=>LoginPage()),
         GetPage(name: "/entrar", page: ()=>EntrarPage()),
         GetPage(name: "/salir", page: ()=>SalirPage()),
+        GetPage(name: "/qrscanner", page: ()=>BarcodeScannerWithController()),
       ],
     //   routes: {
     //     LoginPage.routeName : (context) => LoginPage(),

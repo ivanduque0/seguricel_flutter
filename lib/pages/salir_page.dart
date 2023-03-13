@@ -127,7 +127,7 @@ class _SalirPageState extends State<SalirPage> {
             headerAnimationLoop: false,
             dialogType: DialogType.error,
             showCloseIcon: true,
-            title: "La invitacion no existe",
+            title: "La invitacion aun no se ha procesado por completo",
             //desc:"Solicitud enviada",
             btnOkOnPress: () {
               //debugPrint('OnClcik');

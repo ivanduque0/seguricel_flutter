@@ -75,9 +75,9 @@ class _EntrarPageState extends State<EntrarPage> {
     );
     try {
       if (aperturaVisitanteController.visitante==true){
-        print('${servidor}${idVigilante}/${codigoVisitanteController.codigo}/${personasVisitanteController.personas}/${acceso}/entrada/seguricel_wifi_vigilante_invitado');
+        //print('${servidor}${idVigilante}/${codigoVisitanteController.codigo}/${personasVisitanteController.personas}/${acceso}/entrada/seguricel_wifi_vigilante_invitado');
         var res = await http.post(Uri.parse('${servidor}${idVigilante}/${codigoVisitanteController.codigo}/${personasVisitanteController.personas}/${acceso}/entrada/seguricel_wifi_vigilante_invitado')).timeout(Duration(seconds: 5));
-        print(res.statusCode);
+        //print(res.statusCode);
         Navigator.of(context).pop();
 
         if (res.statusCode==200){
@@ -127,7 +127,7 @@ class _EntrarPageState extends State<EntrarPage> {
             headerAnimationLoop: false,
             dialogType: DialogType.error,
             showCloseIcon: true,
-            title: "La invitacion no existe",
+            title: "La invitacion aun no se ha procesado por completo",
             //desc:"Solicitud enviada",
             btnOkOnPress: () {
               //debugPrint('OnClcik');

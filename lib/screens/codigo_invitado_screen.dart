@@ -242,11 +242,32 @@ class InvitadosScreen extends StatelessWidget {
                           }
                         }
                       },
-                      child: Text("Buscar", textAlign: TextAlign.center, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
+                      child: Text("Verificar", textAlign: TextAlign.center, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Color.fromARGB(255, 135, 253, 106), // Background color
                       ),
                     );})
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  SizedBox(
+                    height: 50,
+                    width: 120,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Get.toNamed("/qrscanner");
+                        // Navigator.of(context).push(
+                        //   MaterialPageRoute(
+                        //     builder: (context) => const BarcodeScannerWithController(),
+                        //   ),
+                        // );
+                      },
+                      child: Text("Escanear QR", textAlign: TextAlign.center, style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Color.fromARGB(255, 14, 78, 255), // Background color
+                        ),
+                    ),
                   ),
                   ],
               );}):AperturasScreen()
