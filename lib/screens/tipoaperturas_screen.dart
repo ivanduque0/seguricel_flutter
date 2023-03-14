@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 import 'package:flutter_switch/flutter_switch.dart';
+import 'package:get/get.dart';
 import 'package:seguricel_flutter/utils/constants.dart';
 import 'package:seguricel_flutter/utils/loading.dart';
+import 'package:seguricel_flutter/controllers/screens_home_controller.dart';
 
-typedef void ScreenCallback(int id);
+// typedef void ScreenCallback(int id);
 
 class tipoAperturaScreen extends StatefulWidget {
-  final ScreenCallback volver;
-  tipoAperturaScreen({required this.volver});
+  // final ScreenCallback volver;
+  // tipoAperturaScreen({required this.volver});
 
   @override
   State<tipoAperturaScreen> createState() => _tipoAperturaScreenState();
@@ -19,6 +21,7 @@ class _tipoAperturaScreenState extends State<tipoAperturaScreen> {
   bool bluetooth=false;
   bool wifi=false;
   bool gps=false;
+  ScreensHomeController homeController = Get.find();
 
   @override
   void initState() {
@@ -39,11 +42,11 @@ class _tipoAperturaScreenState extends State<tipoAperturaScreen> {
   Widget build(BuildContext context) => WillPopScope(
 
     onWillPop: () async {
-      widget.volver(0);
+      homeController.cambiarScreen(0);
       return false;
     },
-    child: Scaffold(
-      body: Center(child: !(internet==false && wifi==false && bluetooth==false)
+    child: Container(
+      child: Center(child: !(internet==false && wifi==false && bluetooth==false)
       ?Column(
         // mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -136,16 +139,16 @@ class _tipoAperturaScreenState extends State<tipoAperturaScreen> {
       )
       :LoadingWidget(),
       ),
-    floatingActionButton: Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: FloatingActionButton(
-        child: Icon(Icons.arrow_back_rounded, size: 40,),
-        onPressed: (() {
-          widget.volver(0);
-        }),
-      ),
-    ),
-    floatingActionButtonLocation: FloatingActionButtonLocation.startFloat
+    // floatingActionButton: Padding(
+    //   padding: const EdgeInsets.all(8.0),
+    //   child: FloatingActionButton(
+    //     child: Icon(Icons.arrow_back_rounded, size: 40,),
+    //     onPressed: (() {
+    //       homeController.cambiarScreen(0);
+    //     }),
+    //   ),
+    // ),
+    // floatingActionButtonLocation: FloatingActionButtonLocation.startFloat
     ),
   );
 }

@@ -6,6 +6,7 @@ import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:seguricel_flutter/controllers/rol_controller.dart';
 import 'package:seguricel_flutter/controllers/screens_visitantes_controller.dart';
+import 'package:seguricel_flutter/controllers/screens_home_controller.dart';
 import 'package:seguricel_flutter/controllers/visitantes_controller.dart';
 import 'package:seguricel_flutter/controllers/contrato_controller.dart';
 // import 'package:seguricel_flutter/utils/drawer.dart';
@@ -32,7 +33,7 @@ class _MainPageState extends State<MainPage> {
   // const MainPage({super.key});
   // var myText = "Change my name";
   // TextEditingController _nameController = TextEditingController();
-  
+
   // var url= Uri(
   //   scheme: 'https',
   //   host: 'webseguricel.up.railway.app',
@@ -46,6 +47,7 @@ class _MainPageState extends State<MainPage> {
   BluetoothState _bluetoothState = BluetoothState.UNKNOWN;
 
   ScreensVisitantesController controller = Get.put(ScreensVisitantesController());
+  ScreensHomeController homeController = Get.put(ScreensHomeController());
   VisitantesController visitantesController = Get.put(VisitantesController());
   RolController rolController= Get.put(RolController());
   ContratoController contratoController= Get.put(ContratoController());
@@ -120,7 +122,7 @@ class _MainPageState extends State<MainPage> {
                   await Constants.beaconBroadcast.stop();
                   // await FlutterBluetoothSerial.instance.requestDisable();
                 }
-                
+
               });
             } else {
               Constants.beaconBroadcast
@@ -139,7 +141,7 @@ class _MainPageState extends State<MainPage> {
                   await Constants.beaconBroadcast.stop();
                   // await FlutterBluetoothSerial.instance.requestDisable();
                 }
-                
+
               });
             }
         }
@@ -171,7 +173,7 @@ class _MainPageState extends State<MainPage> {
     //     _bluetoothState = state;
     //   });
     // });
-  }       
+  }
 
   obtenerRol() async {
 
@@ -204,6 +206,8 @@ class _MainPageState extends State<MainPage> {
   void _onItemTapped(int index){
     if (index==2){
       controller.cambiarScreen(0);
+    } else if (index==0){
+      homeController.cambiarScreen(0);
     }
     setState(() {
       _selectedIndex=index;
@@ -216,7 +220,7 @@ class _MainPageState extends State<MainPage> {
   //   super.initState();
   //   //fetchData2();
   // }
-  
+
   // fetchData2()async{
   //   //SharedPreferences prefs = await SharedPreferences.getInstance();
   //   //String encodeDatosUsuario = await Constants.prefs.getString('datosUsuario').toString();
@@ -234,7 +238,7 @@ class _MainPageState extends State<MainPage> {
   //   // datosUsuario = await jsonDecode(encodeDatosUsuario);
   //   // contratos = await jsonDecode(encodeContratos);
   //   // accesos = await jsonDecode(encodeAccesos);
-  
+
   //   // print(datosUsuario);
   //   // print(contratos);
   //   // print(accesos);
@@ -245,72 +249,131 @@ class _MainPageState extends State<MainPage> {
   //   // var res = await client.post(url);
   //   // data = jsonDecode(res.body);
   //   // setState(() {
-      
+
   //   // });
   // }
-  
+
   @override
   Widget build(BuildContext context) {
     return GetBuilder<RolController>(builder: (RolController){
-    return Scaffold(
-      backgroundColor: Colors.grey[200],
-      appBar: AppBar(
-        title: Text(
-          "Seguricel",
-          style: TextStyle(
-            color: Colors.white
-          ),
-          ),
-        // actions: [
-        //   IconButton(
-        //     onPressed: (() async {
-        //       //SharedPreferences prefs = await SharedPreferences.getInstance();
-        //       // Constants.prefs.remove("datosUsuario");
-        //       // Constants.prefs.remove("accesos");
-        //       // Constants.prefs.remove("contratos");
-        //       // Constants.prefs.remove("isLoggedIn");
-        //       Constants.prefs.clear();
-        //       Get.offNamed("/login");
-        //       //Navigator.pop(context);
-        //     }), 
-        //     icon: Icon(Icons.exit_to_app_rounded)
-        //   ),
-        // ],
-      ),
-      // body: this.datosUsuario!={}
-      //   ?Center(
-        body: Center(
-          child: RolController.rol=="Propietario"
-          ?_widgetOptionsPropietario[_selectedIndex]
-          :_widgetOptionsSecVis[_selectedIndex]
-        ),
-        //:LoadingWidget(),
-      //drawer: MyDrawer(datosUsuario: datosUsuario),//datosUsuario!={}?MyDrawer(datosUsuario: datosUsuario):MyDrawer(datosUsuario: {'nombre':"null", "contrato":"null","cedula":"null", "id_usuario":"null"}),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-        elevation: 10,
-        showSelectedLabels: true,
-        showUnselectedLabels: true,
-        //selectedItemColor: Colors.blue,
-        unselectedItemColor: Color.fromARGB(255, 109, 101, 94),
-        items: RolController.rol=="Propietario"
-        ?itemsPropietario
-        :itemsSecVis
-      ),
-      
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () {
+      return GetBuilder<ScreensHomeController>(builder: (ScreensHomeController){
+        return Scaffold(
+          backgroundColor: Colors.grey[200],
+          appBar: AppBar(
+            toolbarHeight: (_selectedIndex==0&&ScreensHomeController.infoUsuarioScreen==0)?180:70,
+            title: (_selectedIndex==0&&ScreensHomeController.infoUsuarioScreen==0)?Center(
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 13),
+                    child: Text(
+                      "Bienvenido",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 30
+                      ),
+                      ),
+                  ),
+                  Center(
+                    child: Container(
+                      width: 70,
+                      height: 70,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage("assets/images/logo_seguricel.png")
+                        )
+                      ),
+                    ),
+                  ),
+                  Center(
+                    child: Container(
+                      width: 150,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage("assets/images/letras_seguricel.png")
+                        )
+                      ),
+                    ),
+                  ),
 
-      //   },
-      //   child: Icon(
-      //     Icons.settings_rounded,
-      //     size: 30,
-      //     // color: Colors.white,
-      //     ),
-      // ),
-      //floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+                ],
+              ),
+            ):Container(
+              width: 190,
+              height: 70,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage("assets/images/logo_letras_seguricel.png")
+                )
+              ),
+            ),
+            actions: [
+                (_selectedIndex==0&&ScreensHomeController.infoUsuarioScreen!=0)?IconButton(
+                  iconSize: 50,
+                  onPressed: (() async {
+                    if(_selectedIndex==0&&ScreensHomeController.infoUsuarioScreen!=0)
+                    {
+                      ScreensHomeController.cambiarScreen(0);
+                    }
+                  }),
+                  icon: Icon(
+                    Icons.arrow_back_rounded,
+                    color: Colors.white,
+                  )
+                ):SizedBox(),
+              // IconButton(
+              //   onPressed: (() async {
+              //     //SharedPreferences prefs = await SharedPreferences.getInstance();
+              //     // Constants.prefs.remove("datosUsuario");
+              //     // Constants.prefs.remove("accesos");
+              //     // Constants.prefs.remove("contratos");
+              //     // Constants.prefs.remove("isLoggedIn");
+              //     Constants.prefs.clear();
+              //     Get.offNamed("/login");
+              //     //Navigator.pop(context);
+              //   }),
+              //   icon: Icon(Icons.exit_to_app_rounded)
+              // ),
+            ],
+          ),
+          // body: this.datosUsuario!={}
+          //   ?Center(
+            body: Center(
+              child: RolController.rol=="Propietario"
+              ?_widgetOptionsPropietario[_selectedIndex]
+              :_widgetOptionsSecVis[_selectedIndex]
+            ),
+            //:LoadingWidget(),
+          //drawer: MyDrawer(datosUsuario: datosUsuario),//datosUsuario!={}?MyDrawer(datosUsuario: datosUsuario):MyDrawer(datosUsuario: {'nombre':"null", "contrato":"null","cedula":"null", "id_usuario":"null"}),
+          bottomNavigationBar: BottomNavigationBar(
+            currentIndex: _selectedIndex,
+            onTap: _onItemTapped,
+            elevation: 10,
+            showSelectedLabels: true,
+            showUnselectedLabels: true,
+            //selectedItemColor: Colors.blue,
+            unselectedItemColor: Color.fromARGB(255, 109, 101, 94),
+            items: RolController.rol=="Propietario"
+            ?itemsPropietario
+            :itemsSecVis
+          ),
+
+          // floatingActionButton: FloatingActionButton(
+          //   onPressed: () {
+
+          //   },
+          //   child: Icon(
+          //     Icons.settings_rounded,
+          //     size: 30,
+          //     // color: Colors.white,
+          //     ),
+          // ),
+          //floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        );
+        }
+      );
+    }
     );
-  });
   }
 }

@@ -37,6 +37,9 @@ class MyApp extends StatelessWidget {
       // MainPage():
       // LoginPage(),
       theme: ThemeData(
+        appBarTheme: AppBarTheme(
+          color: Color.fromARGB(255, 11, 9, 124)
+        ),
         primarySwatch: Colors.orange,
       ),
       initialRoute: Constants.prefs.getBool('isLoggedIn')==true?"/main":"/login",

@@ -60,13 +60,27 @@ class _EliminarInvitadosPageState extends State<EliminarInvitadosPage> {
       return true;
     },
     child: Scaffold(
+      backgroundColor: Colors.grey[200],
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text(
           "Eliminar invitados",
           style: TextStyle(
             color: Colors.white
           ),
-          ),
+        ),
+        actions: [
+            IconButton(
+              iconSize: 40,
+              onPressed: (() async {
+                Get.back();
+              }),
+              icon: Icon(
+                Icons.arrow_back_rounded,
+                color: Colors.white,
+              )
+            )
+          ],
         // actions: [
         //   IconButton(
         //     onPressed: (() async {
@@ -98,7 +112,7 @@ class _EliminarInvitadosPageState extends State<EliminarInvitadosPage> {
               padding: const EdgeInsets.all(15.0),
               child: Text("Seleccione los invitados que desea eliminar de su lista", textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 20,
+                  fontSize: 24,
                   fontWeight: FontWeight.bold
                 ),
               ),
@@ -120,7 +134,7 @@ class _EliminarInvitadosPageState extends State<EliminarInvitadosPage> {
                 itemCount: VisitantesController.visitantes.length,
                 shrinkWrap: true,
                 itemBuilder:(context, index) => Container(
-                  color: invitadosAgregados.contains(VisitantesController.visitantes[index])?Color.fromARGB(255, 248, 134, 134):Colors.white,
+                  color: invitadosAgregados.contains(VisitantesController.visitantes[index])?Color.fromARGB(255, 248, 134, 134):Color.fromARGB(0, 0, 0, 0),
                   child: ListTile(
                     // leading: Icon(Icons.person),
                     title:Text("${VisitantesController.visitantes[index]['nombre']}", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),

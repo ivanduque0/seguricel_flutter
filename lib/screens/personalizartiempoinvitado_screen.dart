@@ -66,6 +66,7 @@ class _PersonalizarTiempoInvitadoScreenState extends State<PersonalizarTiempoInv
       return false;
     },
     child: Scaffold(
+      backgroundColor: Colors.grey[200],
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -83,7 +84,7 @@ class _PersonalizarTiempoInvitadoScreenState extends State<PersonalizarTiempoInv
                 ),
               ),
               SizedBox(
-                height: 30,
+                height: 10,
               ),
               Text("Entrada", textAlign: TextAlign.center,
                 style: TextStyle(
@@ -435,67 +436,35 @@ class _PersonalizarTiempoInvitadoScreenState extends State<PersonalizarTiempoInv
           ),
         ),
       ),
-      floatingActionButton: Padding(
-        // padding: const EdgeInsets.all(8.0),
-        padding: const EdgeInsets.only(top: 20),
-        child: Row(
-          children: [
-            FloatingActionButton( 
-              child: Icon(Icons.arrow_back_rounded, size: 40,),  
-              onPressed: (() {
-                // widget.volver(2);
-                controller.cambiarScreen(2);
-              }),
-            ),
-            SizedBox(
-              width:MediaQuery.of(context).size.width/3,
-            ),
-            SizedBox(
-              height: 50,
-              width: 120,
-              child: ElevatedButton(
-                onPressed:(fechaDesde=="" && fechaHasta =="" && horaDesde=="" && horaHasta=="")
-                ?null
-                :() async {
-                  showDialog(
-                    barrierDismissible: false,
-                    context: context,
-                    builder: (_) {
-                      return WillPopScope(
-                        onWillPop: () async => false,
-                        child: LoadingWidget());
-                    }
-                  );
-                  String tiempoEstadiaInvitado= await jsonEncode({'fecha_entrada':fechaDesde, 'fecha_salida':fechaHasta, 'entrada':horaDesde, 'salida':horaHasta});
-                  await Constants.prefs.setString('tiempoInvitado', tiempoEstadiaInvitado);
-                  Navigator.of(context).pop();
-                  // widget.volver(4);
-                  controller.cambiarScreen(4);
-                },
-                child: Text("Continuar", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Color.fromARGB(255, 135, 253, 106), // Background color
-                ),
-              ),
-            ),
-            // OutlinedButton(
-            //   style: OutlinedButton.styleFrom(
-            //     fixedSize: Size(190, 50),
-            //     foregroundColor: (fechaDesde=="" && fechaHasta =="" && horaDesde=="" && horaHasta=="")
-            //                       ?Colors.grey
-            //                       :Color.fromARGB(255, 125, 255, 74),
-            //     //disabledForegroundColor: Colors.red,
-            //     side: BorderSide(color: (fechaDesde=="" && fechaHasta =="" && horaDesde=="" && horaHasta=="")
-            //                           ?Colors.grey
-            //                           :Color.fromARGB(255, 125, 255, 74), width: 3),
-            //   ),
-            //   onPressed:(fechaDesde=="" && fechaHasta =="" && horaDesde=="" && horaHasta=="")? null : (){widget.volver(0);},
-            //   child: Text("Continuar", style: TextStyle(fontSize: 18))
-            // )
-          ],
+      floatingActionButton: SizedBox(
+        height: 50,
+        width: 120,
+        child: ElevatedButton(
+          onPressed:(fechaDesde=="" && fechaHasta =="" && horaDesde=="" && horaHasta=="")
+          ?null
+          :() async {
+            showDialog(
+              barrierDismissible: false,
+              context: context,
+              builder: (_) {
+                return WillPopScope(
+                  onWillPop: () async => false,
+                  child: LoadingWidget());
+              }
+            );
+            String tiempoEstadiaInvitado= await jsonEncode({'fecha_entrada':fechaDesde, 'fecha_salida':fechaHasta, 'entrada':horaDesde, 'salida':horaHasta});
+            await Constants.prefs.setString('tiempoInvitado', tiempoEstadiaInvitado);
+            Navigator.of(context).pop();
+            // widget.volver(4);
+            controller.cambiarScreen(4);
+          },
+          child: Text("Continuar", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Color.fromARGB(255, 135, 253, 106), // Background color
+          ),
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.startFloat
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat
     )
   );
 

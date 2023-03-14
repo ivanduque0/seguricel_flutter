@@ -61,8 +61,8 @@ class _SeleccionarInvitadoExistenteScreenState extends State<SeleccionarInvitado
       // widget.volver(4);
       return false;
     },
-    child: Scaffold(
-      body: SingleChildScrollView(
+    child: Container(
+      child: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
@@ -91,129 +91,139 @@ class _SeleccionarInvitadoExistenteScreenState extends State<SeleccionarInvitado
               width: MediaQuery.of(context).size.width/1.2,
               height: MediaQuery.of(context).size.height/2.3,
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(
-                    color: Color.fromARGB(255, 240, 162, 73),
-                    width: 3,
-                  )
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(
+                  color: Color.fromARGB(255, 0, 0, 0),
+                  width: 2,
+                )
               ),
               child: ListView.builder(
                 itemCount: invitados.length,
                 shrinkWrap: true,
-                itemBuilder:(context, index) => Container(
-                  color: invitadosAgregados.contains(invitados[index])?Color.fromARGB(255, 180, 255, 150):Colors.white,
-                  child: ListTile(
-                    // leading: Icon(Icons.person),
-                    title:Text("${invitados[index]['nombre']}", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
-                    subtitle: Text("Codigo: ${invitados[index]['telegram_id']}"),
-                    trailing: invitadosAgregados.contains(invitados[index])?Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Expanded(
-                          flex: 0,
-                          child: InkWell(
-                            borderRadius: BorderRadius.circular(100),
-                            onTap: () {
-                              if (invitados[index]['acompanantes']>0){
+                itemBuilder:(_, index) => Container(
+                  decoration: BoxDecoration(
+                  color: invitadosAgregados.contains(invitados[index])?Color.fromARGB(255, 180, 255, 150):Color.fromARGB(0, 0, 0, 0),
+                  borderRadius: index==0?BorderRadius.only(
+                    topLeft: Radius.circular(10),
+                    topRight: Radius.circular(10)
+                  )
+                  :(index==invitados.length-1)?BorderRadius.only(
+                    bottomLeft: Radius.circular(10),
+                    bottomRight: Radius.circular(10)
+                  ):BorderRadius.all(Radius.circular(0))
+                ),
+                    child: ListTile(
+                      // leading: Icon(Icons.person),
+                      title:Text("${invitados[index]['nombre']}", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+                      subtitle: Text("Codigo: ${invitados[index]['telegram_id']}"),
+                      trailing: invitadosAgregados.contains(invitados[index])?Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Expanded(
+                            flex: 0,
+                            child: InkWell(
+                              borderRadius: BorderRadius.circular(100),
+                              onTap: () {
+                                if (invitados[index]['acompanantes']>0){
+                                  setState(() {
+                                  invitados[index]['acompanantes']--;
+                                });
+                                } 
+                              }, // Handle your callback.
+                              splashColor: Colors.brown.withOpacity(0.5),
+                              child: Ink(
+                                width:40,
+                                height: 40,
+                                child: Icon(Icons.remove, size: 30, color: Colors.red,),
+                                // width: MediaQuery.of(context).size.width,
+                                // height: MediaQuery.of(context).size.height/3,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                              ),
+                              
+                            ),
+                          ),
+                          Expanded(
+                            flex: 0,
+                            child: Text("${invitados[index]['acompanantes']}", 
+                              style: TextStyle(
+                                fontSize: 30
+                              ),)
+                          ),
+                          Expanded(
+                            flex: 0,
+                            child: InkWell(
+                              borderRadius: BorderRadius.circular(100),
+                              onTap: () {
                                 setState(() {
-                                invitados[index]['acompanantes']--;
-                              });
-                              } 
-                            }, // Handle your callback.
-                            splashColor: Colors.brown.withOpacity(0.5),
-                            child: Ink(
-                              width:40,
-                              height: 40,
-                              child: Icon(Icons.remove, size: 30, color: Colors.red,),
-                              // width: MediaQuery.of(context).size.width,
-                              // height: MediaQuery.of(context).size.height/3,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
+                                  invitados[index]['acompanantes']++;
+                                });
+                              }, // Handle your callback.
+                              splashColor: Colors.brown.withOpacity(0.5),
+                              child: Ink(
+                                width:40,
+                                height: 40,
+                                child: Icon(Icons.add, size: 30, color: Colors.green,),
+                                // width: MediaQuery.of(context).size.width,
+                                // height: MediaQuery.of(context).size.height/3,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
                               ),
+                              // child: Icon(Icons.arrow_back_rounded, size: 30,)
+                              
                             ),
-                            
                           ),
-                        ),
-                        Expanded(
-                          flex: 0,
-                          child: Text("${invitados[index]['acompanantes']}", 
-                            style: TextStyle(
-                              fontSize: 30
-                            ),)
-                        ),
-                        Expanded(
-                          flex: 0,
-                          child: InkWell(
-                            borderRadius: BorderRadius.circular(100),
-                            onTap: () {
-                              setState(() {
-                                invitados[index]['acompanantes']++;
-                              });
-                            }, // Handle your callback.
-                            splashColor: Colors.brown.withOpacity(0.5),
-                            child: Ink(
-                              width:40,
-                              height: 40,
-                              child: Icon(Icons.add, size: 30, color: Colors.green,),
-                              // width: MediaQuery.of(context).size.width,
-                              // height: MediaQuery.of(context).size.height/3,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                            ),
-                            // child: Icon(Icons.arrow_back_rounded, size: 30,)
-                            
-                          ),
-                        ),
-                      ],
-                    ):Icon(Icons.person_add_alt_rounded, color: Colors.green),
-                    onTap: (() {
-                      //widget.volver(1);
-                      if (invitados[index]['acompanantes']==null){
-                        setState(() {
-                          invitados[index]['acompanantes']=0;
+                        ],
+                      ):Icon(Icons.person_add_alt_rounded, color: Colors.green),
+                      onTap: (() {
+                        //widget.volver(1);
+                        if (invitados[index]['acompanantes']==null){
+                          setState(() {
+                            invitados[index]['acompanantes']=0;
+                          });
+                        }
+                        if(invitadosAgregados.contains(invitados[index])){
+                          setState(() {
+                          invitadosAgregados.remove(invitados[index]);
                         });
-                      }
-                      if(invitadosAgregados.contains(invitados[index])){
+                        } else {
                         setState(() {
-                        invitadosAgregados.remove(invitados[index]);
-                      });
-                      } else {
-                      setState(() {
-                        invitadosAgregados.add(invitados[index]);
-                      });
-                      }
-                      // print(invitadosAgregados);
-                    }),
-                    // trailing: Row(
-                    //   mainAxisSize: MainAxisSize.min,
-                    //   children: [
-                    //     invitadosPorInvitar.contains(invitados[index])?IconButton(
-                    //     icon: Icon(Icons.remove), 
-                    //     color: Colors.red,
-                    //     onPressed: () async {
-                    //       setState(() {
-                    //         invitadosPorInvitar.remove(invitados[index]);
-                    //       });
-                          
-                    //     },
-                    //     )
-                    //     // SizedBox(width: 10,),
-                    //     :IconButton(
-                    //       icon: Icon(Icons.add), color: Colors.green,
-                    //       onPressed: () async {
-                    //         setState(() {
-                    //           invitadosPorInvitar.add(invitados[index]);
-                    //         });
-                    //         print(invitadosPorInvitar);
-                    //       }, 
-                    //     ),
-                    //   ],
-                    // ),
-                    // onTap: () async {
-
-                    // },
-                  ),
+                          invitadosAgregados.add(invitados[index]);
+                        });
+                        }
+                        // print(invitadosAgregados);
+                      }),
+                      // trailing: Row(
+                      //   mainAxisSize: MainAxisSize.min,
+                      //   children: [
+                      //     invitadosPorInvitar.contains(invitados[index])?IconButton(
+                      //     icon: Icon(Icons.remove), 
+                      //     color: Colors.red,
+                      //     onPressed: () async {
+                      //       setState(() {
+                      //         invitadosPorInvitar.remove(invitados[index]);
+                      //       });
+                            
+                      //     },
+                      //     )
+                      //     // SizedBox(width: 10,),
+                      //     :IconButton(
+                      //       icon: Icon(Icons.add), color: Colors.green,
+                      //       onPressed: () async {
+                      //         setState(() {
+                      //           invitadosPorInvitar.add(invitados[index]);
+                      //         });
+                      //         print(invitadosPorInvitar);
+                      //       }, 
+                      //     ),
+                      //   ],
+                      // ),
+                      // onTap: () async {
+                  
+                      // },
+                    ),
                 ), 
               ),
             ),

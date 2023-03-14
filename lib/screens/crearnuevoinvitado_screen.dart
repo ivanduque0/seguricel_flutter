@@ -73,6 +73,7 @@ class _CrearNuevoInvitadoScreenState extends State<CrearNuevoInvitadoScreen> {
       return false;
     },
     child: Scaffold(
+      backgroundColor: Colors.grey[200],
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(8.0),

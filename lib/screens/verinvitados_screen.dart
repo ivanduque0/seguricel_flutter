@@ -95,9 +95,9 @@ class _VerInvitadosScreenState extends State<VerInvitadosScreen> {
       // widget.volver(0);
       return false;
     },
-    child: Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
+    child: Container(
+      child: Padding(
+        padding: const EdgeInsets.only(left: 10, right: 10),
         child: SingleChildScrollView(
           child: Center(
             child: Column(
@@ -106,11 +106,8 @@ class _VerInvitadosScreenState extends State<VerInvitadosScreen> {
                   return Container(
                   child: Column(
                     children: [
-                      SizedBox(
-                        height: 20,
-                      ),
                       (datosUsuario!={} && VisitantesController.visitantes.length==0)
-                      ?SizedBox(height:30)
+                      ?SizedBox(height:10)
                       :Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [

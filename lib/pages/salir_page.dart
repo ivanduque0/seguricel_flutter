@@ -692,6 +692,22 @@ class _SalirPageState extends State<SalirPage> {
   Widget build(BuildContext context) {
     return Center(
       child: Scaffold(
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          title: Text("Salidas", style: TextStyle(color: Colors.white, fontSize: 25),),
+          actions: [
+            IconButton(
+              iconSize: 40,
+              onPressed: (() async {
+                Get.back();
+              }),
+              icon: Icon(
+                Icons.arrow_back_rounded,
+                color: Colors.white,
+              )
+            )
+          ],
+        ),
         floatingActionButton: _hideShowBluetooth(),
         backgroundColor: Colors.grey[200],
         body: Container(

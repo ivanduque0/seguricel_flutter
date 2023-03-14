@@ -8,12 +8,13 @@ import 'package:seguricel_flutter/utils/constants.dart';
 import 'package:seguricel_flutter/utils/loading.dart';
 import 'package:seguricel_flutter/controllers/rol_controller.dart';
 import 'package:seguricel_flutter/controllers/contrato_controller.dart';
+import 'package:seguricel_flutter/controllers/screens_home_controller.dart';
 
-typedef void ScreenCallback(int id);
+// typedef void ScreenCallback(int id);
 
 class infoContratoScreen extends StatefulWidget {
-  final ScreenCallback volver;
-  infoContratoScreen({required this.volver});
+  // final ScreenCallback volver;
+  // infoContratoScreen({required this.volver});
 
   @override
   State<infoContratoScreen> createState() => _infoContratoScreenState();
@@ -29,6 +30,7 @@ class _infoContratoScreenState extends State<infoContratoScreen> {
 
   RolController rolController= Get.find();
   ContratoController contratoController= Get.find();
+  ScreensHomeController homeController = Get.find();
   
   @override
   void initState() {
@@ -124,11 +126,11 @@ class _infoContratoScreenState extends State<infoContratoScreen> {
   Widget build(BuildContext context) => WillPopScope(
 
     onWillPop: () async {
-      widget.volver(0);
+      homeController.cambiarScreen(0);
       return false;
     },
-    child: Scaffold(
-            body: 
+    child: Container(
+            child: 
             (contratos.length>1 && seleccionContrato!="")
             ?Center(
               child: Column(
@@ -164,8 +166,9 @@ class _infoContratoScreenState extends State<infoContratoScreen> {
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(
-                          color: Color.fromARGB(255, 240, 162, 73),
-                          width: 3,
+                          // color: Color.fromARGB(255, 240, 162, 73),
+                          color: Color.fromARGB(255, 0, 0, 0),
+                          width: 2,
                         )
                       ),
                     child: ListView.builder(
@@ -305,8 +308,9 @@ class _infoContratoScreenState extends State<infoContratoScreen> {
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(
-                          color: Color.fromARGB(255, 240, 162, 73),
-                          width: 3,
+                          color: Color.fromARGB(255, 0, 0, 0),
+                          // color: Color.fromARGB(255, 240, 162, 73),
+                          width: 2,
                         )
                       ),
                     child: ListView.builder(
@@ -591,16 +595,16 @@ class _infoContratoScreenState extends State<infoContratoScreen> {
               ),
             )
             :LoadingWidget(),
-            floatingActionButton: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: FloatingActionButton( 
-                child: Icon(Icons.arrow_back_rounded, size: 40,),  
-                onPressed: (() {
-                  widget.volver(0);
-                }),
-              ),
-            ),
-            floatingActionButtonLocation: FloatingActionButtonLocation.startFloat
+            // floatingActionButton: Padding(
+            //   padding: const EdgeInsets.all(8.0),
+            //   child: FloatingActionButton( 
+            //     child: Icon(Icons.arrow_back_rounded, size: 40,),  
+            //     onPressed: (() {
+            //       infoUsuariocontroller.cambiarScreen(0);
+            //     }),
+            //   ),
+            // ),
+            // floatingActionButtonLocation: FloatingActionButtonLocation.startFloat
           )
   );
 }

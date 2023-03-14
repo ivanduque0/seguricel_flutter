@@ -33,8 +33,8 @@ class _TiempoInvitadoScreenState extends State<TiempoInvitadoScreen> {
       // widget.volver(0);
       return false;
     },
-    child: Scaffold(
-      body: Padding(
+    child: Container(
+      child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
           // mainAxisAlignment: MainAxisAlignment.center,
@@ -243,17 +243,17 @@ class _TiempoInvitadoScreenState extends State<TiempoInvitadoScreen> {
       //   ),
       // ),
       
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: FloatingActionButton( 
-          child: Icon(Icons.arrow_back_rounded, size: 40,),  
-          onPressed: (() {
-            controller.cambiarScreen(0);
-            // widget.volver(0);
-          }),
-        ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.startFloat
+      // floatingActionButton: Padding(
+      //   padding: const EdgeInsets.all(8.0),
+      //   child: FloatingActionButton( 
+      //     child: Icon(Icons.arrow_back_rounded, size: 40,),  
+      //     onPressed: (() {
+      //       controller.cambiarScreen(0);
+      //       // widget.volver(0);
+      //     }),
+      //   ),
+      // ),
+      // floatingActionButtonLocation: FloatingActionButtonLocation.startFloat
     )
   );
 }
